@@ -10,10 +10,5 @@
   publish = "dist"
   base = "/"
 [functions]
-  external_node_modules = ["express"]
+  external_node_modules = ["express","path","url","fs/promises"]
   node_bundler = "esbuild"
-[[redirects]]
-  force = true
-  from = "/*"
-  status = 200
-  to = "/.netlify/functions/server/:splat"
