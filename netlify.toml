@@ -9,6 +9,3 @@
   command = "npm run build"
   publish = "dist"
   base = "/"
-[functions]
-  external_node_modules = ["express","path","url","fs/promises"]
-  node_bundler = "esbuild"
