@@ -4,11 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node server",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "cross-env NODE_ENV=production node server",
+    "start": "npm run build && npm run preview"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "sass": "^1.71.1",
     "vite": "^5.1.4"
   },
