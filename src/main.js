@@ -4,13 +4,6 @@ import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.js'
 
-
-import { obj1 } from "./test1.js";
-import { obj2 } from "./test2.js";
-console.log('obj1', obj1)
-console.log('obj2', obj2)
-
-
 document.querySelector('#app').innerHTML = `
   <div class="app">
     <a class="app__logo" href="https://vitejs.dev" target="_blank">

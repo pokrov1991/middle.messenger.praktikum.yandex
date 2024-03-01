@@ -30,11 +30,11 @@ app.use(express.static(`${__dirname}/dist`));
 // Орабатываем все доступные страницы
 app.get(__allowedPaths, async (req, res) => {
   try {
-    const data = await readFile('index.html', 'utf8');
+    const data = await readFile('src/index.html', 'utf8');
     res.send(data);
   } catch (err) {
     console.error(err);
-    const data = await readFile('500.html', 'utf8');
+    const data = await readFile('src/500.html', 'utf8');
     res.status(500).send(data);
   }
 });
@@ -42,11 +42,11 @@ app.get(__allowedPaths, async (req, res) => {
 // Все остальные идут в 404
 app.use(async (req, res) => {
   try {
-    const data = await readFile('404.html', 'utf8');
+    const data = await readFile('src/404.html', 'utf8');
     res.status(404).send(data);
   } catch (err) {
     console.error(err);
-    const data = await readFile('500.html', 'utf8');
+    const data = await readFile('src/500.html', 'utf8');
     res.status(500).send(data);
   }
 })
@@ -54,7 +54,7 @@ app.use(async (req, res) => {
 // Если ошибка 5xx
 app.use(async (err, req, res, next) => {
   console.log()
-  const data = await readFile('500.html', 'utf8');
+  const data = await readFile('src/500.html', 'utf8');
   res.status(500).send(data);
 })
 
