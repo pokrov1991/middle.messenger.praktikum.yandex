@@ -1,0 +1,11 @@
+{{#> LayoutAuth }}
+  <section class="c-page c-page-login">
+    <form action="/" class="c-page-login__form c-form-auth">
+      {{> InputPassword label="Пароль" id="password" name="password" required="required" className="c-form-auth__field" }}
+      {{> Button text="Авторизоваться" className="c-form-auth__button" }}
+    </form>
+    <div class="c-page-login__link">
+      <a href="/?page=signin">Нет аккаунта?</a>
+    </div>
+  </section>
+{{/ LayoutAuth }}
