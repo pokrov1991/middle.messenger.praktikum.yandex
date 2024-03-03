@@ -1,0 +1,18 @@
+<section class="c-chat">
+  <div class="c-chat__wrap">
+    <div class="c-chat__list" id="chat-list">
+      {{> ChatList }}
+    </div>
+    <div class="c-chat__box">
+      {{#if-chat-selected isChatSelected}}
+        {{#data-chat-selected obj}}
+          {{> ChatBox }}
+        {{/data-chat-selected}}
+      {{else}}
+        <section class="c-chat-box-empty">
+          <p>Выберите чат чтобы отправить сообщение</p>
+        </section>
+      {{/if-chat-selected}}
+    </div>
+  </div>
+</section>

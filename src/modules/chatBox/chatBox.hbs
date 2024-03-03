@@ -1,0 +1,30 @@
+<section class="c-chat-box">
+  <div class="c-chat-box__header">
+    <div class="c-chat-box__user c-chat-box-user">
+      <div class="c-chat-box-user__avatar"></div>
+      <div class="c-chat-box-user__name">
+        <span>{{ dataChatSelected.userName }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="c-chat-box__messages">
+    <div class="c-chat-box-messages">
+      {{#each (chat-messages)}}
+        {{> ChatMessage }}
+      {{/each}}
+    </div>
+  </div>
+  <div class="c-chat-box__action">
+    <form class="c-chat-box-action">
+      <div class="c-chat-box-action__attach">
+        <span>Иконка</span>
+      </div>
+      <div class="c-chat-box-action__text">
+        Инпут
+      </div>
+      <div class="c-chat-box-action__send">
+        Отправить
+      </div>
+    </form>
+  </div>
+</section>
