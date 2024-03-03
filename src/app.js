@@ -2,6 +2,7 @@ import './app.scss'
 import Handlebars from 'handlebars'
 import * as Pages from './pages'
 import * as Layouts from './layouts'
+import * as Modules from './modules'
 import * as Components from './components'
 import * as Ui from './ui'
 import { getPageName } from './utils'
@@ -15,7 +16,7 @@ const pageName = getPageName(location.href)
 const page = Object.keys(pages).includes(pageName) ? pageName : 'main'
 
 // Регистрируем компоненты ui
-Object.entries({ ...Layouts, ...Components, ...Ui }).forEach(([name, component]) => {
+Object.entries({ ...Layouts, ...Modules, ...Components, ...Ui }).forEach(([name, component]) => {
   Handlebars.registerPartial(name, component)
 })
 
