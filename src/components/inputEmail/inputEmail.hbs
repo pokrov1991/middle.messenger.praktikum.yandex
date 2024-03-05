@@ -1,0 +1,8 @@
+<div class="c-input-email{{#if className}} {{ className }}{{/if}}">
+  {{> Input type="email" className="c-input_email" label=label id=id name=name value=value required=required oninput=oninput }}
+  {{#if isValidation}} 
+  <div class="c-input-email__validation">
+    {{ textValidation }}
+  </div>
+  {{/if}}
+</div>

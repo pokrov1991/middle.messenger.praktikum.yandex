@@ -1,1 +1,3 @@
-console.log('Password validation')
+window.onPasswordValidate = (e) => {
+  console.log('Password validation', e.value)
+}

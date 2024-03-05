@@ -18,7 +18,7 @@ const dataChatList = [
     userAvatar: '',
     date: '12:00',
     message: 'Вы: стикер',
-    unread: 0
+    unread: 1
   },
   {
     id: 'ilya',
