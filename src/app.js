@@ -9,7 +9,8 @@ import { getPageName } from './utils'
 
 const pages = {
   'main': Pages.Main,
-  'login': Pages.Login
+  'login': Pages.Login,
+  'signin': Pages.Signin
 }
 
 const pageName = getPageName(location.href)
@@ -23,7 +24,7 @@ Object.entries({ ...Layouts, ...Modules, ...Components, ...Ui }).forEach(([name,
 // Формируем страницу
 const template = Handlebars.compile(pages[page])
 
-document.querySelector('#app').innerHTML = template({title: 'Тайтл'})
+document.querySelector('#app').innerHTML = template({title: 'яЧат'})
 
 // Следим за изменением урла
 // navigation.addEventListener("navigate", (event) => {

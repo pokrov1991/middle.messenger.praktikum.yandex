@@ -1,3 +1,42 @@
 .c-input {
+  position: relative;
   width: 100%;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    position: absolute;
+    bottom: 9px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 13px;
+    letter-spacing: 0em;
+    color: var(--colors-input-label-color);
+    pointer-events: none;
+    transition: var(--transition-03);
+  }
+  input {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 13px;
+    letter-spacing: 0em;
+    color: var(--colors-input-color);
+    border: none;
+    border-bottom: 1px solid var(--colors-input-border);
+    padding: 7px 0;
+    outline: none;
+  }
+
+  &_focus {
+    label {
+      bottom: calc(100% - 9px);
+      font-size: 9px;
+      font-weight: 500;
+      line-height: 9px;
+    }
+    input {
+      border-bottom: 1px solid var(--colors-input-border-focus);
+    }
+  }
 }
