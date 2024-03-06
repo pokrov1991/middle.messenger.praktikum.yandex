@@ -1,0 +1,25 @@
+.c-textarea {
+  width: 100%;
+
+  textarea {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 10px;
+    letter-spacing: 0em;
+    color: var(--colors-input-color);
+    background: var(--colors-chat-search-background);
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px 2px;
+    outline: none;
+
+    &::placeholder {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 12px;
+      letter-spacing: 0em;
+      color: var(--colors-input-label-color);
+    }
+  }
+}

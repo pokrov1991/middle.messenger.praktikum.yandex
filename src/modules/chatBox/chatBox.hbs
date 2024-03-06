@@ -5,6 +5,7 @@
       <div class="c-chat-box-user__name">
         {{ dataChatSelected.userName }}
       </div>
+      <div class="c-chat-box-user__kebab" onclick="console.log('kebab menu')"></div>
     </div>
   </div>
   <div class="c-chat-box__messages">
@@ -16,14 +17,12 @@
   </div>
   <div class="c-chat-box__action">
     <form class="c-chat-box-action">
-      <div class="c-chat-box-action__attach">
-        Иконка
-      </div>
+      <div class="c-chat-box-action__attach" onclick="console.log('attach menu')"></div>
       <div class="c-chat-box-action__text">
-        Текстареа
+        {{> Textarea placeholder="Сообщение" }}
       </div>
       <div class="c-chat-box-action__send">
-        Отправить
+        <span class="c-button-arrow" onclick="console.log('send')"></span>
       </div>
     </form>
   </div>
