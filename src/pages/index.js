@@ -1,3 +1,5 @@
 export { Main } from './main'
 export { Login } from './login'
 export { Signin } from './signin'
+export { Profile } from './profile'
+export { ProfileEdit } from './profile-edit'

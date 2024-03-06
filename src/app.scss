@@ -28,6 +28,12 @@ body {
   background: rgba(255, 255, 255, 1);
 }
 
+ul {
+  li {
+    list-style-type: none;
+  }
+}
+
 /* Общие стили*/
 .c-link {
   font-size: 11px;
@@ -39,5 +45,30 @@ body {
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.c-button-arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--colors-button-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+ 
+  &::after {
+    content: '';
+    width: 11px;
+    height: 10px;
+    background: url('/icons/arrow-right-white.svg') center / cover;
+  }
+
+  &:hover {
+    background: var(--colors-button-background-hover);
+  }
+  &:active {
+    background: var(--colors-button-background-active);
   }
 }

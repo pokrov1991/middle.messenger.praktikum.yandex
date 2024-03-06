@@ -10,7 +10,9 @@ import { getPageName } from './utils'
 const pages = {
   'main': Pages.Main,
   'login': Pages.Login,
-  'signin': Pages.Signin
+  'signin': Pages.Signin,
+  'profile': Pages.Profile,
+  'profile-edit': Pages.ProfileEdit,
 }
 
 const pageName = getPageName(location.href)
