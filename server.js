@@ -11,7 +11,7 @@ const base = process.env.BASE || '/'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const __allowedPathsStatic = ['/fonts', '/icons']
-const __allowedPaths = ['/', '/login', '/signin', '/profile', '/profile/edit', '/profile/password', ...__allowedPathsStatic];
+const __allowedPaths = ['/', '/login', '/signin', '/profile', '/profile/edit', '/profile/password', '/not-found', '/server-error', ...__allowedPathsStatic];
 
 // Создаем http сервер
 const app = express()
@@ -32,7 +32,7 @@ app.use(express.static(`${__dirname}/dist`));
 app.get(__allowedPaths, async (req, res) => {
   try {
     const data = await readFile('src/index.html', 'utf8');
-    res.send(data);
+    res.status(200).send(data);
   } catch (err) {
     console.error(err);
     const data = await readFile('src/500.html', 'utf8');
