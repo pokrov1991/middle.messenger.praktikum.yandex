@@ -1,5 +1,5 @@
 <div 
-  class="c-chat-message{{#if className}} {{ className }}{{/if}}"
+  class="c-chat-message{{#if className}} {{ className }}{{/if}}{{#if isMy}} c-chat-message_my{{/if}}"
 >
   <p class="c-chat-message__text">
     {{ message }}

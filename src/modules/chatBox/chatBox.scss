@@ -58,6 +58,13 @@
     letter-spacing: 0em;
     color: var(--colors-page-color);
   }
+  &__kebab {
+    width: 25px;
+    height: 25px;
+    margin-left: auto;
+    background: url('/icons/kebab.svg') no-repeat center;
+    cursor: pointer;
+  }
 }
 
 .c-chat-box-messages {
@@ -67,46 +74,25 @@
   gap: 30px;
 }
 
-.c-chat-message {
-  position: relative;
-  padding: 11px;
-  border-radius: 0 10px 10px 10px;
-  background: var(--colors-chat-message);
-  color: var(--colors-page-color);
-
-  &__text {
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 15px;
-    letter-spacing: 0em;
-  }
-  &__date {
-    position: absolute;
-    bottom: 11px;
-    right: 11px;
-    font-size: 9px;
-    font-weight: 500;
-    line-height: 9px;
-    letter-spacing: 0em;
-    color: var(--colors-chat-item-slave);    
-  }
-}
-
 .c-chat-box-action {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
   font-size: 12px;
   font-weight: 500;
   line-height: 15px;
   letter-spacing: 0em;
   
   &__attach {
-    color: var(--colors-chat-item-slave);
+    width: 32px;
+    height: 32px;
+    background: url('/icons/attach.svg') no-repeat center;
+    cursor: pointer;
   }
   &__text {
-    color: var(--colors-chat-item-slave);
+    width: 100%;
   }
   &__send {
-    color: var(--colors-chat-item-slave);
+    width: 28px;
   }
 }
