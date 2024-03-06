@@ -13,7 +13,9 @@ const pages = {
   'signin': Pages.Signin,
   'profile': Pages.Profile,
   'profile-edit': Pages.ProfileEdit,
-  'profile-password': Pages. ProfilePassword
+  'profile-password': Pages. ProfilePassword,
+  'not-found': Pages.NotFound,
+  'server-error': Pages.ServerError,
 }
 
 const pageName = getPageName(location.href)
