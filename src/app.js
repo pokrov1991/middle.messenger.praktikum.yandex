@@ -13,6 +13,7 @@ const pages = {
   'signin': Pages.Signin,
   'profile': Pages.Profile,
   'profile-edit': Pages.ProfileEdit,
+  'profile-password': Pages. ProfilePassword
 }
 
 const pageName = getPageName(location.href)
