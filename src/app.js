@@ -1,4 +1,10 @@
 import './app.scss'
-import { template } from './pages'
 
-document.querySelector('#app').innerHTML = template({title: 'яЧат'})
+async function app() {
+  const { template } = await import('./pages')
+
+  template().then((res) => {
+    document.querySelector('#app').innerHTML = res({title: 'яЧат'})
+  })
+}
+app()
