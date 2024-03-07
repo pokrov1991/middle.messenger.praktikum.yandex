@@ -20,6 +20,7 @@ switch(pageName) {
     pageTemplate = pagePromise.Main
     break
   case 'login':
+  case null:
     pagePromise = await login()
     pageTemplate = pagePromise.Login
     break
@@ -42,7 +43,7 @@ switch(pageName) {
     pageTemplate = pagePromise.ProfilePassword
     break
 
-  case 'serverError':
+  case 'server-error':
     pagePromise = await serverError()
     pageTemplate = pagePromise.ServerError
     break

@@ -11,7 +11,7 @@ const base = process.env.BASE || '/'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const __allowedPathsStatic = ['/fonts', '/icons']
-const __allowedPaths = ['/', '/login', '/signin', '/profile', '/profile/edit', '/profile/password', '/not-found', '/server-error', ...__allowedPathsStatic];
+const __allowedPaths = ['/', ...__allowedPathsStatic]
 
 // Создаем http сервер
 const app = express()
@@ -26,37 +26,30 @@ const vite = await createServer({
 app.use(vite.middlewares)
 
 // Отдаем статику
-app.use(express.static(`${__dirname}/dist`));
+app.use(express.static(`${__dirname}/dist`))
 
 // Орабатываем все доступные страницы
 app.get(__allowedPaths, async (req, res) => {
   try {
-    const data = await readFile('src/index.html', 'utf8');
-    res.status(200).send(data);
+    const data = await readFile('src/index.html', 'utf8')
+    res.status(200).send(data)
   } catch (err) {
-    console.error(err);
-    const data = await readFile('src/500.html', 'utf8');
-    res.status(500).send(data);
+    res.status(500).send(`500 Error: ${err}`)
   }
-});
+})
 
 // Все остальные идут в 404
 app.use(async (req, res) => {
   try {
-    const data = await readFile('src/404.html', 'utf8');
-    res.status(404).send(data);
+    res.redirect('/?page=not-fond')
   } catch (err) {
-    console.error(err);
-    const data = await readFile('src/500.html', 'utf8');
-    res.status(500).send(data);
+    res.status(500).send(`500 Error: ${err}`)
   }
 })
 
 // Если ошибка 5xx
 app.use(async (err, req, res, next) => {
-  console.log()
-  const data = await readFile('src/500.html', 'utf8');
-  res.status(500).send(data);
+  res.status(500).send(`500 Error: ${err}`)
 })
 
 // Стартуем http сервер
