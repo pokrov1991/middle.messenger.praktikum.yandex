@@ -1,8 +1,10 @@
-export { Chat } from './chat'
-export { ChatList } from './chatList'
-export { ChatItem } from './chatList/components/chatItem'
-export { ChatBox } from './chatBox'
-export { ChatMessage } from './chatBox/components/chatMessage'
-export { Profile } from './profile'
-export { ProfileItem } from './profile/components/profileItem'
-export { Error } from './error'
+const chat = () => import('./chat')
+const chatList = () => import('./chatList')
+const chatItem = () => import('./chatList/components/chatItem')
+const chatBox = () => import('./chatBox')
+const chatMessage = () => import('./chatBox/components/chatMessage')
+const profile = () => import('./profile')
+const profileItem = () => import('./profile/components/profileItem')
+const error = () => import('./error')
+
+export { chat, chatList, chatItem, chatBox, chatMessage, profile, profileItem, error }

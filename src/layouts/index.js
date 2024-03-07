@@ -1,3 +1,5 @@
-export { LayoutEmpty } from './layoutEmpty'
-export { LayoutAuth } from './layoutAuth'
-export { LayoutProfile } from './layoutProfile'
+const layoutEmpty = () => import('./layoutEmpty')
+const layoutAuth = () => import('./layoutAuth')
+const layoutProfile = () => import('./layoutProfile')
+
+export { layoutEmpty, layoutAuth, layoutProfile }
