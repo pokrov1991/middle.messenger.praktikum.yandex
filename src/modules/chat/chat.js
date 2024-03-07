@@ -3,7 +3,7 @@ import { getPageHash } from '../../utils'
 import { isChatSelectedHelper, dataChatSelectedHelper } from './utils/helpers'
 
 // Мок-даннные списка чатов
-const dataChatList = [
+window.dataChatList = [
   {
     id: 'andrey',
     userName: 'Андрей',
@@ -32,28 +32,13 @@ const dataChatList = [
 
 // Временный вызол заглушки "Выберите чат"
 window.isChatSelected = getPageHash() === 'messages'
-window.dataChatSelected = window.isChatSelected ? dataChatList[0] : {}
+window.dataChatSelected = window.isChatSelected ? window.dataChatList[0] : {}
 
 // Выводим список чатов
-Handlebars.registerHelper('chat-list', () => dataChatList)
+Handlebars.registerHelper('chat-list', () => window.dataChatList)
 
 // Вывод "Выберите чат" или сообщений 
 Handlebars.registerHelper('if-chat-selected', (isChatSelected, options) => isChatSelectedHelper(window.isChatSelected, options))
 
 // Вывод данных выбранного чата
 Handlebars.registerHelper('data-chat-selected', (dataChatSelected, options) => dataChatSelectedHelper(window.dataChatSelected, options))
-
-// Обрабатываем клик по чату
-document.addEventListener('DOMContentLoaded', () => {
-  const nodeChatList = document.querySelector('#chat-list')
-
-  nodeChatList.addEventListener('click', event => {
-    event.stopImmediatePropagation()
-    
-    const chatId = event.target.getAttribute('data-id-chat')
-    window.dataChatSelected = dataChatList.find(chat => chat.id === chatId)
-    // Временный вывод данный чата в консоль и показ заглушки
-    console.log('Chat', window.dataChatSelected)
-    location.href = '?page=chat#messages'
-  })
-})
