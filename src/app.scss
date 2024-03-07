@@ -43,6 +43,9 @@ ul {
   color: var(--colors-link-color);
   text-decoration: none;
 
+  &_red {
+    color: var(--colors-link-color-red);
+  }
   &:hover {
     text-decoration: underline;
   }
