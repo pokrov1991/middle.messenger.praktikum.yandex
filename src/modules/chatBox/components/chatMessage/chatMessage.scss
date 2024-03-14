@@ -1,0 +1,32 @@
+.c-chat-message {
+  width: 100%;
+  max-width: 402px;
+  position: relative;
+  padding: 11px;
+  border-radius: 0 10px 10px 10px;
+  background: var(--colors-chat-message);
+  color: var(--colors-page-color);
+
+  &__text {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15px;
+    letter-spacing: 0em;
+  }
+  &__date {
+    position: absolute;
+    bottom: 11px;
+    right: 11px;
+    font-size: 9px;
+    font-weight: 500;
+    line-height: 9px;
+    letter-spacing: 0em;
+    color: var(--colors-chat-item-slave);    
+  }
+
+  &_my {
+    margin-left: auto;
+    border-radius: 10px 10px 0 10px;
+    background: var(--colors-chat-message-my);
+  }
+}

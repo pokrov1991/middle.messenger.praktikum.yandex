@@ -1,0 +1,27 @@
+.c-button {
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--colors-button-color);
+  background: var(--colors-button-background);
+  transition: var(--transition-03);
+  cursor: pointer;
+
+  span {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 13px;
+    letter-spacing: 0em;
+  }
+
+  &:hover {
+    background: var(--colors-button-background-hover);
+  }
+  &:active {
+    background: var(--colors-button-background-active);
+  }
+}

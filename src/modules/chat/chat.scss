@@ -1,0 +1,88 @@
+@import './../../assets/mixins.scss';
+
+.c-chat {
+  @include fullSize;
+  display: flex;
+
+  &__sidebar {
+    @include fullSize;
+    max-width: 310px;
+    padding: 0 10px;
+    border-right: 1px solid var(--colors-chat-sidebar-border);
+    background: var(--colors-chat-sidebar-background);
+  }
+  &__box {
+    @include fullSize;
+  }
+  &__profile {
+    width: 100%;
+    padding: 21px 0 23px;
+    display: flex;
+    justify-content: flex-end;
+
+    .c-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 12px;
+      color: var(--colors-link-color-grey);
+
+      &::after {
+        content: '';
+        display: block;
+        height: 8px;
+        width: 4px;
+        background: url('/icons/arrow-right-grey.svg') center / cover;
+      }
+    }
+  }
+  &__search {
+    width: 100%;
+    padding-bottom: 14px;
+
+    .c-input-search {
+      height: 32px;
+      padding: 0;
+      border-radius: 5px;
+      background: var(--colors-chat-search-background);
+    
+      label {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        line-height: 12px;
+        top: 50%;
+        left: 50%;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+        gap: 4px;
+
+        &::before {
+          content: '';
+          display: block;
+          width: 20px;
+          height: 20px;
+          background: url('/icons/search.svg') center / cover;
+        }
+      }
+      input {
+        height: 32px;
+        padding: 10px 10px 10px 32px;
+        background: none;
+        border-bottom: none;
+      }
+    }
+    .c-input_focus {
+      label {
+        left: 10px;
+        transform: translate(0, -50%);
+        font-size: 0;
+      }
+    }
+  }
+  &__list {
+    width: 100%;
+  }
+}

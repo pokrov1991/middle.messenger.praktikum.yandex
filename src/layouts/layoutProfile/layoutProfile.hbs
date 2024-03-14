@@ -1,0 +1,19 @@
+<main class="c-layout c-layout-profile">
+  <div class="c-layout-profile__back" onclick="window.toRoute('{{ urlBack }}')">
+    <a href="{{ urlBack }}" class="c-router-arrow"></a>
+  </div>
+  <div class="c-layout-profile__wrap">
+    <div class="c-layout-profile__avatar">
+      <div class="c-profile-avatar">
+        <span class="c-profile-avatar__upload" onclick="console.log('upload')">
+          Поменять аватар
+        </span>
+        <img class="c-profile-avatar__img" src="/icons/avatar-default.jpg" alt="Avatar">
+      </div>
+      {{> Title text=title className="c-layout-profile__title" }}
+    </div>
+    <div class="c-layout-profile__body">
+      {{> @partial-block }}
+    </div>
+  </div>
+</main>

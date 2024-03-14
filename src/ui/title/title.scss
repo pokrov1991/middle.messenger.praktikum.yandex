@@ -1,0 +1,17 @@
+.c-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  svg {
+    width: 32px;
+  }
+  span {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    color: rgba(30, 30, 30, 1);
+  }
+}

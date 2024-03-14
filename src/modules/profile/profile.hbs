@@ -1,0 +1,15 @@
+<section class="c-profile">
+  {{#if isEdit}}
+  <div class="c-profile-list">
+    {{#each (profile-list)}}
+      {{> Input }}
+    {{/each}}
+  </div>
+  {{else}}
+  <ul class="c-profile-list">
+    {{#each (profile-list)}}
+      {{> ProfileItem }}
+    {{/each}}
+  </ul>
+  {{/if}}
+</section>

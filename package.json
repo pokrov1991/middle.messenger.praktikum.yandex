@@ -1,0 +1,24 @@
+{
+  "name": "chat",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": "20.10.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "node server",
+    "build": "vite build --emptyOutDir",
+    "preview": "cross-env NODE_ENV=production node server",
+    "start": "npm run build && npm run preview"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "sass": "^1.71.1",
+    "vite": "^5.1.4"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "vite-plugin-handlebars": "^2.0.0"
+  }
+}

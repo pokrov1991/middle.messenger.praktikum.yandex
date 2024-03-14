@@ -1,0 +1,13 @@
+<div class="c-input{{#if className}} {{ className }}{{/if}}{{#if value}} c-input_focus{{/if}}">
+  <label for="{{ id }}">{{ label }}</label>
+  <input 
+    type="{{ type }}" 
+    id="{{ id }}" 
+    name="{{ name }}" 
+    value="{{ value }}" 
+    {{ required }} 
+    onfocus="window.inputFocus({{ id }}, true)"
+    onfocusout="window.inputFocus({{ id }})"
+    oninput="{{ oninput }}({{ id }})"
+  />
+</div>

@@ -1,0 +1,15 @@
+.c-profile {
+  width: 100%;
+
+  .c-profile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .c-profile-item {
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}

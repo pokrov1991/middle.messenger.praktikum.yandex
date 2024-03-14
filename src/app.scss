@@ -1,0 +1,79 @@
+@import './assets/variable.scss';
+@import './assets/fonts.scss';
+@import './assets/mixins.scss';
+
+:root {
+  font-family: Inter, sans-serif;
+  color-scheme: normal;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+main,
+#app {
+  @include fullSize;
+}
+
+body {
+  background: rgba(255, 255, 255, 1);
+}
+
+ul {
+  li {
+    list-style-type: none;
+  }
+}
+
+/* Общие стили*/
+.c-link {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 11px;
+  letter-spacing: 0em;
+  color: var(--colors-link-color);
+  text-decoration: none;
+
+  &_red {
+    color: var(--colors-link-color-red);
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.c-router-arrow,
+.c-button-arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--colors-button-background);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+ 
+  &::after {
+    content: '';
+    width: 11px;
+    height: 10px;
+    background: url('/icons/arrow-right-white.svg') center / cover;
+  }
+
+  &:hover {
+    background: var(--colors-button-background-hover);
+  }
+  &:active {
+    background: var(--colors-button-background-active);
+  }
+}

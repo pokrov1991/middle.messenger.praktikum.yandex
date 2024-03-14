@@ -1,0 +1,19 @@
+{{#> LayoutAuth title="Регистрация" }}
+  <div class="c-page c-page-signin">
+    <form action="/" class="c-page-signin__form c-form-auth">
+      <div class="c-form-auth__fields">
+        {{> InputEmail label="Почта" id="email" name="email" required="required" className="c-form-auth__field" oninput="window.onEmailValidate" }}
+        {{> Input label="Логин" id="login" name="login" className="c-form-auth__field" }}
+        {{> Input label="Имя" id="first_name" name="first_name" className="c-form-auth__field" }}
+        {{> Input label="Фамилия" id="second_name" name="second_name" className="c-form-auth__field" }}
+        {{> Input label="Телефон" id="phone" name="phone" className="c-form-auth__field" }}
+        {{> InputPassword label="Пароль" id="password" name="password" required="required" className="c-form-auth__field" }}
+        {{> InputPassword label="Пароль (еще раз)" id="password_repeat" name="password_repeat" required="required" className="c-form-auth__field" }}
+      </div>
+      {{> Button text="Зарегистрироваться" className="c-form-auth__button" }}
+    </form>
+    <div class="c-page-signin__link">
+      <a class="c-link" href="/?page=login">Войти</a>
+    </div>
+  </div>
+{{/ LayoutAuth }}
