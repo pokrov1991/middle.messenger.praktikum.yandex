@@ -1,8 +1,8 @@
 import './main.scss'
 import Handlebars from 'handlebars'
-import { layoutEmpty } from './../../layouts'
-import { chat, chatList, chatItem, chatBox, chatMessage } from './../../modules'
-import { input, textarea } from './../../ui'
+import { layoutEmpty } from '../../layouts'
+import { chat, chatList, chatItem, chatBox, chatMessage } from '../../modules'
+import { input, textarea } from '../../ui'
 
 export async function main() {
   const layoutEmptyPromise = await layoutEmpty()

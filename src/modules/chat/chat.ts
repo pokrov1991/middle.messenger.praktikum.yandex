@@ -38,7 +38,7 @@ window.dataChatSelected = window.isChatSelected ? window.dataChatList[0] : {}
 Handlebars.registerHelper('chat-list', () => window.dataChatList)
 
 // Вывод "Выберите чат" или сообщений 
-Handlebars.registerHelper('if-chat-selected', (isChatSelected, options) => isChatSelectedHelper(window.isChatSelected, options))
+Handlebars.registerHelper('if-chat-selected', (_isChatSelected: any, options) => isChatSelectedHelper(window.isChatSelected, options))
 
 // Вывод данных выбранного чата
-Handlebars.registerHelper('data-chat-selected', (dataChatSelected, options) => dataChatSelectedHelper(window.dataChatSelected, options))
+Handlebars.registerHelper('data-chat-selected', (_dataChatSelected, options) => dataChatSelectedHelper(window.dataChatSelected, options))

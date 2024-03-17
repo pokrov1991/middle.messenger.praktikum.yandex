@@ -1,3 +1,3 @@
 import './input.scss'
-import './input.js'
+import './input'
 export { default as Input } from './input.hbs?raw'

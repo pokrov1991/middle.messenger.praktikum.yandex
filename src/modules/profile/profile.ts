@@ -1,7 +1,8 @@
+import { Field } from './types/field'
 import Handlebars from 'handlebars'
 
 // Мок-даннные профиля
-const dataProfile = [
+const dataProfile: Field[] = [
   {
     id: 'email',
     name: 'email',

@@ -1,4 +1,4 @@
 import './chatItem.scss'
-import './chatItem.js'
+import './chatItem'
 
 export { default as ChatItem } from './chatItem.hbs?raw'

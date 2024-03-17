@@ -1,4 +1,4 @@
 import './profile.scss'
-import './profile.js'
+import './profile'
 
 export { default as Profile } from './profile.hbs?raw'
