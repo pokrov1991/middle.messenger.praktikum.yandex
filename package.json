@@ -7,14 +7,18 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "node server",
-    "build": "vite build --emptyOutDir",
+    "dev": "npx tsx server.ts",
+    "prebuild": "tsc --noEmit",
+    "build": "npm run prebuild && vite build --emptyOutDir",
     "preview": "cross-env NODE_ENV=production node server",
     "start": "npm run build && npm run preview"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "cross-env": "^7.0.3",
     "sass": "^1.71.1",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2",
     "vite": "^5.1.4"
   },
   "dependencies": {

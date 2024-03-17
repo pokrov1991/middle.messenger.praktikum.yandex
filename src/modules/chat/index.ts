@@ -1,4 +1,4 @@
 import './chat.scss'
-import './chat.js'
+import './chat'
 
 export { default as Chat } from './chat.hbs?raw'

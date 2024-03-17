@@ -2,10 +2,12 @@ import Handlebars from 'handlebars'
 import { getPageName } from './../utils'
 
 export async function template() {  
-  const pageName = getPageName(location.href)
+  const pageName: string = getPageName(location.href)
   
-  let pagePromise = ''
-  let pageTemplate = ''
+  let pagePromise: { default: string } = {
+    default: ''
+  }
+  let pageTemplate: string = ''
   switch(pageName) {
     case 'main':
       const { main } = await import('./main')

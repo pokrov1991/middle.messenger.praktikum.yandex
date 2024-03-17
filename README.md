@@ -18,6 +18,12 @@ npm install
 
 npm run start
 
+# Команды для разработки
+
+npm run dev - в одном окне терминала сбока esbuild черз vite
+
+npx tsc --noEmit --watch - в другом окне терминала транспиляция ts
+
 ## Страницы
 
 Авторизация: https://reliable-pie-75ba03.netlify.app/?page=login

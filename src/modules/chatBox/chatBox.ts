@@ -1,7 +1,14 @@
 import Handlebars from 'handlebars'
 
+type Message = {
+  id: string;
+  date: string,
+  message: string,
+  isMy: boolean
+}
+
 // Мок-даннные сообщений
-const dataMessageList = [
+const dataMessageList: Message[] = [
   {
     id: 'key0',
     date: '12:00',

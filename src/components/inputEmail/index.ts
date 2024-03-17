@@ -1,3 +1,3 @@
 import './inputEmail.scss'
-import './inputEmail.js'
+import './inputEmail'
 export { default as InputEmail } from './inputEmail.hbs?raw'

@@ -1,4 +1,4 @@
-window.onChatShow = (event) => {    
+window.onChatShow = (event: any): void => {    
   const chatId = event.getAttribute('data-id-chat')
   window.dataChatSelected = window.dataChatList.find(chat => chat.id === chatId)
   
