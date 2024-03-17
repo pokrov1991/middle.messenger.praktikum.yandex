@@ -15,12 +15,13 @@
     font-size: 13px;
     font-weight: 500;
     line-height: 13px;
-    letter-spacing: 0em;
+    letter-spacing: 0;
   }
 
   &:hover {
     background: var(--colors-button-background-hover);
   }
+
   &:active {
     background: var(--colors-button-background-active);
   }

@@ -4,7 +4,7 @@ import { layoutEmpty } from '../../layouts'
 import { chat, chatList, chatItem, chatBox, chatMessage } from '../../modules'
 import { input, textarea } from '../../ui'
 
-export async function main() {
+export async function main () {
   const layoutEmptyPromise = await layoutEmpty()
   const LayoutEmpty = layoutEmptyPromise.LayoutEmpty
 
@@ -24,10 +24,15 @@ export async function main() {
   const textareaPromise = await textarea()
   const Textarea = textareaPromise.Textarea
 
-  Object.entries({ 
+  Object.entries({
     LayoutEmpty,
-    Chat, ChatList, ChatItem, ChatBox, ChatMessage,
-    Input, Textarea
+    Chat,
+    ChatList,
+    ChatItem,
+    ChatBox,
+    ChatMessage,
+    Input,
+    Textarea
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
   })

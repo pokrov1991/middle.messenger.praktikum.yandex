@@ -1,60 +1,68 @@
 import Handlebars from 'handlebars'
 import { getPageName } from './../utils'
 
-export async function template() {  
-  const pageName: string = getPageName(location.href)
-  
+export async function template () {
+  const pageName: string | null = getPageName(location.href)
+
   let pagePromise: { default: string } = {
     default: ''
   }
   let pageTemplate: string = ''
-  switch(pageName) {
+  let main: any
+  let login: any
+  let signin: any
+  let profilePage: any
+  let profileEdit: any
+  let profilePassword: any
+  let serverError: any
+  let notFound: any
+  switch (pageName) {
     case 'main':
-      const { main } = await import('./main')
+      ({ main } = await import('./main'))
       pagePromise = await main()
       pageTemplate = pagePromise.default
       break
     case 'login':
     case null:
-      const { login } = await import('./login')
+      ({ login } = await import('./login'))
       pagePromise = await login()
       pageTemplate = pagePromise.default
       break
     case 'signin':
-      const { signin } = await import('./signin')
+      ({ signin } = await import('./signin'))
       pagePromise = await signin()
       pageTemplate = pagePromise.default
       break
     case 'profile':
-      const { profilePage } = await import('./profile')
+      ({ profilePage } = await import('./profile'))
       pagePromise = await profilePage()
       pageTemplate = pagePromise.default
       break
-  
+
     case 'profile-edit':
-      const { profileEdit } = await import('./profile-edit')
+      ({ profileEdit } = await import('./profile-edit'))
       pagePromise = await profileEdit()
       pageTemplate = pagePromise.default
       break
-  
+
     case 'profile-password':
-      const { profilePassword } = await import('./profile-password')
+      ({ profilePassword } = await import('./profile-password'))
       pagePromise = await profilePassword()
       pageTemplate = pagePromise.default
       break
-  
+
     case 'server-error':
-      const { serverError } = await import('./server-error')
+      ({ serverError } = await import('./server-error'))
       pagePromise = await serverError()
       pageTemplate = pagePromise.default
       break
-  
+
     default:
-      const { notFound } = await import('./not-found')
+      ({ notFound } = await import('./not-found'))
       pagePromise = await notFound()
       pageTemplate = pagePromise.default
       break
   }
-  
+
   return Handlebars.compile(pageTemplate)
 }

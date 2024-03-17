@@ -1,9 +1,9 @@
 import Handlebars from 'handlebars'
 
-type Message = {
-  id: string;
-  date: string,
-  message: string,
+interface Message {
+  id: string
+  date: string
+  message: string
   isMy: boolean
 }
 

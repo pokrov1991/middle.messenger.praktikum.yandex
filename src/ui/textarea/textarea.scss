@@ -6,7 +6,7 @@
     font-size: 12px;
     font-weight: 500;
     line-height: 10px;
-    letter-spacing: 0em;
+    letter-spacing: 0;
     color: var(--colors-input-color);
     background: var(--colors-chat-search-background);
     border: none;
@@ -18,7 +18,7 @@
       font-size: 12px;
       font-weight: 500;
       line-height: 12px;
-      letter-spacing: 0em;
+      letter-spacing: 0;
       color: var(--colors-input-label-color);
     }
   }

@@ -1,8 +1,8 @@
-type Field = {
-  id: string;
-  name: string,
-  label: string,
+interface Field {
+  id: string
+  name: string
+  label: string
   value: string
-};
+}
 
 export type { Field }

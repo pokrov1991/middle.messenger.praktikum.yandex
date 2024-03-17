@@ -5,7 +5,7 @@ import { profile } from './../../modules'
 import { inputPassword } from './../../components'
 import { input, button, title } from './../../ui'
 
-export async function profilePassword() {
+export async function profilePassword () {
   const layoutProfilePromise = await layoutProfile()
   const LayoutProfile = layoutProfilePromise.LayoutProfile
 
@@ -22,7 +22,7 @@ export async function profilePassword() {
   const titlePromise = await title()
   const Title = titlePromise.Title
 
-  Object.entries({ 
+  Object.entries({
     LayoutProfile,
     Profile,
     InputPassword,

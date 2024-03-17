@@ -1,12 +1,12 @@
-@import './assets/variable.scss';
-@import './assets/fonts.scss';
-@import './assets/mixins.scss';
+@import './assets/variable';
+@import './assets/fonts';
+@import './assets/mixins';
 
 :root {
   font-family: Inter, sans-serif;
   color-scheme: normal;
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -21,11 +21,11 @@ html,
 body,
 main,
 #app {
-  @include fullSize;
+  @include full-size;
 }
 
 body {
-  background: rgba(255, 255, 255, 1);
+  background: rgb(255 255 255 / 100%);
 }
 
 ul {
@@ -34,18 +34,19 @@ ul {
   }
 }
 
-/* Общие стили*/
+/* Общие стили */
 .c-link {
   font-size: 11px;
   font-weight: 500;
   line-height: 11px;
-  letter-spacing: 0em;
+  letter-spacing: 0;
   color: var(--colors-link-color);
   text-decoration: none;
 
   &_red {
     color: var(--colors-link-color-red);
   }
+
   &:hover {
     text-decoration: underline;
   }
@@ -73,6 +74,7 @@ ul {
   &:hover {
     background: var(--colors-button-background-hover);
   }
+
   &:active {
     background: var(--colors-button-background-active);
   }

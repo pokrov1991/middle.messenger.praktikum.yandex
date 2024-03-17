@@ -1,19 +1,23 @@
-@import './../../assets/mixins.scss';
+@import './../../assets/mixins';
 
 .c-chat {
-  @include fullSize;
+  @include full-size;
+
   display: flex;
 
   &__sidebar {
-    @include fullSize;
+    @include full-size;
+
     max-width: 310px;
     padding: 0 10px;
     border-right: 1px solid var(--colors-chat-sidebar-border);
     background: var(--colors-chat-sidebar-background);
   }
+
   &__box {
-    @include fullSize;
+    @include full-size;
   }
+
   &__profile {
     width: 100%;
     padding: 21px 0 23px;
@@ -38,6 +42,7 @@
       }
     }
   }
+
   &__search {
     width: 100%;
     padding-bottom: 14px;
@@ -67,6 +72,7 @@
           background: url('/icons/search.svg') center / cover;
         }
       }
+
       input {
         height: 32px;
         padding: 10px 10px 10px 32px;
@@ -74,14 +80,18 @@
         border-bottom: none;
       }
     }
-    .c-input_focus {
-      label {
-        left: 10px;
-        transform: translate(0, -50%);
-        font-size: 0;
+
+    .c-input {
+      &_focus {
+        label {
+          left: 10px;
+          transform: translate(0, -50%);
+          font-size: 0;
+        }
       }
     }
   }
+
   &__list {
     width: 100%;
   }

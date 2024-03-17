@@ -4,7 +4,7 @@ import { layoutProfile } from './../../layouts'
 import { profile, profileItem } from './../../modules'
 import { title } from './../../ui'
 
-export async function profilePage() {
+export async function profilePage () {
   const layoutProfilePromise = await layoutProfile()
   const LayoutProfile = layoutProfilePromise.LayoutProfile
 
@@ -16,7 +16,7 @@ export async function profilePage() {
   const titlePromise = await title()
   const Title = titlePromise.Title
 
-  Object.entries({ 
+  Object.entries({
     LayoutProfile,
     Profile,
     ProfileItem,
