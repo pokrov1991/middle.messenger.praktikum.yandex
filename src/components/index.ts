@@ -1,4 +1,4 @@
-const inputPassword = () => import('./inputPassword')
-const inputEmail = () => import('./inputEmail')
+const inputPassword = async () => await import('./inputPassword')
+const inputEmail = async () => await import('./inputEmail')
 
 export { inputPassword, inputEmail }

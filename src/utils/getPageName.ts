@@ -1,4 +1,4 @@
-const getPageName = (originUrl: string): string => {
+const getPageName = (originUrl: string): string | null => {
   const url: URL = new URL(originUrl)
   const params: URLSearchParams = new URLSearchParams(url.search)
   return params.get('page')

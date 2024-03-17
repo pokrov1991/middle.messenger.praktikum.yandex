@@ -1,11 +1,13 @@
-@import './../../assets/mixins.scss';
+@import './../../assets/mixins';
 
 .c-layout-profile {
-  @include fullSize;
+  @include full-size;
+
   display: flex;
 
   &__back {
-    @include fullSize;
+    @include full-size;
+
     max-width: 64px;
     border-right: 1px solid var(--colors-chat-sidebar-border);
     background: var(--colors-chat-sidebar-background);
@@ -18,27 +20,32 @@
       transform: scale(-1, 1);
     }
   }
+
   &__wrap {
-    @include fullSize;
+    @include full-size;
+
     max-width: calc(100% - 64px);
     padding: 60px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   &__avatar {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 97px;
   }
+
   &__title {
     margin-top: 21px;
     font-size: 16px;
     font-weight: 600;
-    letter-spacing: 0em;
+    letter-spacing: 0;
     text-align: center;
   }
+
   &__body {
     width: 100%;
     max-width: 510px;
@@ -63,7 +70,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: Inter;
     font-size: 13px;
     font-weight: 500;
     line-height: 14px;
@@ -73,14 +79,17 @@
     transition: var(--transition-03);
     cursor: pointer;
   }
+
   &__img {
     object-fit: cover;
     width: 100%;
   }
 
   &:hover {
-    .c-profile-avatar__upload {
-      opacity: 1;
+    .c-profile-avatar {
+      &__upload {
+        opacity: 1;
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import { layoutAuth } from './../../layouts'
 import { inputPassword, inputEmail } from './../../components'
 import { input, button, title } from './../../ui'
 
-export async function signin() {
+export async function signin () {
   const layoutAuthPromise = await layoutAuth()
   const LayoutAuth = layoutAuthPromise.LayoutAuth
 
@@ -20,10 +20,13 @@ export async function signin() {
   const titlePromise = await title()
   const Title = titlePromise.Title
 
-  Object.entries({ 
+  Object.entries({
     LayoutAuth,
-    InputPassword, InputEmail,
-    Input, Button, Title
+    InputPassword,
+    InputEmail,
+    Input,
+    Button,
+    Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
   })

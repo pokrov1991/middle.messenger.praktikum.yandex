@@ -1,7 +1,8 @@
-@import './../../assets/mixins.scss';
+@import './../../assets/mixins';
 
 .c-chat-list {
-  @include fullSize;
+  @include full-size;
+
   display: flex;
   flex-direction: column;
 }

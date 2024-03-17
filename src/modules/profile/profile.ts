@@ -1,4 +1,4 @@
-import { Field } from './types/field'
+import { type Field } from './types/field'
 import Handlebars from 'handlebars'
 
 // Мок-даннные профиля
@@ -40,7 +40,6 @@ const dataProfile: Field[] = [
     value: '+7 (909) 967 30 30'
   }
 ]
-
 
 // Выводим данные профиля
 Handlebars.registerHelper('profile-list', () => dataProfile)
