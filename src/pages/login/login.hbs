@@ -1,14 +1,14 @@
-{{#> LayoutAuth title="Вход" }}
+{{#> LayoutAuth title=text }}
   <div class="c-page c-page-login">
-    {{ text }}
-    <form action="/" class="c-page-login__form c-form-auth">
+    <form id="formLogin" class="c-page-login__form c-form-auth">
       <div class="c-form-auth__fields">
-        {{> InputEmail label="Логин" id="login" name="login" required="required" className="c-form-auth__field" oninput="window.onEmailValidate" }}
-        {{> InputPassword label="Пароль" id="password" name="password" required="required" className="c-form-auth__field" oninput="window.onPasswordValidate" }}
+        {{!-- {{> InputEmail label="Логин" id="login" name="login" required="required" className="c-form-auth__field" oninput="window.onEmailValidate" }} --}}
+        {{{ InputEmail }}}
+        {{!-- {{> InputPassword label="Пароль" id="password" name="password" required="required" className="c-form-auth__field" oninput="window.onPasswordValidate" }} --}}
+        {{{ InputPassword }}}
       </div>
-      {{> Button text="Авторизоваться" className="c-form-auth__button" }}
-      {{> Button text=text className="c-form-auth__button" }}
-      {{{ button }}}
+      {{!-- {{> Button text="Авторизоваться" className="c-form-auth__button" }} --}}
+      {{{ Button }}}
     </form>
     <div class="c-page-login__link">
       <a class="c-link" href="/?page=signin">Нет аккаунта?</a>

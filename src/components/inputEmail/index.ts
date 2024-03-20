@@ -1,3 +1,3 @@
 import './inputEmail.scss'
-import './inputEmail'
+export { onValidateEmail } from './inputEmail'
 export { default as InputEmail } from './inputEmail.hbs?raw'

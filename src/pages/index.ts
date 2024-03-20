@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars'
+// import Handlebars from 'handlebars'
 import { getPageName } from './../utils'
 
 export async function template () {
@@ -25,8 +25,7 @@ export async function template () {
     case 'login':
     case null:
       ({ login } = await import('./login'))
-      pagePromise = await login()
-      pageTemplate = pagePromise.default
+      pageTemplate = await login()
       break
     case 'signin':
       ({ signin } = await import('./signin'))
@@ -64,5 +63,6 @@ export async function template () {
       break
   }
 
-  return Handlebars.compile(pageTemplate)
+  return pageTemplate
+  // return Handlebars.compile(pageTemplate)
 }
