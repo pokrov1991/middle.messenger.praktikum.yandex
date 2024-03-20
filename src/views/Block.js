@@ -127,7 +127,15 @@ export default class Block {
     this._removeEvents()
 
     this._element.innerHTML = ''
-    this._element.appendChild(block)
+    // Реализация добавления компонента, в обертку с id
+    // this._element.appendChild(block)
+
+    // Реализация добавления компонента, заменой обертки с id
+    const newElement = block.firstElementChild
+    if (this._element) {
+      this._element.replaceWith(newElement)
+    }
+    this._element = newElement
 
     this._addEvents()
   }
