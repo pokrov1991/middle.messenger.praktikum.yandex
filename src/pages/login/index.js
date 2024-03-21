@@ -1,6 +1,8 @@
 import './login.scss'
 import Handlebars from 'handlebars'
 import Block from '../../views/Block'
+import Mediator from '../../modules/mediator'
+import Validation from '../../modules/validation'
 import { layoutAuth } from './../../layouts'
 import { inputPassword, inputEmail } from './../../components'
 import { input, button, title } from './../../ui'
@@ -38,8 +40,15 @@ export async function login () {
   })
 
   // Методы
-  const onValidateEmail = inputEmailPromise.onValidateEmail
-  const onValidatePassword = inputPasswordPromise.onValidatePassword
+  const bus = new Mediator()
+  const validation = new Validation(['email', 'password'])
+
+  // Слушатели
+  bus.on('form:vaidated', (payload) => {
+    cButton.setProps({
+      disabled: payload.isValid ? '' : 'disabled'
+    })
+  })
 
   // Создание классов компонентов
   class BlockInputPassword extends Block {
@@ -68,9 +77,7 @@ export async function login () {
     }
 
     render () {
-      const { className, text, _id } = this.props
-      console.log('Button', _id)
-      return this.compile(Button, { className, text })
+      return this.compile(Button, this.props)
     }
   }
 
@@ -88,12 +95,15 @@ export async function login () {
   const cInputPassword = new BlockInputPassword({
     className: 'c-form-auth__field',
     label: 'Пароль',
+    textValid: 'Неверный пароль',
     id: 'password',
     name: 'password',
     required: 'required',
+    isValid: false,
     events: {
-      input: event => {
-        onValidatePassword(event, cButton)
+      focusout: event => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        validation.onValidatePassword(event, 'password')
       }
     }
   })
@@ -101,16 +111,22 @@ export async function login () {
   const cInputEmail = new BlockInputEmail({
     className: 'c-form-auth__field',
     label: 'Логин',
+    textValid: 'Неверныая почта',
     id: 'login',
     name: 'login',
     required: 'required',
+    isValid: false,
     events: {
-      input: onValidateEmail
+      focusout: event => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        validation.onValidateEmail(event, 'email')
+      }
     }
   })
 
   const cButton = new BlockButton({
     className: 'c-form-auth__button',
+    disabled: 'disabled',
     text: 'Авторизоваться',
     events: {
       click: onSubmit

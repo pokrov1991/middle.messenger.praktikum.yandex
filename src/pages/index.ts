@@ -1,5 +1,8 @@
-// import Handlebars from 'handlebars'
+import UserService from '../services/user-service'
 import { getPageName } from './../utils'
+
+const userService = new UserService()
+userService.init()
 
 export async function template () {
   const pageName: string | null = getPageName(location.href)
@@ -64,5 +67,4 @@ export async function template () {
   }
 
   return pageTemplate
-  // return Handlebars.compile(pageTemplate)
 }
