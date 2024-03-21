@@ -1,3 +1,6 @@
+import Mediator from '../../modules/mediator'
+const bus = new Mediator()
+
 const onSubmit = (event: any): void => {
   event.preventDefault()
 
@@ -9,7 +12,12 @@ const onSubmit = (event: any): void => {
     const login = formData.get('login')
     const password = formData.get('password')
 
-    console.log('Login form submit', { login, password })
+    const data = {
+      login,
+      password
+    }
+
+    bus.emit('user:login', data)
   }
 }
 

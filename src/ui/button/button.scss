@@ -25,4 +25,9 @@
   &:active {
     background: var(--colors-button-background-active);
   }
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }

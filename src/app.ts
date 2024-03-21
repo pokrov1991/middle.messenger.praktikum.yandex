@@ -13,17 +13,6 @@ async function app () {
     .catch((error) => {
       console.error(error)
     })
-
-  // template()
-  //   .then((res) => {
-  //     const appEl = document.querySelector<HTMLElement>('#app')
-  //     if (appEl !== null) {
-  //       appEl.innerHTML = res({ title: 'яЧат' })
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error(error)
-  //   })
 }
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 app()
