@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars'
-import { v4 as makeUUID } from 'uuid'
 import EventBus from './EventBus'
+import { v4 as makeUUID } from 'uuid'
 
 interface Meta {
   tagName: string
@@ -18,9 +18,10 @@ export default class Block {
   _element: HTMLElement | null = null
   _meta: Meta
   _id: string
+
+  eventBus: () => EventBus<string, Record<string, any[]>>
   children: object
   props: object
-  eventBus: () => EventBus<string, Record<string, any[]>>
 
   constructor (tagName = 'div', propsAndChildren = {}) {
     const eventBus = new EventBus()
@@ -32,7 +33,6 @@ export default class Block {
       props
     }
 
-    // Генерируем уникальный UUID V4
     this._id = makeUUID()
 
     this.children = children
@@ -42,6 +42,7 @@ export default class Block {
     this.eventBus = () => eventBus
 
     this._registerEvents(eventBus)
+
     eventBus.emit(Block.EVENTS.INIT)
   }
 
@@ -57,10 +58,10 @@ export default class Block {
     this._element = this._createDocumentElement(tagName)
   }
 
-  init () {
-    this._createResources()
-
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
+  _createDocumentElement (tagName) {
+    const element = document.createElement(tagName)
+    element.setAttribute('data-id', this._id)
+    return element
   }
 
   _componentDidMount () {
@@ -71,12 +72,6 @@ export default class Block {
     })
   }
 
-  componentDidMount () {}
-
-  dispatchComponentDidMount () {
-    this.eventBus().emit(Block.EVENTS.FLOW_CDM)
-  }
-
   _componentDidUpdate (oldProps, newProps) {
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
@@ -85,20 +80,24 @@ export default class Block {
     this._render()
   }
 
-  componentDidUpdate (_oldProps, _newProps) {
-    return true
-  }
+  _makePropsProxy (props) {
+    const self = this
 
-  setProps = nextProps => {
-    if (!nextProps) {
-      return
-    }
+    return new Proxy(props, {
+      get (target, prop) {
+        const value = target[prop]
+        return typeof value === 'function' ? value.bind(target) : value
+      },
+      set (target, prop, value) {
+        target[prop] = value
 
-    Object.assign(this.props, nextProps)
-  }
-
-  get element () {
-    return this._element
+        self.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target)
+        return true
+      },
+      deleteProperty () {
+        throw new Error('Нет доступа')
+      }
+    })
   }
 
   _addEvents () {
@@ -117,22 +116,31 @@ export default class Block {
     })
   }
 
+  _getChildren (propsAndChildren) {
+    const children = {}
+    const props = {}
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    Object.entries(propsAndChildren).forEach(([key, value]) => {
+      if (value instanceof Block) {
+        children[key] = value
+      } else {
+        props[key] = value
+      }
+    })
+
+    return { children, props }
+  }
+
   _render () {
     const block = this.render()
-    // Этот небезопасный метод для упрощения логики
-    // Используйте шаблонизатор из npm или напишите свой безопасный
-    // Нужно не в строку компилировать (или делать это правильно),
-    // либо сразу в DOM-элементы возвращать из compile DOM-ноду
 
     this._removeEvents()
 
     if (this._element !== null) {
       this._element.innerHTML = ''
 
-      // Реализация добавления компонента, в обертку с id
-      // this._element.appendChild(block)
-
-      // Реализация добавления компонента, заменой обертки с id
+      // Добавления компонента, заменой обертки с id
       const newElement = block.firstElementChild as HTMLElement
       if (this._element) {
         this._element.replaceWith(newElement)
@@ -143,12 +151,35 @@ export default class Block {
     this._addEvents()
   }
 
-  render (): HTMLElement {
-    return document.createElement('div')
+  init () {
+    this._createResources()
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
+  }
+
+  componentDidMount () {}
+
+  componentDidUpdate (_oldProps, _newProps) {
+    return true
+  }
+
+  dispatchComponentDidMount () {
+    this.eventBus().emit(Block.EVENTS.FLOW_CDM)
+  }
+
+  get element () {
+    return this._element
   }
 
   getContent () {
     return this.element
+  }
+
+  setProps = nextProps => {
+    if (!nextProps) {
+      return
+    }
+
+    Object.assign(this.props, nextProps)
   }
 
   compile (template, props) {
@@ -173,51 +204,8 @@ export default class Block {
     return fragment.content
   }
 
-  _getChildren (propsAndChildren) {
-    const children = {}
-    const props = {}
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    Object.entries(propsAndChildren).forEach(([key, value]) => {
-      if (value instanceof Block) {
-        children[key] = value
-      } else {
-        props[key] = value
-      }
-    })
-
-    return { children, props }
-  }
-
-  _makePropsProxy (props) {
-    // Можно и так передать this
-    // Такой способ больше не применяется с приходом ES6+
-    const self = this
-
-    return new Proxy(props, {
-      get (target, prop) {
-        const value = target[prop]
-        return typeof value === 'function' ? value.bind(target) : value
-      },
-      set (target, prop, value) {
-        target[prop] = value
-
-        // Запускаем обновление компоненты
-        // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
-        self.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target)
-        return true
-      },
-      deleteProperty () {
-        throw new Error('Нет доступа')
-      }
-    })
-  }
-
-  _createDocumentElement (tagName) {
-    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
-    const element = document.createElement(tagName)
-    element.setAttribute('data-id', this._id)
-    return element
+  render (): HTMLElement {
+    return document.createElement('div')
   }
 
   show () {
