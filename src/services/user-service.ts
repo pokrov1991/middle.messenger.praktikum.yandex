@@ -8,8 +8,9 @@ interface DataLogin {
 
 export default class UserService {
   constructor () {
-    bus.on('user:login', (data: DataLogin) => {
-      this.login(data)
+    bus.on('user:login', (data) => {
+      const { login, password } = data as unknown as DataLogin
+      this.login({ login, password })
     })
   }
 
@@ -18,6 +19,6 @@ export default class UserService {
   }
 
   login (data: DataLogin) {
-    console.log('Login', data)
+    console.log('Login send', data)
   }
 }

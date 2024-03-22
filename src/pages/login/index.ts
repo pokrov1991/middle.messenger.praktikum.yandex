@@ -3,6 +3,7 @@ import Handlebars from 'handlebars'
 import Block from '../../views/Block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
+import { type Props } from '../../types/global'
 import { layoutAuth } from './../../layouts'
 import { inputPassword, inputEmail } from './../../components'
 import { input, button, title } from './../../ui'
@@ -45,14 +46,15 @@ export async function login () {
 
   // Слушатели
   bus.on('form:vaidated', (payload) => {
+    const { isValid } = payload as unknown as Props
     cButton.setProps({
-      disabled: payload.isValid ? '' : 'disabled'
+      disabled: isValid ? '' : 'disabled'
     })
   })
 
   // Создание классов компонентов
   class BlockInputPassword extends Block {
-    constructor (props) {
+    constructor (props: Props) {
       super('div', props)
     }
 
@@ -62,7 +64,7 @@ export async function login () {
   }
 
   class BlockInputEmail extends Block {
-    constructor (props) {
+    constructor (props: Props) {
       super('div', props)
     }
 
@@ -72,7 +74,7 @@ export async function login () {
   }
 
   class BlockButton extends Block {
-    constructor (props) {
+    constructor (props: Props) {
       super('button', props)
     }
 
@@ -82,7 +84,7 @@ export async function login () {
   }
 
   class BlockLogin extends Block {
-    constructor (props) {
+    constructor (props: Props) {
       super('section', props)
     }
 

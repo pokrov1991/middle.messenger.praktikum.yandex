@@ -2,6 +2,11 @@ import Handlebars from 'handlebars'
 import { v4 as makeUUID } from 'uuid'
 import EventBus from './EventBus'
 
+interface Meta {
+  tagName: string
+  props: object | null
+}
+
 export default class Block {
   static EVENTS = {
     INIT: 'init',
@@ -10,16 +15,13 @@ export default class Block {
     FLOW_RENDER: 'flow:render'
   }
 
-  _element = null
-  _meta = null
-  _id = null
+  _element: HTMLElement | null = null
+  _meta: Meta
+  _id: string
+  children: object
+  props: object
+  eventBus: () => EventBus<string, Record<string, any[]>>
 
-  /** JSDoc
-   * @param {string} tagName
-   * @param {Object} propsAndChildren
-   *
-   * @returns {void}
-   */
   constructor (tagName = 'div', propsAndChildren = {}) {
     const eventBus = new EventBus()
 
@@ -69,7 +71,7 @@ export default class Block {
     })
   }
 
-  componentDidMount (oldProps) {}
+  componentDidMount () {}
 
   dispatchComponentDidMount () {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
@@ -83,7 +85,7 @@ export default class Block {
     this._render()
   }
 
-  componentDidUpdate (oldProps, newProps) {
+  componentDidUpdate (_oldProps, _newProps) {
     return true
   }
 
@@ -100,20 +102,18 @@ export default class Block {
   }
 
   _addEvents () {
-    const { events = {} } = this.props
+    const { events = {} } = this.props as { events?: object }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     Object.keys(events).forEach(eventName => {
-      this._element.addEventListener(eventName, events[eventName])
+      this._element?.addEventListener(eventName, events[eventName] as EventListener)
     })
   }
 
   _removeEvents () {
-    const { events = {} } = this.props
+    const { events = {} } = this.props as { events?: object }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     Object.keys(events).forEach(eventName => {
-      this._element.removeEventListener(eventName, events[eventName])
+      this._element?.removeEventListener(eventName, events[eventName] as EventListener)
     })
   }
 
@@ -126,22 +126,25 @@ export default class Block {
 
     this._removeEvents()
 
-    this._element.innerHTML = ''
-    // Реализация добавления компонента, в обертку с id
-    // this._element.appendChild(block)
+    if (this._element !== null) {
+      this._element.innerHTML = ''
 
-    // Реализация добавления компонента, заменой обертки с id
-    const newElement = block.firstElementChild
-    if (this._element) {
-      this._element.replaceWith(newElement)
+      // Реализация добавления компонента, в обертку с id
+      // this._element.appendChild(block)
+
+      // Реализация добавления компонента, заменой обертки с id
+      const newElement = block.firstElementChild as HTMLElement
+      if (this._element) {
+        this._element.replaceWith(newElement)
+      }
+      this._element = newElement
     }
-    this._element = newElement
 
     this._addEvents()
   }
 
-  render () {
-    return true
+  render (): HTMLElement {
+    return document.createElement('div')
   }
 
   getContent () {
@@ -218,10 +221,16 @@ export default class Block {
   }
 
   show () {
-    this.getContent().style.display = 'block'
+    const content = this.getContent()
+    if (content !== null) {
+      content.style.display = 'block'
+    }
   }
 
   hide () {
-    this.getContent().style.display = 'none'
+    const content = this.getContent()
+    if (content !== null) {
+      content.style.display = 'none'
+    }
   }
 }
