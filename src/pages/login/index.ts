@@ -1,6 +1,6 @@
 import './login.scss'
 import Handlebars from 'handlebars'
-import Block from '../../views/Block'
+import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
 import { type Props } from '../../types/global'
