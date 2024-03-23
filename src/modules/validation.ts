@@ -33,41 +33,38 @@ export default class Validation {
     this.fieldsVerified = Array.from(new Set([...this.fieldsVerified, field]))
   }
 
-  onValidateName (field: string) {
-    console.log('onValidateName')
-    this._arrayPush(field)
+  _isValid (event: InputEvent, regex: RegExp): boolean {
+    const inputElement = event.target as HTMLInputElement
+    return regex.test(inputElement.value)
   }
 
-  onValidateLogin (field: string) {
-    console.log('onValidateLogin')
-    this._arrayPush(field)
+  onValidateName (event: InputEvent, field: string): void {
+    const isValid = this._isValid(event, /^(?:[А-ЯA-Z][а-яa-z-]*|[A-Z][a-z-]*)$/)
+    this._fieldControl(isValid, event, field)
   }
 
-  onValidatePhone (field: string) {
-    console.log('onValidatePhone')
-    this._arrayPush(field)
+  onValidateLogin (event: InputEvent, field: string): void {
+    const isValid = this._isValid(event, /^(?!-|\d)(?!.*--)[A-Za-z\d_-]{3,20}(?<!-)$/g)
+    this._fieldControl(isValid, event, field)
   }
 
-  onValidateMessage (field: string) {
-    console.log('onValidateMessage')
-    this._arrayPush(field)
+  onValidatePhone (event: InputEvent, field: string): void {
+    const isValid = this._isValid(event, /^\+?\d{10,15}$/)
+    this._fieldControl(isValid, event, field)
+  }
+
+  onValidateMessage (event: InputEvent, field: string): void {
+    const isValid = this._isValid(event, /.+/)
+    this._fieldControl(isValid, event, field)
   }
 
   onValidateEmail (event: InputEvent, field: string): void {
-    const inputElement = event.target as HTMLInputElement
-
-    const emailRegex = /^[a-zA-Z0-9_.-]+@[a-zA-Z]+\.[a-zA-Z]+$/
-    const isValid: boolean = emailRegex.test(inputElement.value)
-
+    const isValid = this._isValid(event, /^[a-zA-Z0-9_.-]+@[a-zA-Z]+\.[a-zA-Z]+$/)
     this._fieldControl(isValid, event, field)
   }
 
   onValidatePassword (event: InputEvent, field: string): void {
-    const inputElement = event.target as HTMLInputElement
-
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,40}$/
-    const isValid: boolean = passwordRegex.test(inputElement.value)
-
+    const isValid = this._isValid(event, /^(?=.*[A-Z])(?=.*\d).{8,40}$/)
     this._fieldControl(isValid, event, field)
   }
 
