@@ -1,8 +1,11 @@
 import UserService from '../services/user-service'
+import ChatService from '../services/chat-service'
 import { getPageName } from './../utils'
 
 const userService = new UserService()
 userService.init()
+const chatService = new ChatService()
+chatService.init()
 
 export async function template () {
   const pageName: string | null = getPageName(location.href)
@@ -22,8 +25,7 @@ export async function template () {
   switch (pageName) {
     case 'main':
       ({ main } = await import('./main'))
-      pagePromise = await main()
-      pageTemplate = pagePromise.default
+      pageTemplate = await main()
       break
     case 'login':
     case null:

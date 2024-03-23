@@ -30,4 +30,18 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  &_arrow {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+   
+    &::after {
+      content: '';
+      width: 11px;
+      min-width: 11px;
+      height: 10px;
+      background: url('/icons/arrow-right-white.svg') center / cover;
+    }
+  }
 }
