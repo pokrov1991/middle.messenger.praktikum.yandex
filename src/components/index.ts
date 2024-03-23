@@ -1,4 +1,5 @@
 const inputPassword = async () => await import('./inputPassword')
 const inputEmail = async () => await import('./inputEmail')
+const inputText = async () => await import('./inputText')
 
-export { inputPassword, inputEmail }
+export { inputPassword, inputEmail, inputText }

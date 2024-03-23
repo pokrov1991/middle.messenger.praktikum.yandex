@@ -32,8 +32,7 @@ export async function template () {
       break
     case 'signin':
       ({ signin } = await import('./signin'))
-      pagePromise = await signin()
-      pageTemplate = pagePromise.default
+      pageTemplate = await signin()
       break
     case 'profile':
       ({ profilePage } = await import('./profile'))
