@@ -4,4 +4,13 @@ interface Props {
   [key: string]: any
 }
 
-export type { Props }
+interface DataChatItem {
+  id: string
+  userName: string
+  userAvatar: string
+  date: string
+  message: string
+  unread: number
+}
+
+export type { Props, DataChatItem }

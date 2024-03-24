@@ -21,12 +21,13 @@ export default class Block {
 
   eventBus: () => EventBus<string, Record<string, any[]>>
   children: object
+  lists: object
   props: object
 
   constructor (tagName = 'div', propsAndChildren = {}) {
     const eventBus = new EventBus()
 
-    const { children, props } = this._getChildren(propsAndChildren)
+    const { children, lists, props } = this._getChildren(propsAndChildren)
 
     this._meta = {
       tagName,
@@ -36,6 +37,8 @@ export default class Block {
     this._id = makeUUID()
 
     this.children = children
+
+    this.lists = lists
 
     this.props = this._makePropsProxy({ ...props, _id: this._id })
 
@@ -118,18 +121,21 @@ export default class Block {
 
   _getChildren (propsAndChildren) {
     const children = {}
+    const lists = {}
     const props = {}
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
         children[key] = value
+      } else if (Array.isArray(value)) {
+        lists[key] = value
       } else {
         props[key] = value
       }
     })
 
-    return { children, props }
+    return { children, lists, props }
   }
 
   _render () {
@@ -185,9 +191,14 @@ export default class Block {
   compile (template, props) {
     const propsAndStubs = { ...props }
 
-    // Доюавляем заглушки для дочерних компонентов
+    // Добавляем заглушки для дочерних компонентов
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`
+    })
+
+    // Добавляем заглушки для списков
+    Object.entries(this.lists).forEach(([key, list]) => {
+      propsAndStubs[key] = `<div data-id="list-${list._id}"></div>`
     })
 
     const fragment = this._createDocumentElement('template')
@@ -195,10 +206,25 @@ export default class Block {
     const templator = Handlebars.compile(template)
     fragment.innerHTML = templator({ ...propsAndStubs })
 
-    // Заменяем заглушку на компонент из шаблона
+    // Заменяем заглушку дочерних на компонент из шаблона
     Object.values(this.children).forEach(child => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`)
       stub.replaceWith(child.getContent())
+    })
+
+    // Заменяем заглушку листов на компонент из шаблона
+    Object.values(this.lists).forEach(list => {
+      const fragmentList = this._createDocumentElement('template')
+      list.forEach(item => {
+        if (item instanceof Block) {
+          fragmentList.content.append(item.getContent())
+        } else {
+          fragmentList.content.append(`${item}`)
+        }
+      })
+
+      const stub = fragment.content.querySelector(`[data-id="list-${list._id}"]`)
+      stub.replaceWith(fragmentList.content)
     })
 
     return fragment.content

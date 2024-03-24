@@ -3,11 +3,12 @@ import Handlebars from 'handlebars'
 import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
-import { type Props } from '../../types/global'
+import ChatService from '../../services/chat-service'
+import { type Props, type DataChatItem } from '../../types/global'
 import { layoutEmpty } from '../../layouts'
-import { chat, chatList, chatItem, chatBox, chatMessage } from '../../modules'
+import { chat, chatList, chatItem, chatBox, chatMessage } from '../../blocks'
 import { input, textarea, button } from '../../ui'
-import { onSubmit } from './main'
+import { onChat, onSubmit } from './main'
 
 export async function main () {
   const pagePromise = await import('./main.hbs?raw')
@@ -49,9 +50,10 @@ export async function main () {
     Handlebars.registerPartial(name, component)
   })
 
-  // Методы
+  // Методы и переменные
   const bus = new Mediator()
   const validation = new Validation(['message'])
+  let dataChatList: DataChatItem[] = []
 
   // Слушатели
   bus.on('form:vaidated', (payload) => {
@@ -60,6 +62,14 @@ export async function main () {
       disabled: isValid ? '' : 'disabled'
     })
   })
+
+  bus.on('chat:get-messages', (payload) => {
+    dataChatList = payload as unknown as DataChatItem[]
+  })
+
+  // Инициализация сервиса
+  const chatService = new ChatService()
+  chatService.init()
 
   // Создание классов компонентов
   class BlockTextarea extends Block {
@@ -112,6 +122,21 @@ export async function main () {
     }
   }
 
+  class BlockChatItem extends Block {
+    constructor (props: Props) {
+      super('section', {
+        ...props,
+        events: {
+          click: item => { onChat(item, props) }
+        }
+      })
+    }
+
+    render () {
+      return this.compile(ChatItem, this.props)
+    }
+  }
+
   class BlockChatPage extends Block {
     constructor (props: Props) {
       super('section', props)
@@ -150,7 +175,7 @@ export async function main () {
   })
 
   const cChatList = new BlockChatList({
-
+    Lists: dataChatList.map(item => new BlockChatItem(item))
   })
 
   const cChat = new BlockChat({
