@@ -3,6 +3,7 @@ import Handlebars from 'handlebars'
 import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
+import UserService from '../../services/user-service'
 import { type Props } from '../../types/global'
 import { layoutAuth } from './../../layouts'
 import { inputPassword, inputEmail } from './../../components'
@@ -51,6 +52,10 @@ export async function login () {
       disabled: isValid ? '' : 'disabled'
     })
   })
+
+  // Инициализация сервиса
+  const userService = new UserService()
+  userService.init()
 
   // Создание классов компонентов
   class BlockInputPassword extends Block {

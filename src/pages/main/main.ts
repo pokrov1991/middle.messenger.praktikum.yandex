@@ -1,5 +1,10 @@
 import Mediator from '../../modules/mediator'
+import { type Props } from '../../types/global'
 const bus = new Mediator()
+
+const onChat = (event: any, data: Props): void => {
+  console.log('Выбран чат', event, data)
+}
 
 const onSubmit = (event: any): void => {
   event.preventDefault()
@@ -15,8 +20,8 @@ const onSubmit = (event: any): void => {
       message
     }
 
-    bus.emit('chat:message', data)
+    bus.emit('chat:send-message', data)
   }
 }
 
-export { onSubmit }
+export { onChat, onSubmit }
