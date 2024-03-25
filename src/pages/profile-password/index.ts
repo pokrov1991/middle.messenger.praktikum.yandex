@@ -1,7 +1,7 @@
 import './profile-password.scss'
 import Handlebars from 'handlebars'
 import { layoutProfile } from './../../layouts'
-import { profile } from './../../modules'
+import { profile } from './../../blocks'
 import { inputPassword } from './../../components'
 import { input, button, title } from './../../ui'
 

@@ -112,15 +112,6 @@ export default class Block {
     Object.keys(events).forEach(eventName => {
       this._element?.addEventListener(eventName, events[eventName] as EventListener)
     })
-
-    // Добавляем евенты компонентов из листа
-    // Object.values(this.lists).forEach(list => {
-    //   const { events = {} } = list[0].props as { events?: object }
-
-    //   Object.keys(events).forEach(eventName => {
-    //     this._element?.addEventListener(eventName, events[eventName] as EventListener)
-    //   })
-    // })
   }
 
   _removeEvents () {
@@ -233,9 +224,6 @@ export default class Block {
         } else {
           fragmentList.content.append(`${item}`)
         }
-        // Если используем ивенты из _addEvents
-        // const templator = Handlebars.compile(item._element.outerHTML)
-        // fragmentList.innerHTML += templator({ ...propsAndStubs })
       })
 
       const stub = fragment.content.querySelector(`[data-id="list-${list._id}"]`)

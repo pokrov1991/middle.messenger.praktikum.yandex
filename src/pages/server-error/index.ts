@@ -1,7 +1,7 @@
 import './server-error.scss'
 import Handlebars from 'handlebars'
 import { layoutEmpty } from './../../layouts'
-import { error } from './../../modules'
+import { error } from './../../blocks'
 
 export async function serverError () {
   const layoutEmptyPromise = await layoutEmpty()

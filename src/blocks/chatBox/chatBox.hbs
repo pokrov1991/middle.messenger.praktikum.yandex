@@ -11,20 +11,15 @@
   <div class="c-chat-box__messages">
     <div class="c-chat-box-messages">
       {{{ ListMessages }}}
-      {{!-- {{#each (chat-messages)}}
-        {{> ChatMessage }}
-      {{/each}} --}}
     </div>
   </div>
   <div class="c-chat-box__action">
     <form id="formMessage" class="c-chat-box-action">
       <div class="c-chat-box-action__attach" onclick="console.log('attach menu')"></div>
       <div class="c-chat-box-action__text">
-        {{!-- {{> Textarea id="message" name="message" placeholder="Сообщение" }} --}}
         {{{ Textarea }}}
       </div>
       <div class="c-chat-box-action__send">
-        {{!-- <button class="c-button-arrow" onclick="console.log('send')"></button> --}}
         {{{ Button }}}
       </div>
       <input type="hidden" id="id-chat" name="id-chat" value="{{ id }}"/>

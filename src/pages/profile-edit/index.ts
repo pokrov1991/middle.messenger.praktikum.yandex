@@ -1,7 +1,7 @@
 import './profile-edit.scss'
 import Handlebars from 'handlebars'
 import { layoutProfile } from './../../layouts'
-import { profile } from './../../modules'
+import { profile } from './../../blocks'
 import { input, button, title } from './../../ui'
 
 export async function profileEdit () {
