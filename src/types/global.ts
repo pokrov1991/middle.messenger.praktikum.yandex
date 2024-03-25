@@ -11,6 +11,7 @@ interface DataChatItem {
   date: string
   message: string
   unread: number
+  active: boolean
 }
 
 export type { Props, DataChatItem }

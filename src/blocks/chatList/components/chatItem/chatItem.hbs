@@ -1,5 +1,5 @@
 <div 
-  class="c-chat-item{{#if className}} {{ className }}{{/if}}"
+  class="c-chat-item{{#if active}} c-chat-item_active{{/if}}"
   id="{{ id }}"
 >
   <div class="c-chat-item__avatar"></div>
@@ -9,6 +9,8 @@
   </div>
   <div class="c-chat-item__info">
     <span class="c-chat-item__date">{{ date }}</span>
-    <b class="c-chat-item__unread">{{ unread }}</b>
+    {{#if unread}} 
+      <b class="c-chat-item__unread">{{ unread }}</b>
+    {{/if}}
   </div>
 </div>

@@ -4,6 +4,7 @@ const bus = new Mediator()
 
 const onChat = (event: any, data: Props): void => {
   console.log('Выбран чат', event, data)
+  bus.emit('chat:select-chat', data)
 }
 
 const onSubmit = (event: any): void => {

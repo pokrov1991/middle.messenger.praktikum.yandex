@@ -12,7 +12,12 @@
     </div>
   </div>
 
-  <div class="c-chat__box">
+  <div class="c-chat__box{{#if className}} {{ className }}{{/if}}">
+    {{#if isChatSelected}}
+      <section class="c-chat-box-empty">
+        <p>Выберите чат чтобы отправить сообщение</p>
+      </section>
+    {{/if}}
     {{{ ChatBox }}}
     {{!-- {{#if-chat-selected isChatSelected}}
       {{#data-chat-selected obj}}

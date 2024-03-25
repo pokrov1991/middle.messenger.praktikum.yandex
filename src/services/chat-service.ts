@@ -35,7 +35,8 @@ export default class ChatService {
         userAvatar: '',
         date: '10:49',
         message: 'Изображение',
-        unread: 2
+        unread: 2,
+        active: false
       },
       {
         id: 'kinoclub',
@@ -43,7 +44,8 @@ export default class ChatService {
         userAvatar: '',
         date: '12:00',
         message: 'Вы: стикер',
-        unread: 1
+        unread: 1,
+        active: false
       },
       {
         id: 'ilya',
@@ -51,7 +53,8 @@ export default class ChatService {
         userAvatar: '',
         date: 'ЧТ',
         message: 'Друзья, у меня для вас особенный выпуск новостей!...',
-        unread: 4
+        unread: 4,
+        active: false
       }
     ]
     bus.emit('chat:get-messages', dataChatList)
