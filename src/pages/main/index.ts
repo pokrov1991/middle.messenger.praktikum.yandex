@@ -77,6 +77,7 @@ export async function main () {
       className: 'c-chat__box_active'
     })
     cChatBox.setProps({
+      id: payload.id,
       userName: payload.userName
     })
     cChat.setProps({
@@ -225,6 +226,7 @@ export async function main () {
 
   // Блок чата
   const cChatBox = new BlockChatBox({
+    id: 'id-chat',
     userName: 'Имя собеседника',
     ListMessages: dataMessageList.map(item => new BlockChatMessage(item)),
     Textarea: cTextarea,

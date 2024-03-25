@@ -1,12 +1,19 @@
 import Mediator from '../modules/mediator'
+import { getDate } from '../utils'
 import { type DataChatItem, type DataMessage } from '../types/global'
 const bus = new Mediator()
 
 export default class ChatService {
+  private _chatList: DataChatItem[]
+  private _messageList: object
+
   constructor () {
+    this._chatList = []
+    this._messageList = {}
+
     bus.on('chat:send-message', (data) => {
-      const { message } = data as unknown as DataMessage
-      this.sendMessage({ message })
+      const { id, message } = data as unknown as DataMessage
+      this.sendMessage({ id, message })
     })
 
     bus.on('chat:send-chat-id', (id) => {
@@ -22,10 +29,11 @@ export default class ChatService {
 
   sendMessage (data: DataMessage) {
     console.log('Message send', data)
+    this.getMessages(data.id, data.message)
   }
 
-  getMessages (idChat: string) {
-    const dataMessageList: object = {
+  getMessages (idChat: string | undefined, message: string = '') {
+    const dataMessageList = {
       andrey: [
         {
           id: 'key0',
@@ -57,7 +65,25 @@ export default class ChatService {
         }
       ]
     }
-    bus.emit('chat:get-messages', dataMessageList[idChat])
+
+    if (Object.keys(this._messageList).length === 0) {
+      this._messageList = dataMessageList
+    }
+
+    if (typeof idChat !== 'undefined') {
+      if (message) {
+        this._messageList[idChat] = [
+          {
+            id: `key${Math.floor(100000 + Math.random() * 900000)}`,
+            date: getDate,
+            message,
+            isMy: true
+          },
+          ...this._messageList[idChat]
+        ]
+      }
+      bus.emit('chat:get-messages', this._messageList[idChat])
+    }
   }
 
   getChats () {
@@ -90,6 +116,11 @@ export default class ChatService {
         active: false
       }
     ]
-    bus.emit('chat:get-chats', dataChatList)
+
+    if (this._chatList.length === 0) {
+      this._chatList = dataChatList
+    }
+
+    bus.emit('chat:get-chats', this._chatList)
   }
 }

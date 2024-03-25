@@ -14,11 +14,15 @@ const onSubmit = (event: any): void => {
   if (formElement !== null) {
     const formData = new FormData(formElement)
 
+    const id = formData.get('id-chat')
     const message = formData.get('message')
 
     const data = {
+      id,
       message
     }
+
+    formElement.reset()
 
     bus.emit('chat:send-message', data)
   }
