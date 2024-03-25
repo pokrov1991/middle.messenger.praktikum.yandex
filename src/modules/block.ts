@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars'
 import EventBus from './event-bus'
 import { v4 as makeUUID } from 'uuid'
+import { type Props } from '../types/global'
 
 interface Meta {
   tagName: string
@@ -20,7 +21,7 @@ export default class Block {
   _id: string
 
   eventBus: () => EventBus<string, Record<string, any[]>>
-  children: object
+  children: Props
   lists: object
   props: object
 
@@ -92,9 +93,11 @@ export default class Block {
         return typeof value === 'function' ? value.bind(target) : value
       },
       set (target, prop, value) {
+        const oldTarget = { ...target }
+
         target[prop] = value
 
-        self.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target)
+        self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target)
         return true
       },
       deleteProperty () {
@@ -109,6 +112,15 @@ export default class Block {
     Object.keys(events).forEach(eventName => {
       this._element?.addEventListener(eventName, events[eventName] as EventListener)
     })
+
+    // Добавляем евенты компонентов из листа
+    // Object.values(this.lists).forEach(list => {
+    //   const { events = {} } = list[0].props as { events?: object }
+
+    //   Object.keys(events).forEach(eventName => {
+    //     this._element?.addEventListener(eventName, events[eventName] as EventListener)
+    //   })
+    // })
   }
 
   _removeEvents () {
@@ -221,6 +233,9 @@ export default class Block {
         } else {
           fragmentList.content.append(`${item}`)
         }
+        // Если используем ивенты из _addEvents
+        // const templator = Handlebars.compile(item._element.outerHTML)
+        // fragmentList.innerHTML += templator({ ...propsAndStubs })
       })
 
       const stub = fragment.content.querySelector(`[data-id="list-${list._id}"]`)

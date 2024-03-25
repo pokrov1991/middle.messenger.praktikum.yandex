@@ -16,6 +16,16 @@
 
   &__box {
     @include full-size;
+
+    .c-chat-box {
+      display: none;
+    }
+
+    &_active {
+      .c-chat-box {
+        display: flex;
+      }
+    }
   }
 
   &__profile {

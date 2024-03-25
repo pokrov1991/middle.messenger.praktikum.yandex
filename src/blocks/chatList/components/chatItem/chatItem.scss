@@ -1,6 +1,6 @@
 .c-chat-item {
   width: 100%;
-  padding: 12px 0;
+  padding: 12px 10px;
   border-top: 1px solid var(--colors-chat-sidebar-border);
   display: flex;
   justify-content: flex-start;
@@ -71,5 +71,9 @@
     letter-spacing: 0;
     background: var(--colors-chat-item-action);
     color: var(--color-white-100);
+  }
+
+  &_active {
+    background: var(--colors-chat-message-my);
   }
 }

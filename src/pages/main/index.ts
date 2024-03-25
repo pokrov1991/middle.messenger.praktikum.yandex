@@ -67,6 +67,28 @@ export async function main () {
     dataChatList = payload as unknown as DataChatItem[]
   })
 
+  bus.on('chat:select-chat', (payload: Props) => {
+    dataChatList.forEach(item => {
+      item.active = false
+      if (item.id === payload.id) {
+        item.active = true
+        item.unread = 0
+      }
+    })
+    cChat.setProps({
+      isChatSelected: false,
+      className: 'c-chat__box_active'
+    })
+    cChatBox.setProps({
+      userName: payload.userName
+    })
+    cChat.setProps({
+      ChatList: new BlockChatList({
+        Lists: dataChatList.map(item => new BlockChatItem(item))
+      })
+    })
+  })
+
   // Инициализация сервиса
   const chatService = new ChatService()
   chatService.init()
@@ -95,6 +117,14 @@ export async function main () {
   class BlockChat extends Block {
     constructor (props: Props) {
       super('section', props)
+    }
+
+    componentDidUpdate (oldProps, newProps) {
+      if (oldProps.ChatList !== newProps.ChatList) {
+        this.children.ChatList.lists.Lists = newProps.ChatList.lists.Lists
+        this.children.ChatList.setProps({ List: newProps.ChatList.lists.Lists })
+      }
+      return true
     }
 
     render () {
@@ -170,6 +200,7 @@ export async function main () {
 
   // Блок чата
   const cChatBox = new BlockChatBox({
+    userName: 'Имя собеседника',
     Textarea: cTextarea,
     Button: cButton
   })
@@ -179,6 +210,8 @@ export async function main () {
   })
 
   const cChat = new BlockChat({
+    isChatSelected: true,
+    className: '',
     ChatBox: cChatBox,
     ChatList: cChatList
   })
