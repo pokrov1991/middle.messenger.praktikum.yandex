@@ -10,9 +10,10 @@
   </div>
   <div class="c-chat-box__messages">
     <div class="c-chat-box-messages">
-      {{#each (chat-messages)}}
+      {{{ ListMessages }}}
+      {{!-- {{#each (chat-messages)}}
         {{> ChatMessage }}
-      {{/each}}
+      {{/each}} --}}
     </div>
   </div>
   <div class="c-chat-box__action">

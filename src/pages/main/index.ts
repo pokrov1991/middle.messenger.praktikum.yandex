@@ -4,7 +4,7 @@ import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
 import ChatService from '../../services/chat-service'
-import { type Props, type DataChatItem } from '../../types/global'
+import { type Props, type DataChatItem, type DataMessage } from '../../types/global'
 import { layoutEmpty } from '../../layouts'
 import { chat, chatList, chatItem, chatBox, chatMessage } from '../../blocks'
 import { input, textarea, button } from '../../ui'
@@ -54,6 +54,7 @@ export async function main () {
   const bus = new Mediator()
   const validation = new Validation(['message'])
   let dataChatList: DataChatItem[] = []
+  let dataMessageList: DataMessage[] = []
 
   // Слушатели
   bus.on('form:vaidated', (payload) => {
@@ -61,10 +62,6 @@ export async function main () {
     cButton.setProps({
       disabled: isValid ? '' : 'disabled'
     })
-  })
-
-  bus.on('chat:get-messages', (payload) => {
-    dataChatList = payload as unknown as DataChatItem[]
   })
 
   bus.on('chat:select-chat', (payload: Props) => {
@@ -84,7 +81,21 @@ export async function main () {
     })
     cChat.setProps({
       ChatList: new BlockChatList({
-        Lists: dataChatList.map(item => new BlockChatItem(item))
+        ListChats: dataChatList.map(item => new BlockChatItem(item))
+      })
+    })
+    bus.emit('chat:send-chat-id', payload.id)
+  })
+
+  bus.on('chat:get-chats', (payload) => {
+    dataChatList = payload as unknown as DataChatItem[]
+  })
+
+  bus.on('chat:get-messages', (payload) => {
+    dataMessageList = payload as unknown as DataMessage[]
+    cChat.setProps({
+      ChatBox: new BlockChatBox({
+        ListMessages: dataMessageList.map(item => new BlockChatMessage(item))
       })
     })
   })
@@ -121,8 +132,12 @@ export async function main () {
 
     componentDidUpdate (oldProps, newProps) {
       if (oldProps.ChatList !== newProps.ChatList) {
-        this.children.ChatList.lists.Lists = newProps.ChatList.lists.Lists
-        this.children.ChatList.setProps({ List: newProps.ChatList.lists.Lists })
+        this.children.ChatList.lists.ListChats = newProps.ChatList.lists.ListChats
+        this.children.ChatList.setProps({ ListChats: newProps.ChatList.lists.ListChats })
+      }
+      if (oldProps.ChatBox !== newProps.ChatBox) {
+        this.children.ChatBox.lists.ListMessages = newProps.ChatBox.lists.ListMessages
+        this.children.ChatBox.setProps({ ListMessages: newProps.ChatBox.lists.ListMessages })
       }
       return true
     }
@@ -142,6 +157,16 @@ export async function main () {
     }
   }
 
+  class BlockChatMessage extends Block {
+    constructor (props: Props) {
+      super('section', props)
+    }
+
+    render () {
+      return this.compile(ChatMessage, this.props)
+    }
+  }
+
   class BlockChatList extends Block {
     constructor (props: Props) {
       super('section', props)
@@ -157,7 +182,7 @@ export async function main () {
       super('section', {
         ...props,
         events: {
-          click: item => { onChat(item, props) }
+          click: function () { onChat(props) }
         }
       })
     }
@@ -201,12 +226,13 @@ export async function main () {
   // Блок чата
   const cChatBox = new BlockChatBox({
     userName: 'Имя собеседника',
+    ListMessages: dataMessageList.map(item => new BlockChatMessage(item)),
     Textarea: cTextarea,
     Button: cButton
   })
 
   const cChatList = new BlockChatList({
-    Lists: dataChatList.map(item => new BlockChatItem(item))
+    ListChats: dataChatList.map(item => new BlockChatItem(item))
   })
 
   const cChat = new BlockChat({
