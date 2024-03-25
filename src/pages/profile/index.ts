@@ -1,7 +1,7 @@
 import './profile.scss'
 import Handlebars from 'handlebars'
 import { layoutProfile } from './../../layouts'
-import { profile, profileItem } from './../../modules'
+import { profile, profileItem } from './../../blocks'
 import { title } from './../../ui'
 
 export async function profilePage () {

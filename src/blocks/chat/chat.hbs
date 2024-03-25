@@ -7,7 +7,6 @@
       {{> Input label="Поиск" id="search_chat" name="search_chat" className="c-input-search" }}
     </div>
     <div class="c-chat__list" id="chat-list">
-      {{!-- {{> ChatList }} --}}
       {{{ ChatList }}}
     </div>
   </div>
@@ -19,14 +18,5 @@
       </section>
     {{/if}}
     {{{ ChatBox }}}
-    {{!-- {{#if-chat-selected isChatSelected}}
-      {{#data-chat-selected obj}}
-        {{> ChatBox }}
-      {{/data-chat-selected}}
-    {{else}}
-      <section class="c-chat-box-empty">
-        <p>Выберите чат чтобы отправить сообщение</p>
-      </section>
-    {{/if-chat-selected}} --}}
   </div>
 </section>
