@@ -1,16 +1,17 @@
 import Mediator from '../modules/mediator'
-import { type DataChatItem } from '../types/global'
+import { type DataChatItem, type DataMessage } from '../types/global'
 const bus = new Mediator()
-
-interface DataMessage {
-  message: string
-}
 
 export default class ChatService {
   constructor () {
     bus.on('chat:send-message', (data) => {
       const { message } = data as unknown as DataMessage
       this.sendMessage({ message })
+    })
+
+    bus.on('chat:send-chat-id', (id) => {
+      const idChat = id as unknown as string
+      this.getMessages(idChat)
     })
   }
 
@@ -23,8 +24,40 @@ export default class ChatService {
     console.log('Message send', data)
   }
 
-  getMessages () {
-    console.log('Messages get')
+  getMessages (idChat: string) {
+    const dataMessageList: object = {
+      andrey: [
+        {
+          id: 'key0',
+          date: '12:00',
+          message: 'Круто!',
+          isMy: true
+        },
+        {
+          id: 'key1',
+          date: '11:56',
+          message: 'Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА.',
+          isMy: false
+        }
+      ],
+      kinoclub: [
+        {
+          id: 'key0',
+          date: '12:00',
+          message: 'Мяу-мяу',
+          isMy: true
+        }
+      ],
+      ilya: [
+        {
+          id: 'key0',
+          date: '12:00',
+          message: 'Гав-гав',
+          isMy: false
+        }
+      ]
+    }
+    bus.emit('chat:get-messages', dataMessageList[idChat])
   }
 
   getChats () {
@@ -44,7 +77,7 @@ export default class ChatService {
         userAvatar: '',
         date: '12:00',
         message: 'Вы: стикер',
-        unread: 1,
+        unread: 0,
         active: false
       },
       {
@@ -53,10 +86,10 @@ export default class ChatService {
         userAvatar: '',
         date: 'ЧТ',
         message: 'Друзья, у меня для вас особенный выпуск новостей!...',
-        unread: 4,
+        unread: 1,
         active: false
       }
     ]
-    bus.emit('chat:get-messages', dataChatList)
+    bus.emit('chat:get-chats', dataChatList)
   }
 }

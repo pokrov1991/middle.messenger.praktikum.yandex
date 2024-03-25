@@ -2,8 +2,7 @@ import Mediator from '../../modules/mediator'
 import { type Props } from '../../types/global'
 const bus = new Mediator()
 
-const onChat = (event: any, data: Props): void => {
-  console.log('Выбран чат', event, data)
+const onChat = (data: Props): void => {
   bus.emit('chat:select-chat', data)
 }
 

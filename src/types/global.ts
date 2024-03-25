@@ -14,4 +14,11 @@ interface DataChatItem {
   active: boolean
 }
 
-export type { Props, DataChatItem }
+interface DataMessage {
+  id?: string
+  date?: string
+  message: string
+  isMy?: boolean
+}
+
+export type { Props, DataChatItem, DataMessage }
