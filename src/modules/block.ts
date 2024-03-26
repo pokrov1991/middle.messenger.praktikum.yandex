@@ -41,6 +41,7 @@ export default class Block {
 
     this.lists = lists
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.props = this._makePropsProxy({ ...props, _id: this._id })
 
     this.eventBus = () => eventBus
@@ -50,25 +51,28 @@ export default class Block {
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  _registerEvents (eventBus) {
+  _registerEvents (eventBus: EventBus<string, Record<string, any[]>>): void {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
+    // eventBus.on(Block.EVENTS.FLOW_CDU, (oldProps: Props, newProps: Props) => {
+    //   this._componentDidUpdate(oldProps, newProps)
+    // })
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this))
   }
 
-  _createResources () {
+  _createResources (): void {
     const { tagName } = this._meta
-    this._element = this._createDocumentElement(tagName)
+    this._element = this._createDocumentElement(tagName) as HTMLElement
   }
 
-  _createDocumentElement (tagName) {
+  _createDocumentElement (tagName: string): Element {
     const element = document.createElement(tagName)
     element.setAttribute('data-id', this._id)
     return element
   }
 
-  _componentDidMount () {
+  _componentDidMount (): void {
     this.componentDidMount()
 
     Object.values(this.children).forEach(child => {
@@ -76,7 +80,7 @@ export default class Block {
     })
   }
 
-  _componentDidUpdate (oldProps, newProps) {
+  _componentDidUpdate (oldProps: Props, newProps: Props): void {
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
       return
@@ -84,18 +88,19 @@ export default class Block {
     this._render()
   }
 
-  _makePropsProxy (props) {
+  _makePropsProxy (props: Props): Props {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
 
     return new Proxy(props, {
       get (target, prop) {
-        const value = target[prop]
+        const value = target[prop as string]
         return typeof value === 'function' ? value.bind(target) : value
       },
       set (target, prop, value) {
         const oldTarget = { ...target }
 
-        target[prop] = value
+        target[prop as string] = value
 
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target)
         return true
@@ -106,28 +111,27 @@ export default class Block {
     })
   }
 
-  _addEvents () {
-    const { events = {} } = this.props as { events?: object }
+  _addEvents (): void {
+    const { events = {} } = this.props as { events?: Record<string, EventListener> }
 
     Object.keys(events).forEach(eventName => {
-      this._element?.addEventListener(eventName, events[eventName] as EventListener)
+      this._element?.addEventListener(eventName, events[eventName])
     })
   }
 
-  _removeEvents () {
-    const { events = {} } = this.props as { events?: object }
+  _removeEvents (): void {
+    const { events = {} } = this.props as { events?: Record<string, EventListener> }
 
     Object.keys(events).forEach(eventName => {
-      this._element?.removeEventListener(eventName, events[eventName] as EventListener)
+      this._element?.removeEventListener(eventName, events[eventName])
     })
   }
 
-  _getChildren (propsAndChildren) {
-    const children = {}
-    const lists = {}
-    const props = {}
+  _getChildren (propsAndChildren: Props): Props {
+    const children: Record<string, Block> = {}
+    const lists: Record<string, any[]> = {}
+    const props: Record<string, any> = {}
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
         children[key] = value
@@ -141,7 +145,7 @@ export default class Block {
     return { children, lists, props }
   }
 
-  _render () {
+  _render (): void {
     const block = this.render()
 
     this._removeEvents()
@@ -151,47 +155,46 @@ export default class Block {
 
       // Добавления компонента, заменой обертки с id
       const newElement = block.firstElementChild as HTMLElement
-      if (this._element) {
-        this._element.replaceWith(newElement)
-      }
+      this._element.replaceWith(newElement)
       this._element = newElement
     }
 
     this._addEvents()
   }
 
-  init () {
+  init (): void {
     this._createResources()
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
   }
 
-  componentDidMount () {}
+  componentDidMount (): void {}
 
-  componentDidUpdate (_oldProps, _newProps) {
+  componentDidUpdate (_oldProps: Props, _newProps: Props): boolean {
     return true
   }
 
-  dispatchComponentDidMount () {
+  dispatchComponentDidMount (): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
   }
 
-  get element () {
+  get element (): HTMLElement | null {
     return this._element
   }
 
-  getContent () {
+  getContent (): HTMLElement | null {
     return this.element
   }
 
-  setProps = nextProps => {
-    if (!nextProps) {
+  setProps = (nextProps: Props): void => {
+    const isProps: boolean = Object.keys(nextProps).length !== 0
+    if (!isProps) {
       return
     }
 
     Object.assign(this.props, nextProps)
   }
 
-  compile (template, props) {
+  compile (template: string, props: Props): DocumentFragment {
     const propsAndStubs = { ...props }
 
     // Добавляем заглушки для дочерних компонентов
@@ -204,7 +207,7 @@ export default class Block {
       propsAndStubs[key] = `<div data-id="list-${list._id}"></div>`
     })
 
-    const fragment = this._createDocumentElement('template')
+    const fragment = this._createDocumentElement('template') as HTMLTemplateElement
 
     const templator = Handlebars.compile(template)
     fragment.innerHTML = templator({ ...propsAndStubs })
@@ -212,22 +215,26 @@ export default class Block {
     // Заменяем заглушку дочерних на компонент из шаблона
     Object.values(this.children).forEach(child => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`)
-      stub.replaceWith(child.getContent())
+      if (stub !== null) {
+        stub.replaceWith(child.getContent() as Node)
+      }
     })
 
     // Заменяем заглушку листов на компонент из шаблона
     Object.values(this.lists).forEach(list => {
-      const fragmentList = this._createDocumentElement('template')
-      list.forEach(item => {
+      const fragmentList = this._createDocumentElement('template') as HTMLTemplateElement
+      list.forEach((item: { getContent: () => string | Node }) => {
         if (item instanceof Block) {
           fragmentList.content.append(item.getContent())
         } else {
-          fragmentList.content.append(`${item}`)
+          fragmentList.content.append(`${String(item)}`)
         }
       })
 
       const stub = fragment.content.querySelector(`[data-id="list-${list._id}"]`)
-      stub.replaceWith(fragmentList.content)
+      if (stub !== null) {
+        stub.replaceWith(fragmentList.content)
+      }
     })
 
     return fragment.content
@@ -237,14 +244,14 @@ export default class Block {
     return document.createElement('div')
   }
 
-  show () {
+  show (): void {
     const content = this.getContent()
     if (content !== null) {
       content.style.display = 'block'
     }
   }
 
-  hide () {
+  hide (): void {
     const content = this.getContent()
     if (content !== null) {
       content.style.display = 'none'

@@ -1,6 +1,6 @@
 import './app.scss'
 
-async function app () {
+async function app (): Promise<void> {
   const { template } = await import('./pages')
 
   template()
@@ -14,5 +14,4 @@ async function app () {
       console.error(error)
     })
 }
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-app()
+void app()

@@ -1,17 +1,18 @@
 export type Listener<T extends unknown[] = any[]> = (args: T) => void
 
 export default class EventBus<E extends string = string, M extends { [K in E]: unknown[] } = Record<E, any[]> > {
-  private listeners: { [K in E]?: Array<Listener<M[E]>> } = {}
+  private listeners: Record<string, any[]> = {}
 
-  on (event: E, callback: Listener<M[E]>) {
-    if (!this.listeners[event]) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  on (event: E, callback: Function): void {
+    if (typeof this.listeners[event] === 'undefined') {
       this.listeners[event] = []
     }
     this.listeners[event]?.push(callback)
   }
 
-  off (event: E, callback: Listener<M[E]>) {
-    if (!this.listeners[event]) {
+  off (event: E, callback: Listener<M[E]>): void {
+    if (typeof this.listeners[event] === 'undefined') {
       throw new Error(`Нет события: ${event}`)
     }
 
@@ -20,8 +21,8 @@ export default class EventBus<E extends string = string, M extends { [K in E]: u
     )
   }
 
-  emit (event: E, ...args: M[E]) {
-    if (!this.listeners[event]) {
+  emit (event: E, ...args: M[E]): void {
+    if (typeof this.listeners[event] === 'undefined') {
       throw new Error(`Нет события: ${event}`)
     }
 

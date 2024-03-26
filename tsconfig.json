@@ -13,11 +13,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "noImplicitAny": false,//вернуть в true
+    "noImplicitAny": true,
     "sourceMap": true,
-    "strictNullChecks": true,//вернуть в true
-    "skipLibCheck": true,
-    "allowJs": true//убрать
+    "strictNullChecks": true,
+    "skipLibCheck": true
   },
   "include": ["src", "global.d.ts"]
 } 

@@ -10,7 +10,7 @@ import { inputPassword, inputEmail } from './../../components'
 import { input, button, title } from './../../ui'
 import { onSubmit } from './login'
 
-export async function login () {
+export async function login (): Promise<HTMLElement | null> {
   const pagePromise = await import('./login.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -49,7 +49,7 @@ export async function login () {
   bus.on('form:vaidated', (payload) => {
     const { isValid } = payload as unknown as Props
     cButton.setProps({
-      disabled: isValid ? '' : 'disabled'
+      disabled: (isValid ?? false) ? '' : 'disabled'
     })
   })
 
@@ -63,8 +63,8 @@ export async function login () {
       super('div', props)
     }
 
-    render () {
-      return this.compile(InputPassword, this.props)
+    render (): HTMLElement {
+      return this.compile(InputPassword, this.props) as unknown as HTMLElement
     }
   }
 
@@ -73,8 +73,8 @@ export async function login () {
       super('div', props)
     }
 
-    render () {
-      return this.compile(InputEmail, this.props)
+    render (): HTMLElement {
+      return this.compile(InputEmail, this.props) as unknown as HTMLElement
     }
   }
 
@@ -83,8 +83,8 @@ export async function login () {
       super('button', props)
     }
 
-    render () {
-      return this.compile(Button, this.props)
+    render (): HTMLElement {
+      return this.compile(Button, this.props) as unknown as HTMLElement
     }
   }
 
@@ -93,8 +93,8 @@ export async function login () {
       super('section', props)
     }
 
-    render () {
-      return this.compile(pageTemplate, this.props)
+    render (): HTMLElement {
+      return this.compile(pageTemplate, this.props) as unknown as HTMLElement
     }
   }
 
@@ -108,8 +108,7 @@ export async function login () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidatePassword(event, 'password')
       }
     }
@@ -124,8 +123,7 @@ export async function login () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidateEmail(event, 'email')
       }
     }

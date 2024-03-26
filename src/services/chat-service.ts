@@ -5,7 +5,7 @@ const bus = new Mediator()
 
 export default class ChatService {
   private _chatList: DataChatItem[]
-  private _messageList: object
+  private _messageList: Record<string, DataMessage[]>
 
   constructor () {
     this._chatList = []
@@ -75,7 +75,7 @@ export default class ChatService {
         this._messageList[idChat] = [
           {
             id: `key${Math.floor(100000 + Math.random() * 900000)}`,
-            date: getDate,
+            date: getDate(),
             message,
             isMy: true
           },
