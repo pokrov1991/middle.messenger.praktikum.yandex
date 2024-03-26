@@ -10,7 +10,7 @@ import { inputPassword, inputEmail, inputText } from './../../components'
 import { input, button, title } from './../../ui'
 import { onSubmit } from './signin'
 
-export async function signin () {
+export async function signin (): Promise<HTMLElement | null> {
   const pagePromise = await import('./signin.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -51,7 +51,7 @@ export async function signin () {
   bus.on('form:vaidated', (payload) => {
     const { isValid } = payload as unknown as Props
     cButton.setProps({
-      disabled: isValid ? '' : 'disabled'
+      disabled: (isValid ?? false) ? '' : 'disabled'
     })
   })
 
@@ -65,8 +65,8 @@ export async function signin () {
       super('div', props)
     }
 
-    render () {
-      return this.compile(InputEmail, this.props)
+    render (): HTMLElement {
+      return this.compile(InputEmail, this.props) as unknown as HTMLElement
     }
   }
 
@@ -75,8 +75,8 @@ export async function signin () {
       super('div', props)
     }
 
-    render () {
-      return this.compile(InputText, this.props)
+    render (): HTMLElement {
+      return this.compile(InputText, this.props) as unknown as HTMLElement
     }
   }
 
@@ -85,8 +85,8 @@ export async function signin () {
       super('div', props)
     }
 
-    render () {
-      return this.compile(InputPassword, this.props)
+    render (): HTMLElement {
+      return this.compile(InputPassword, this.props) as unknown as HTMLElement
     }
   }
 
@@ -95,8 +95,8 @@ export async function signin () {
       super('button', props)
     }
 
-    render () {
-      return this.compile(Button, this.props)
+    render (): HTMLElement {
+      return this.compile(Button, this.props) as unknown as HTMLElement
     }
   }
 
@@ -105,8 +105,8 @@ export async function signin () {
       super('section', props)
     }
 
-    render () {
-      return this.compile(pageTemplate, this.props)
+    render (): HTMLElement {
+      return this.compile(pageTemplate, this.props) as unknown as HTMLElement
     }
   }
 
@@ -120,8 +120,7 @@ export async function signin () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidateEmail(event, 'email')
       }
     }
@@ -136,8 +135,7 @@ export async function signin () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidateLogin(event, 'login')
       }
     }
@@ -152,8 +150,7 @@ export async function signin () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidateName(event, 'first_name')
       }
     }
@@ -168,8 +165,7 @@ export async function signin () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidateName(event, 'second_name')
       }
     }
@@ -184,8 +180,7 @@ export async function signin () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidatePhone(event, 'phone')
       }
     }
@@ -200,8 +195,7 @@ export async function signin () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidatePassword(event, 'password')
       }
     }
@@ -216,8 +210,7 @@ export async function signin () {
     required: 'required',
     isValid: false,
     events: {
-      focusout: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      focusout: (event: InputEvent) => {
         validation.onValidatePassword(event, 'password')
       }
     }

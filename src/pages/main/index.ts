@@ -10,7 +10,7 @@ import { chat, chatList, chatItem, chatBox, chatMessage } from '../../blocks'
 import { input, textarea, button } from '../../ui'
 import { onChat, onSubmit } from './main'
 
-export async function main () {
+export async function main (): Promise<HTMLElement | null> {
   const pagePromise = await import('./main.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -60,7 +60,7 @@ export async function main () {
   bus.on('form:vaidated', (payload) => {
     const { isValid } = payload as unknown as Props
     cButton.setProps({
-      disabled: isValid ? '' : 'disabled'
+      disabled: (isValid ?? false) ? '' : 'disabled'
     })
   })
 
@@ -111,8 +111,8 @@ export async function main () {
       super('div', props)
     }
 
-    render () {
-      return this.compile(Textarea, this.props)
+    render (): HTMLElement {
+      return this.compile(Textarea, this.props) as unknown as HTMLElement
     }
   }
 
@@ -121,8 +121,8 @@ export async function main () {
       super('button', props)
     }
 
-    render () {
-      return this.compile(Button, this.props)
+    render (): HTMLElement {
+      return this.compile(Button, this.props) as unknown as HTMLElement
     }
   }
 
@@ -131,7 +131,7 @@ export async function main () {
       super('section', props)
     }
 
-    componentDidUpdate (oldProps, newProps) {
+    componentDidUpdate (oldProps: Props, newProps: Props): boolean {
       if (oldProps.ChatList !== newProps.ChatList) {
         this.children.ChatList.lists.ListChats = newProps.ChatList.lists.ListChats
         this.children.ChatList.setProps({ ListChats: newProps.ChatList.lists.ListChats })
@@ -143,8 +143,8 @@ export async function main () {
       return true
     }
 
-    render () {
-      return this.compile(Chat, this.props)
+    render (): HTMLElement {
+      return this.compile(Chat, this.props) as unknown as HTMLElement
     }
   }
 
@@ -153,8 +153,8 @@ export async function main () {
       super('section', props)
     }
 
-    render () {
-      return this.compile(ChatBox, this.props)
+    render (): HTMLElement {
+      return this.compile(ChatBox, this.props) as unknown as HTMLElement
     }
   }
 
@@ -163,8 +163,8 @@ export async function main () {
       super('section', props)
     }
 
-    render () {
-      return this.compile(ChatMessage, this.props)
+    render (): HTMLElement {
+      return this.compile(ChatMessage, this.props) as unknown as HTMLElement
     }
   }
 
@@ -173,8 +173,8 @@ export async function main () {
       super('section', props)
     }
 
-    render () {
-      return this.compile(ChatList, this.props)
+    render (): HTMLElement {
+      return this.compile(ChatList, this.props) as unknown as HTMLElement
     }
   }
 
@@ -188,8 +188,8 @@ export async function main () {
       })
     }
 
-    render () {
-      return this.compile(ChatItem, this.props)
+    render (): HTMLElement {
+      return this.compile(ChatItem, this.props) as unknown as HTMLElement
     }
   }
 
@@ -198,8 +198,8 @@ export async function main () {
       super('section', props)
     }
 
-    render () {
-      return this.compile(pageTemplate, this.props)
+    render (): HTMLElement {
+      return this.compile(pageTemplate, this.props) as unknown as HTMLElement
     }
   }
 
@@ -209,8 +209,7 @@ export async function main () {
     name: 'message',
     placeholder: 'Сообщение',
     events: {
-      input: event => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      input: (event: InputEvent) => {
         validation.onValidateMessage(event, 'message')
       }
     }

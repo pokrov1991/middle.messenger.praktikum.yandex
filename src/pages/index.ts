@@ -1,6 +1,6 @@
 import { getPageName } from './../utils'
 
-export async function template () {
+export async function template (): Promise<string | Node> {
   const pageName: string | null = getPageName(location.href)
 
   let pagePromise: { default: string } = {
