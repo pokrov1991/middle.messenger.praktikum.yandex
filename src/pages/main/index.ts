@@ -160,7 +160,7 @@ export async function main (): Promise<HTMLElement | null> {
 
   class BlockChatMessage extends Block {
     constructor (props: Props) {
-      super('section', props)
+      super('div', props)
     }
 
     render (): HTMLElement {
@@ -170,7 +170,7 @@ export async function main (): Promise<HTMLElement | null> {
 
   class BlockChatList extends Block {
     constructor (props: Props) {
-      super('section', props)
+      super('div', props)
     }
 
     render (): HTMLElement {
@@ -180,7 +180,7 @@ export async function main (): Promise<HTMLElement | null> {
 
   class BlockChatItem extends Block {
     constructor (props: Props) {
-      super('section', {
+      super('div', {
         ...props,
         events: {
           click: function () { onChat(props) }

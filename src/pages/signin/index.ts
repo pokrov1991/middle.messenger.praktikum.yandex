@@ -45,7 +45,7 @@ export async function signin (): Promise<HTMLElement | null> {
 
   // Методы
   const bus = new Mediator()
-  const validation = new Validation(['email', 'login', 'password'])
+  const validation = new Validation(['email', 'login', 'first_name', 'second_name', 'phone', 'password'])
 
   // Слушатели
   bus.on('form:vaidated', (payload) => {
@@ -129,7 +129,7 @@ export async function signin (): Promise<HTMLElement | null> {
   const cInputLogin = new BlockInputText({
     className: 'c-form-auth__field',
     label: 'Логин',
-    textValid: 'Неверныый логин',
+    textValid: 'Неверный логин',
     id: 'login',
     name: 'login',
     required: 'required',

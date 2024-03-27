@@ -3,9 +3,6 @@ import { getPageName } from './../utils'
 export async function template (): Promise<string | Node> {
   const pageName: string | null = getPageName(location.href)
 
-  let pagePromise: { default: string } = {
-    default: ''
-  }
   let pageTemplate: string = ''
   let main: any
   let login: any
@@ -31,32 +28,27 @@ export async function template (): Promise<string | Node> {
       break
     case 'profile':
       ({ profilePage } = await import('./profile'))
-      pagePromise = await profilePage()
-      pageTemplate = pagePromise.default
+      pageTemplate = await profilePage()
       break
 
     case 'profile-edit':
       ({ profileEdit } = await import('./profile-edit'))
-      pagePromise = await profileEdit()
-      pageTemplate = pagePromise.default
+      pageTemplate = await profileEdit()
       break
 
     case 'profile-password':
       ({ profilePassword } = await import('./profile-password'))
-      pagePromise = await profilePassword()
-      pageTemplate = pagePromise.default
+      pageTemplate = await profilePassword()
       break
 
     case 'server-error':
       ({ serverError } = await import('./server-error'))
-      pagePromise = await serverError()
-      pageTemplate = pagePromise.default
+      pageTemplate = await serverError()
       break
 
     default:
       ({ notFound } = await import('./not-found'))
-      pagePromise = await notFound()
-      pageTemplate = pagePromise.default
+      pageTemplate = await notFound()
       break
   }
 
