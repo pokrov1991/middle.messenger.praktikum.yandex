@@ -13,6 +13,8 @@ interface Options {
 
 type OptionsWithoutMethod = Omit<Options, 'method'>
 
+type HTTPMethod = (url: string, options: OptionsWithoutMethod) => Promise<XMLHttpRequest>
+
 class HTTPTransport {
   _queryStringify (data: Record<string, string | number | boolean>): string {
     const queryString = Object.keys(data)
@@ -21,23 +23,23 @@ class HTTPTransport {
     return queryString
   }
 
-  async get (url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+  get: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
     return await this.request(url, { ...options, method: METHOD.GET })
   }
 
-  async post (url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+  post: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
     return await this.request(url, { ...options, method: METHOD.POST })
   }
 
-  async put (url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+  put: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
     return await this.request(url, { ...options, method: METHOD.PUT })
   }
 
-  async patch (url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+  patch: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
     return await this.request(url, { ...options, method: METHOD.PATCH })
   }
 
-  async delete (url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+  delete: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
     return await this.request(url, { ...options, method: METHOD.DELETE })
   }
 
@@ -70,5 +72,5 @@ class HTTPTransport {
   };
 }
 
-const testRequest = new HTTPTransport().get('https://ya.ru')
+const testRequest = new HTTPTransport().get('https://ya.ru', {})
 console.log(testRequest)

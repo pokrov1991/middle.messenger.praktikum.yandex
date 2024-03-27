@@ -1,27 +1,27 @@
 export type Listener<T extends unknown[] = any[]> = (args: T) => void
 
 export default class Mediator<E extends string = string, M extends { [K in E]: unknown[] } = Record<E, any[]> > {
-  private listeners: { [K in E]?: Array<Listener<M[E]>> } = {}
+  private listeners: Record<string, any[]> = {}
   static __instance: object
 
   constructor () {
     // Логика инициализации синглтона
-    if (Mediator.__instance) {
+    if (typeof Mediator.__instance !== 'undefined') {
       return Mediator.__instance as Mediator<E, M>
     }
 
     Mediator.__instance = this
   }
 
-  on (event: E, callback: Listener<M[E]>) {
-    if (!this.listeners[event]) {
+  on (event: E, callback: Listener<M[E]>): void {
+    if (typeof this.listeners[event] === 'undefined') {
       this.listeners[event] = []
     }
     this.listeners[event]?.push(callback)
   }
 
-  off (event: E, callback: Listener<M[E]>) {
-    if (!this.listeners[event]) {
+  off (event: E, callback: Listener<M[E]>): void {
+    if (typeof this.listeners[event] === 'undefined') {
       throw new Error(`Нет события: ${event}`)
     }
 
@@ -30,8 +30,8 @@ export default class Mediator<E extends string = string, M extends { [K in E]: u
     )
   }
 
-  emit (event: E, ...args: M[E]) {
-    if (!this.listeners[event]) {
+  emit (event: E, ...args: M[E]): void {
+    if (typeof this.listeners[event] === 'undefined') {
       throw new Error(`Нет события: ${event}`)
     }
 
