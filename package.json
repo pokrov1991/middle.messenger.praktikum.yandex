@@ -14,7 +14,7 @@
     "dev": "npx tsx server.ts",
     "prebuild": "tsc --noEmit",
     "build": "npm run prebuild && vite build --emptyOutDir",
-    "preview": "cross-env NODE_ENV=production node server",
+    "preview": "cross-env NODE_ENV=production npx tsx server.ts",
     "start": "npm run build && npm run preview"
   },
   "devDependencies": {

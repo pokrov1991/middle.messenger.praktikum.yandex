@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -29,7 +30,7 @@ app.use(vite.middlewares)
 app.use(express.static(`${__dirname}/dist`))
 
 // Орабатываем все доступные страницы
-app.get(__allowedPaths, async (req, res) => {
+app.get(__allowedPaths, async (_req, res) => {
   try {
     const data = await readFile('src/index.html', 'utf8')
     res.status(200).send(data)
@@ -39,7 +40,7 @@ app.get(__allowedPaths, async (req, res) => {
 })
 
 // Все остальные идут в 404
-app.use(async (req, res) => {
+app.use(async (_req, res) => {
   try {
     res.redirect('/?page=not-fond')
   } catch (err) {
@@ -48,7 +49,7 @@ app.use(async (req, res) => {
 })
 
 // Если ошибка 5xx
-app.use(async (err, req, res, next) => {
+app.use(async (err: any, _req: any, res: any, _next: any) => {
   res.status(500).send(`500 Error: ${err}`)
 })
 

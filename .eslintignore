@@ -2,7 +2,7 @@
 /node_modules
 /src/assets
 vite.config.js
-server.js
+server.ts
 *.hbs
 *.scss
 *.html
