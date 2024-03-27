@@ -32,16 +32,21 @@ npm run stylelint
 
 # Функциональность
 
-Бизне-слогика реализована через сервисы /src/services
-Управление бизнес-логикой реализовано через модули /src/modules
-Сервисы и представления общаются через паттерн «Медиатор» src/modules/mediator.ts
-Класс для работы с запросами src/modules/fetch.ts
-Представления реализованы через структуру схожей c атомной: pages, blocks, components, ui
+Бизне-слогика реализована через сервисы **/src/services**
+
+Управление бизнес-логикой реализовано через модули **/src/modules**
+
+Сервисы и представления общаются через паттерн «Медиатор» **src/modules/mediator.ts**
+
+Класс для работы с запросами **src/modules/fetch.ts**
+
+Представления реализованы через структуру схожей c атомной: **pages, blocks, components, ui**
 
 # Инструменты
 
-В проекте подключены TypeScript, Eslint, Stylelint
-Соответствующие конфигурации лежат в файлах tsconfig.json, .eslintrc.json, .stylelintrc.json
+В проекте подключены **TypeScript, Eslint, Stylelint**
+
+Соответствующие конфигурации лежат в файлах **tsconfig.json, .eslintrc.json, .stylelintrc.json**
 
 ## Страницы
 
