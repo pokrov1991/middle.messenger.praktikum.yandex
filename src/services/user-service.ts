@@ -119,7 +119,7 @@ export default class UserService {
         id: 'phone',
         name: 'phone',
         label: 'Телефон',
-        value: '+7 (909) 967 30 30'
+        value: '+79099673030'
       }
     ]
     const dataUser: DataUser = {

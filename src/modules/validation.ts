@@ -25,6 +25,8 @@ export default class Validation {
       if (inputValid != null) {
         inputValid.style.display = 'block'
       }
+      bus.emit('form:vaidated', { isValid: false })
+      return
     }
     this.checkValidate()
   }
