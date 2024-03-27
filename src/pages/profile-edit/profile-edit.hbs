@@ -1,11 +1,13 @@
-{{#> LayoutProfile title="Изменить данные" urlBack="/?page=profile" }}
+{{#> LayoutProfile title=title urlBack="/?page=profile" }}
   <div class="c-page c-page-profile c-page-profile_edit">
-    <form action="/">
+    <form id="formProfileEdit">
       <div class="c-page-profile__fields">
-        {{> Profile isEdit="true" }}
+        {{{ Profile }}}
+        {{!-- {{> Profile isEdit="true" }} --}}
       </div>
       <div class="c-page-profile__action">
-        {{> Button text="Сохранить" className="c-page-profile__save" }}
+        {{{ Button }}}
+        {{!-- {{> Button text="Сохранить" className="c-page-profile__save" }} --}}
       </div>
     </form>
   </div>

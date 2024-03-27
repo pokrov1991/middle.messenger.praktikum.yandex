@@ -10,26 +10,26 @@ export default class Validation {
     this.fieldsVerified = []
   }
 
-  _fieldControl (isValid: boolean, event: InputEvent, field: string) {
+  _fieldControl (isValid: boolean, event: InputEvent, field: string): void {
     const inputElement = event.target as HTMLInputElement
     const inputWrap = inputElement.parentNode?.parentElement
     const inputValid: HTMLElement | null | undefined = inputWrap?.querySelector('.c-input-validation')
 
     if (isValid) {
       this._arrayPush(field)
-      if (inputValid) {
+      if (inputValid != null) {
         inputValid.style.display = 'none'
       }
     } else {
       this.fieldsVerified = this.fieldsVerified.filter((item) => item !== field)
-      if (inputValid) {
+      if (inputValid != null) {
         inputValid.style.display = 'block'
       }
     }
     this.checkValidate()
   }
 
-  _arrayPush (field: string) {
+  _arrayPush (field: string): void {
     this.fieldsVerified = Array.from(new Set([...this.fieldsVerified, field]))
   }
 
@@ -68,8 +68,8 @@ export default class Validation {
     this._fieldControl(isValid, event, field)
   }
 
-  checkValidate () {
-    const isIncludes = (item: string) => {
+  checkValidate (): void {
+    const isIncludes = (item: string): boolean => {
       return this.fieldsVerified.includes(item)
     }
     const result = this.fieldsNeed.every(isIncludes)

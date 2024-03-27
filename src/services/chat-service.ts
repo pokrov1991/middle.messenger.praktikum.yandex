@@ -22,17 +22,17 @@ export default class ChatService {
     })
   }
 
-  init () {
+  init (): void {
     console.log('init chat-service')
     this.getChats()
   }
 
-  sendMessage (data: DataMessage) {
+  sendMessage (data: DataMessage): void {
     console.log('Message send', data)
     this.getMessages(data.id, data.message)
   }
 
-  getMessages (idChat: string | undefined, message: string = '') {
+  getMessages (idChat: string | undefined, message: string = ''): void {
     const dataMessageList = {
       andrey: [
         {
@@ -71,7 +71,7 @@ export default class ChatService {
     }
 
     if (typeof idChat !== 'undefined') {
-      if (message) {
+      if (message.length > 0) {
         this._messageList[idChat] = [
           {
             id: `key${Math.floor(100000 + Math.random() * 900000)}`,
@@ -86,7 +86,7 @@ export default class ChatService {
     }
   }
 
-  getChats () {
+  getChats (): void {
     const dataChatList: DataChatItem[] = [
       {
         id: 'andrey',
