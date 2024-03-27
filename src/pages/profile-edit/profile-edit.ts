@@ -25,6 +25,18 @@ const onSubmit = (event: any): void => {
       phone
     }
 
+    for (const item of Object.values(data)) {
+      const value = item as string
+      const regex = /.+/
+      if (value !== null) {
+        const isValid = regex.test(value)
+        if (!isValid) {
+          console.log('Profile password send: Заполните все поля!')
+          return
+        }
+      }
+    }
+
     bus.emit('user:edit', data)
   }
 }
