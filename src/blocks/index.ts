@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 const chat = async () => await import('./chat')
 const chatList = async () => await import('./chatList')
 const chatItem = async () => await import('./chatList/components/chatItem')

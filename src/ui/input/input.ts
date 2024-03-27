@@ -2,7 +2,7 @@ window.inputFocus = (e: { value: string | any[], parentElement: { classList: { a
   const classFocus = 'c-input_focus'
   const isValue = e.value.length
 
-  if (focus || isValue) {
+  if ((Boolean(focus)) || (isValue !== 0)) {
     e.parentElement.classList.add(classFocus)
   } else {
     e.parentElement.classList.remove(classFocus)

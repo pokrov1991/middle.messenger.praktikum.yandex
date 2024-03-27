@@ -3,8 +3,7 @@ export type Listener<T extends unknown[] = any[]> = (args: T) => void
 export default class EventBus<E extends string = string, M extends { [K in E]: unknown[] } = Record<E, any[]> > {
   private listeners: Record<string, any[]> = {}
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  on (event: E, callback: Function): void {
+  on (event: E, callback: Listener<M[E]>): void {
     if (typeof this.listeners[event] === 'undefined') {
       this.listeners[event] = []
     }
