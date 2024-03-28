@@ -1,0 +1,22 @@
+<section class="c-chat">
+  <div class="c-chat__sidebar">
+    <div class="c-chat__profile">
+      <a class="c-link" href="/?page=profile">Профиль</a>
+    </div>
+    <div class="c-chat__search">
+      {{> Input label="Поиск" id="search_chat" name="search_chat" className="c-input-search" }}
+    </div>
+    <div class="c-chat__list" id="chat-list">
+      {{{ ChatList }}}
+    </div>
+  </div>
+
+  <div class="c-chat__box{{#if className}} {{ className }}{{/if}}">
+    {{#if isChatSelected}}
+      <section class="c-chat-box-empty">
+        <p>Выберите чат чтобы отправить сообщение</p>
+      </section>
+    {{/if}}
+    {{{ ChatBox }}}
+  </div>
+</section>

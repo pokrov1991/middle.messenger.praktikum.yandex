@@ -11,16 +11,17 @@
     font-size: 13px;
     font-weight: 500;
     line-height: 13px;
-    letter-spacing: 0em;
+    letter-spacing: 0;
     color: var(--colors-input-label-color);
     pointer-events: none;
     transition: var(--transition-03);
   }
+
   input {
     font-size: 13px;
     font-weight: 500;
     line-height: 13px;
-    letter-spacing: 0em;
+    letter-spacing: 0;
     color: var(--colors-input-color);
     border: none;
     border-bottom: 1px solid var(--colors-input-border);
@@ -35,6 +36,7 @@
       font-weight: 500;
       line-height: 9px;
     }
+
     input {
       border-bottom: 1px solid var(--colors-input-border-focus);
     }

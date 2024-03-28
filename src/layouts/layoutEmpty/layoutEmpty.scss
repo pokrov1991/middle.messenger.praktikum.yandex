@@ -1,5 +1,5 @@
-@import './../../assets/mixins.scss';
+@import './../../assets/mixins';
 
 .c-layout-empty {
-  @include fullSize;
+  @include full-size;
 }

@@ -1,0 +1,28 @@
+<section class="c-chat-box">
+  <div class="c-chat-box__header">
+    <div class="c-chat-box__user c-chat-box-user">
+      <div class="c-chat-box-user__avatar"></div>
+      <div class="c-chat-box-user__name">
+        {{ userName }}
+      </div>
+      <div class="c-chat-box-user__kebab" onclick="console.log('kebab menu')"></div>
+    </div>
+  </div>
+  <div class="c-chat-box__messages">
+    <div class="c-chat-box-messages">
+      {{{ ListMessages }}}
+    </div>
+  </div>
+  <div class="c-chat-box__action">
+    <form id="formMessage" class="c-chat-box-action">
+      <div class="c-chat-box-action__attach" onclick="console.log('attach menu')"></div>
+      <div class="c-chat-box-action__text">
+        {{{ Textarea }}}
+      </div>
+      <div class="c-chat-box-action__send">
+        {{{ Button }}}
+      </div>
+      <input type="hidden" id="id-chat" name="id-chat" value="{{ id }}"/>
+    </form>
+  </div>
+</section>

@@ -1,11 +1,14 @@
 .c-page-signin {
-  .c-form-auth__fields {
-    margin-bottom: 47px;
+  .c-form-auth {
+    &__fields {
+      margin-bottom: 47px;
+    }  
   }
+
   &__link {
-    width: 100%;
-    margin-top: 14px;
     display: flex;
     justify-content: center;
+    width: 100%;
+    margin-top: 14px;
   }
 }

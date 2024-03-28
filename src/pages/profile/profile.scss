@@ -1,12 +1,13 @@
-@import './../../assets/mixins.scss';
+@import './../../assets/mixins';
 
 .c-page-profile {
-  @include fullSize;
+  @include full-size;
 
   &__fields {
     width: 100%;
     margin-bottom: 50px;
   }
+
   &__navigations {
     width: 100%;
     display: flex;
@@ -16,6 +17,7 @@
     ul {
       width: 100%;
     }
+
     li {
       padding-bottom: 10px;
       border-bottom: 1px solid var(--colors-chat-sidebar-border);

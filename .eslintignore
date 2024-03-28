@@ -1,0 +1,8 @@
+/dist
+/node_modules
+/src/assets
+vite.config.js
+server.ts
+*.hbs
+*.scss
+*.html

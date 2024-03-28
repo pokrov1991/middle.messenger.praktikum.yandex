@@ -1,0 +1,23 @@
+.c-profile-item {
+  width: 100%;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--colors-chat-sidebar-border);
+  display: flex;
+  justify-content: space-between;
+
+  b {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 13px;
+    letter-spacing: 0;
+    color: var(--colors-page-color);
+  }
+
+  span {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 13px;
+    letter-spacing: 0;
+    color: var(--colors-input-label-color)
+  }
+}
