@@ -1,0 +1,11 @@
+<section class="c-profile">
+  {{#if isEdit}}
+  <div class="c-profile-list">
+    {{{ InputList }}}
+  </div>
+  {{else}}
+  <ul class="c-profile-list">
+    {{{ FieldsList }}}
+  </ul>
+  {{/if}}
+</section>

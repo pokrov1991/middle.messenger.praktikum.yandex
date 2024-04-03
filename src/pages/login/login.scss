@@ -1,7 +1,10 @@
 .c-page-login {
-  .c-form-auth__fields {
-    margin-bottom: 159px;
+  .c-form-auth {
+    &__fields {
+      margin-bottom: 159px;
+    }
   }
+
   &__link {
     width: 100%;
     margin-top: 14px;

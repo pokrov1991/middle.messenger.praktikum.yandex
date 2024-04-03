@@ -18,6 +18,36 @@ npm install
 
 npm run start
 
+# Команды для разработки
+
+npm run dev - в одном окне терминала сбока esbuild черз vite
+
+npx tsc --noEmit --watch - в другом окне терминала транспиляция ts
+
+# Команды линтеров
+
+npm run eslint
+
+npm run stylelint
+
+# Функциональность
+
+Бизне-слогика реализована через сервисы **/src/services**
+
+Управление бизнес-логикой реализовано через модули **/src/modules**
+
+Сервисы и представления общаются через паттерн «Медиатор» **src/modules/mediator.ts**
+
+Класс для работы с запросами **src/modules/fetch.ts**
+
+Представления реализованы через структуру схожей c атомной: **pages, blocks, components, ui**
+
+# Инструменты
+
+В проекте подключены **TypeScript, Eslint, Stylelint**
+
+Соответствующие конфигурации лежат в файлах **tsconfig.json, .eslintrc.json, .stylelintrc.json**
+
 ## Страницы
 
 Авторизация: https://reliable-pie-75ba03.netlify.app/?page=login
