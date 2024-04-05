@@ -239,7 +239,7 @@ export async function signin (): Promise<Block> {
   })
 
   const cLink = new BlockLink({
-    to: '/login',
+    to: '/',
     text: 'Войти'
   })
 

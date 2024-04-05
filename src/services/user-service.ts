@@ -31,10 +31,15 @@ interface DataPassword {
 }
 
 export default class UserService {
-  private _userFieldsList: DataUserField[]
-  private _userData: DataUser | null
+  static __instance: UserService
+  private _userFieldsList!: DataUserField[]
+  private _userData!: DataUser | null
 
   constructor () {
+    if (typeof UserService.__instance !== 'undefined') {
+      return UserService.__instance
+    }
+
     this._userFieldsList = []
     this._userData = null
 
@@ -57,6 +62,8 @@ export default class UserService {
       const { oldPassword, newPassword } = data as unknown as DataPassword
       this.editPassword({ oldPassword, newPassword })
     })
+
+    UserService.__instance = this
   }
 
   init (isAuth: boolean = false): void {

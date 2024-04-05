@@ -12,19 +12,17 @@ export async function loadBlockPage (pageName: string): Promise<Block> {
   let notFound: () => Promise<Block>
 
   switch (pageName) {
-    case '/main':
-      ({ main } = await import('../pages/main'))
-      blockPage = await main()
-      break
-    case '/login':
     case '/':
-    case '':
       ({ login } = await import('../pages/login'))
       blockPage = await login()
       break
     case '/signin':
       ({ signin } = await import('../pages/signin'))
       blockPage = await signin()
+      break
+    case '/main':
+      ({ main } = await import('../pages/main'))
+      blockPage = await main()
       break
     case '/profile':
       ({ profilePage } = await import('../pages/profile'))

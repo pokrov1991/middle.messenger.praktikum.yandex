@@ -75,17 +75,33 @@ export default class Router {
     Router.__instance = this
   }
 
-  use (pathname: string, block: Block): this {
-    const route = new Route(pathname, block, { rootQuery: this._rootQuery })
+  private _onRoute (pathname: string): void {
+    const route = this.getRoute(pathname)
+    if (route == null) {
+      return
+    }
 
+    if ((this._currentRoute != null) && this._currentRoute !== route) {
+      this._currentRoute.leave()
+    }
+
+    this._currentRoute = route
+    route.render()
+  }
+
+  isRoute (pathname: string): boolean {
     let isRoute = false
     this.routes.forEach((item) => {
-      if (item._pathname === route._pathname) {
+      if (item._pathname === pathname) {
         isRoute = true
       }
     })
+    return isRoute
+  }
 
-    if (!isRoute) {
+  use (pathname: string, block: Block): this {
+    if (!this.isRoute(pathname)) {
+      const route = new Route(pathname, block, { rootQuery: this._rootQuery })
       this.routes.push(route)
     }
 
@@ -100,20 +116,6 @@ export default class Router {
     }
 
     this._onRoute(window.location.pathname)
-  }
-
-  _onRoute (pathname: string): void {
-    const route = this.getRoute(pathname)
-    if (route == null) {
-      return
-    }
-
-    if ((this._currentRoute != null) && this._currentRoute !== route) {
-      this._currentRoute.leave()
-    }
-
-    this._currentRoute = route
-    route.render()
   }
 
   go (pathname: string): void {

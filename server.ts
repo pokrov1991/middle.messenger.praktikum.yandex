@@ -12,7 +12,7 @@ const base = process.env.BASE || '/'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const __allowedPathsStatic = ['/fonts', '/icons']
-const __allowedPaths = ['/', ...__allowedPathsStatic]
+const __allowedPaths = ['/', '/signin', '/main', '/profile', '/profile-edit', '/profile-password', '/server-error', '/not-fond', ...__allowedPathsStatic]
 
 // Создаем http сервер
 const app: express.Application = express()
@@ -42,7 +42,7 @@ app.get(__allowedPaths, async (_req, res) => {
 // Все остальные идут в 404
 app.use(async (_req, res) => {
   try {
-    res.redirect('/?page=not-fond')
+    res.redirect('/not-fond')
   } catch (err) {
     res.status(500).send(`500 Error: ${err}`)
   }
