@@ -4,6 +4,8 @@ import Router from '../../modules/router'
 const router = new Router('#app')
 
 window.toRoute = async (url: string) => {
-  router.use(url, await loadBlockPage(url))
+  if (!router.isRoute(url)) {
+    router.use(url, await loadBlockPage(url))
+  }
   router.go(url)
 }
