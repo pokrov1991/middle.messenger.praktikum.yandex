@@ -6,9 +6,9 @@ import UserService from '../../services/user-service'
 import { type Props, type DataUserField, type DataUser } from '../../types/global'
 import { layoutProfile } from './../../layouts'
 import { profile, profileItem } from './../../blocks'
-import { title } from './../../ui'
+import { link, title } from './../../ui'
 
-export async function profilePage (): Promise<HTMLElement | null> {
+export async function profilePage (): Promise<Block> {
   const pagePromise = await import('./profile.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -20,6 +20,8 @@ export async function profilePage (): Promise<HTMLElement | null> {
   const profileItemPromise = await profileItem()
   const ProfileItem = profileItemPromise.ProfileItem
 
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const titlePromise = await title()
   const Title = titlePromise.Title
 
@@ -28,6 +30,7 @@ export async function profilePage (): Promise<HTMLElement | null> {
     LayoutProfile,
     Profile,
     ProfileItem,
+    Link,
     Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -92,5 +95,5 @@ export async function profilePage (): Promise<HTMLElement | null> {
     Profile: cProfile
   })
 
-  return cProfilePage.getContent()
+  return cProfilePage
 }

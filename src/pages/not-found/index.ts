@@ -5,7 +5,7 @@ import { type Props } from '../../types/global'
 import { layoutEmpty } from './../../layouts'
 import { error } from './../../blocks'
 
-export async function notFound (): Promise<HTMLElement | null> {
+export async function notFound (): Promise<Block> {
   const pagePromise = await import('./not-found.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -37,5 +37,5 @@ export async function notFound (): Promise<HTMLElement | null> {
     text: 'Не туда попали'
   })
 
-  return cNotFound.getContent()
+  return cNotFound
 }

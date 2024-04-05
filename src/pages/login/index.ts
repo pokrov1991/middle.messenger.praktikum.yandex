@@ -7,10 +7,10 @@ import UserService from '../../services/user-service'
 import { type Props } from '../../types/global'
 import { layoutAuth } from './../../layouts'
 import { inputPassword, inputEmail } from './../../components'
-import { input, button, title } from './../../ui'
+import { input, button, link, title } from './../../ui'
 import { onSubmit } from './login'
 
-export async function login (): Promise<HTMLElement | null> {
+export async function login (): Promise<Block> {
   const pagePromise = await import('./login.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -26,6 +26,8 @@ export async function login (): Promise<HTMLElement | null> {
   const Input = inputPromise.Input
   const buttonPromise = await button()
   const Button = buttonPromise.Button
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const titlePromise = await title()
   const Title = titlePromise.Title
 
@@ -36,6 +38,7 @@ export async function login (): Promise<HTMLElement | null> {
     InputEmail,
     Input,
     Button,
+    Link,
     Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -85,6 +88,16 @@ export async function login (): Promise<HTMLElement | null> {
 
     render (): HTMLElement {
       return this.compile(Button, this.props) as unknown as HTMLElement
+    }
+  }
+
+  class BlockLink extends Block {
+    constructor (props: Props) {
+      super('a', props)
+    }
+
+    render (): HTMLElement {
+      return this.compile(Link, this.props) as unknown as HTMLElement
     }
   }
 
@@ -138,13 +151,19 @@ export async function login (): Promise<HTMLElement | null> {
     }
   })
 
+  const cLink = new BlockLink({
+    to: '/signin',
+    text: 'Нет аккаунта?'
+  })
+
   // Создание компонента страницы
   const cLogin = new BlockLogin({
     text: 'Вход',
     InputPassword: cInputPassword,
     InputEmail: cInputEmail,
-    Button: cButton
+    Button: cButton,
+    Link: cLink
   })
 
-  return cLogin.getContent()
+  return cLogin
 }

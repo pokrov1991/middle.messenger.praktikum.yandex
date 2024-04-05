@@ -8,10 +8,10 @@ import { type Props, type DataUserField, type DataUser } from '../../types/globa
 import { layoutProfile } from './../../layouts'
 import { profile } from './../../blocks'
 import { inputText } from './../../components'
-import { input, button, title } from './../../ui'
+import { input, button, link, title } from './../../ui'
 import { onSubmit } from './profile-edit'
 
-export async function profileEdit (): Promise<HTMLElement | null> {
+export async function profileEdit (): Promise<Block> {
   const pagePromise = await import('./profile-edit.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -28,6 +28,8 @@ export async function profileEdit (): Promise<HTMLElement | null> {
   const Input = inputPromise.Input
   const buttonPromise = await button()
   const Button = buttonPromise.Button
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const titlePromise = await title()
   const Title = titlePromise.Title
 
@@ -37,6 +39,7 @@ export async function profileEdit (): Promise<HTMLElement | null> {
     Profile,
     Input,
     Button,
+    Link,
     Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -160,5 +163,5 @@ export async function profileEdit (): Promise<HTMLElement | null> {
     Button: cButton
   })
 
-  return cProfileEditPage.getContent()
+  return cProfileEditPage
 }

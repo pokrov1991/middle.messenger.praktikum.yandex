@@ -7,10 +7,10 @@ import ChatService from '../../services/chat-service'
 import { type Props, type DataChatItem, type DataMessage } from '../../types/global'
 import { layoutEmpty } from '../../layouts'
 import { chat, chatList, chatItem, chatBox, chatMessage } from '../../blocks'
-import { input, textarea, button } from '../../ui'
+import { input, textarea, link, button } from '../../ui'
 import { onChat, onSubmit } from './main'
 
-export async function main (): Promise<HTMLElement | null> {
+export async function main (): Promise<Block> {
   const pagePromise = await import('./main.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -32,6 +32,8 @@ export async function main (): Promise<HTMLElement | null> {
   const Input = inputPromise.Input
   const textareaPromise = await textarea()
   const Textarea = textareaPromise.Textarea
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const buttonPromise = await button()
   const Button = buttonPromise.Button
 
@@ -45,6 +47,7 @@ export async function main (): Promise<HTMLElement | null> {
     ChatMessage,
     Input,
     Textarea,
+    Link,
     Button
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -123,6 +126,16 @@ export async function main (): Promise<HTMLElement | null> {
 
     render (): HTMLElement {
       return this.compile(Button, this.props) as unknown as HTMLElement
+    }
+  }
+
+  class BlockLink extends Block {
+    constructor (props: Props) {
+      super('a', props)
+    }
+
+    render (): HTMLElement {
+      return this.compile(Link, this.props) as unknown as HTMLElement
     }
   }
 
@@ -223,6 +236,11 @@ export async function main (): Promise<HTMLElement | null> {
     }
   })
 
+  const cLink = new BlockLink({
+    to: '/profile',
+    text: 'Профиль'
+  })
+
   // Блок чата
   const cChatBox = new BlockChatBox({
     id: 'id-chat',
@@ -240,7 +258,8 @@ export async function main (): Promise<HTMLElement | null> {
     isChatSelected: true,
     className: '',
     ChatBox: cChatBox,
-    ChatList: cChatList
+    ChatList: cChatList,
+    Link: cLink
   })
 
   // Создание компонента страницы
@@ -248,5 +267,5 @@ export async function main (): Promise<HTMLElement | null> {
     Chat: cChat
   })
 
-  return cChatPage.getContent()
+  return cChatPage
 }

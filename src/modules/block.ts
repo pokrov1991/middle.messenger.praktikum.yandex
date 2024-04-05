@@ -236,7 +236,7 @@ export default abstract class Block {
   show (): void {
     const content = this.getContent()
     if (content !== null) {
-      content.style.display = 'block'
+      content.style.display = 'flex'
     }
   }
 

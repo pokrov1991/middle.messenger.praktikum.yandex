@@ -5,7 +5,7 @@ import { type Props } from '../../types/global'
 import { layoutEmpty } from './../../layouts'
 import { error } from './../../blocks'
 
-export async function serverError (): Promise<HTMLElement | null> {
+export async function serverError (): Promise<Block> {
   const pagePromise = await import('./server-error.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -37,5 +37,5 @@ export async function serverError (): Promise<HTMLElement | null> {
     text: 'Мы уже фиксим'
   })
 
-  return cServerError.getContent()
+  return cServerError
 }

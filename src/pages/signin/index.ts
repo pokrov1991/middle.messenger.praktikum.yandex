@@ -7,10 +7,10 @@ import UserService from '../../services/user-service'
 import { type Props } from '../../types/global'
 import { layoutAuth } from './../../layouts'
 import { inputPassword, inputEmail, inputText } from './../../components'
-import { input, button, title } from './../../ui'
+import { input, button, link, title } from './../../ui'
 import { onSubmit } from './signin'
 
-export async function signin (): Promise<HTMLElement | null> {
+export async function signin (): Promise<Block> {
   const pagePromise = await import('./signin.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -28,6 +28,8 @@ export async function signin (): Promise<HTMLElement | null> {
   const Input = inputPromise.Input
   const buttonPromise = await button()
   const Button = buttonPromise.Button
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const titlePromise = await title()
   const Title = titlePromise.Title
 
@@ -38,6 +40,7 @@ export async function signin (): Promise<HTMLElement | null> {
     InputEmail,
     Input,
     Button,
+    Link,
     Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -107,6 +110,16 @@ export async function signin (): Promise<HTMLElement | null> {
 
     render (): HTMLElement {
       return this.compile(pageTemplate, this.props) as unknown as HTMLElement
+    }
+  }
+
+  class BlockLink extends Block {
+    constructor (props: Props) {
+      super('a', props)
+    }
+
+    render (): HTMLElement {
+      return this.compile(Link, this.props) as unknown as HTMLElement
     }
   }
 
@@ -225,6 +238,11 @@ export async function signin (): Promise<HTMLElement | null> {
     }
   })
 
+  const cLink = new BlockLink({
+    to: '/login',
+    text: 'Войти'
+  })
+
   // Создание компонента страницы
   const cSignin = new BlockSignin({
     text: 'Регистрация',
@@ -235,8 +253,9 @@ export async function signin (): Promise<HTMLElement | null> {
     InputPhone: cInputPhone,
     InputPassword: cInputPassword,
     InputPasswordRepeat: cInputPasswordRepeat,
-    Button: cButton
+    Button: cButton,
+    Link: cLink
   })
 
-  return cSignin.getContent()
+  return cSignin
 }
