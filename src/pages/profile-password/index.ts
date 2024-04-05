@@ -8,10 +8,10 @@ import { type Props } from '../../types/global'
 import { layoutProfile } from './../../layouts'
 import { profile } from './../../blocks'
 import { inputPassword } from './../../components'
-import { input, button, title } from './../../ui'
+import { input, button, link, title } from './../../ui'
 import { onSubmit } from './profile-password'
 
-export async function profilePassword (): Promise<HTMLElement | null> {
+export async function profilePassword (): Promise<Block> {
   const pagePromise = await import('./profile-password.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -28,6 +28,8 @@ export async function profilePassword (): Promise<HTMLElement | null> {
   const Input = inputPromise.Input
   const buttonPromise = await button()
   const Button = buttonPromise.Button
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const titlePromise = await title()
   const Title = titlePromise.Title
 
@@ -38,6 +40,7 @@ export async function profilePassword (): Promise<HTMLElement | null> {
     InputPassword,
     Input,
     Button,
+    Link,
     Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -146,5 +149,5 @@ export async function profilePassword (): Promise<HTMLElement | null> {
     Button: cButton
   })
 
-  return cProfilePasswordPage.getContent()
+  return cProfilePasswordPage
 }

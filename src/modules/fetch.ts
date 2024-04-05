@@ -16,32 +16,24 @@ type OptionsWithoutMethod = Omit<Options, 'method'>
 type HTTPMethod = (url: string, options: OptionsWithoutMethod) => Promise<XMLHttpRequest>
 
 class HTTPTransport {
-  _queryStringify (data: Record<string, string | number | boolean>): string {
+  private _queryStringify (data: Record<string, string | number | boolean>): string {
     const queryString = Object.keys(data)
       .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
       .join('&')
     return queryString
   }
 
-  get: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
-    return await this.request(url, { ...options, method: METHOD.GET })
+  private readonly _createHTTPMethod = (method: METHOD): HTTPMethod => {
+    return async (url: string, options: OptionsWithoutMethod = {}) => {
+      return await this.request(url, { ...options, method })
+    }
   }
 
-  post: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
-    return await this.request(url, { ...options, method: METHOD.POST })
-  }
-
-  put: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
-    return await this.request(url, { ...options, method: METHOD.PUT })
-  }
-
-  patch: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
-    return await this.request(url, { ...options, method: METHOD.PATCH })
-  }
-
-  delete: HTTPMethod = async (url: string, options: OptionsWithoutMethod = {}) => {
-    return await this.request(url, { ...options, method: METHOD.DELETE })
-  }
+  get: HTTPMethod = this._createHTTPMethod(METHOD.GET)
+  post: HTTPMethod = this._createHTTPMethod(METHOD.POST)
+  put: HTTPMethod = this._createHTTPMethod(METHOD.PUT)
+  patch: HTTPMethod = this._createHTTPMethod(METHOD.PATCH)
+  delete: HTTPMethod = this._createHTTPMethod(METHOD.DELETE)
 
   async request (url: string, options: Options): Promise<XMLHttpRequest> {
     const { method, data } = options
