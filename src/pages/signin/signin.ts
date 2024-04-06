@@ -19,8 +19,8 @@ const onSubmit = (event: any): void => {
     const data = {
       email,
       login,
-      firstName,
-      secondName,
+      first_name: firstName,
+      second_name: secondName,
       phone,
       password
     }
