@@ -15,7 +15,7 @@ type OptionsWithoutMethod = Omit<Options, 'method'>
 
 type HTTPMethod = (url: string, options: OptionsWithoutMethod) => Promise<XMLHttpRequest>
 
-class HTTPTransport {
+export default class HTTP {
   private _queryStringify (data: Record<string, string | number | boolean>): string {
     const queryString = Object.keys(data)
       .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
@@ -58,11 +58,9 @@ class HTTPTransport {
       if (isGet) {
         xhr.send()
       } else {
-        xhr.send(data as unknown as XMLHttpRequestBodyInit)
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.send(JSON.stringify(data))
       }
     })
-  };
+  }
 }
-
-const testRequest = new HTTPTransport().get('https://ya.ru', {})
-console.log(testRequest)

@@ -6,7 +6,7 @@ import Validation from '../../modules/validation'
 import UserService from '../../services/user-service'
 import { type Props } from '../../types/global'
 import { layoutAuth } from './../../layouts'
-import { inputPassword, inputEmail } from './../../components'
+import { inputPassword, inputText } from './../../components'
 import { input, button, link, title } from './../../ui'
 import { onSubmit } from './login'
 
@@ -19,8 +19,8 @@ export async function login (): Promise<Block> {
 
   const inputPasswordPromise = await inputPassword()
   const InputPassword = inputPasswordPromise.InputPassword
-  const inputEmailPromise = await inputEmail()
-  const InputEmail = inputEmailPromise.InputEmail
+  const inputTextPromise = await inputText()
+  const InputText = inputTextPromise.InputText
 
   const inputPromise = await input()
   const Input = inputPromise.Input
@@ -35,7 +35,7 @@ export async function login (): Promise<Block> {
   Object.entries({
     LayoutAuth,
     InputPassword,
-    InputEmail,
+    InputText,
     Input,
     Button,
     Link,
@@ -46,7 +46,7 @@ export async function login (): Promise<Block> {
 
   // Методы
   const bus = new Mediator()
-  const validation = new Validation(['email', 'password'])
+  const validation = new Validation(['login', 'password'])
 
   // Слушатели
   bus.on('form:vaidated', (payload) => {
@@ -61,6 +61,16 @@ export async function login (): Promise<Block> {
   userService.init()
 
   // Создание классов компонентов
+  class BlockInputText extends Block {
+    constructor (props: Props) {
+      super('div', props)
+    }
+
+    render (): HTMLElement {
+      return this.compile(InputText, this.props) as unknown as HTMLElement
+    }
+  }
+
   class BlockInputPassword extends Block {
     constructor (props: Props) {
       super('div', props)
@@ -68,16 +78,6 @@ export async function login (): Promise<Block> {
 
     render (): HTMLElement {
       return this.compile(InputPassword, this.props) as unknown as HTMLElement
-    }
-  }
-
-  class BlockInputEmail extends Block {
-    constructor (props: Props) {
-      super('div', props)
-    }
-
-    render (): HTMLElement {
-      return this.compile(InputEmail, this.props) as unknown as HTMLElement
     }
   }
 
@@ -112,6 +112,21 @@ export async function login (): Promise<Block> {
   }
 
   // Создание компонентов
+  const cInputLogin = new BlockInputText({
+    className: 'c-form-auth__field',
+    label: 'Логин',
+    textValid: 'Неверный логин',
+    id: 'login',
+    name: 'login',
+    required: 'required',
+    isValid: false,
+    events: {
+      focusout: (event: InputEvent) => {
+        validation.onValidateLogin(event, 'login')
+      }
+    }
+  })
+
   const cInputPassword = new BlockInputPassword({
     className: 'c-form-auth__field',
     label: 'Пароль',
@@ -123,21 +138,6 @@ export async function login (): Promise<Block> {
     events: {
       focusout: (event: InputEvent) => {
         validation.onValidatePassword(event, 'password')
-      }
-    }
-  })
-
-  const cInputEmail = new BlockInputEmail({
-    className: 'c-form-auth__field',
-    label: 'Логин',
-    textValid: 'Неверныая почта',
-    id: 'login',
-    name: 'login',
-    required: 'required',
-    isValid: false,
-    events: {
-      focusout: (event: InputEvent) => {
-        validation.onValidateEmail(event, 'email')
       }
     }
   })
@@ -159,8 +159,8 @@ export async function login (): Promise<Block> {
   // Создание компонента страницы
   const cLogin = new BlockLogin({
     text: 'Вход',
+    InputLogin: cInputLogin,
     InputPassword: cInputPassword,
-    InputEmail: cInputEmail,
     Button: cButton,
     Link: cLink
   })

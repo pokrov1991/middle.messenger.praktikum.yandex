@@ -1,34 +1,12 @@
 import Mediator from '../modules/mediator'
+import SigninAPI from '../api/signin-api'
+import LoginAPI from '../api/login-api'
+import { type LoginFormModel, type SigninFormModel, type ProfileEditFormModel, type ProfilePasswordFormModel } from '../types/user'
 import { type DataUserField, type DataUser } from '../types/global'
+
 const bus = new Mediator()
-
-interface DataLogin {
-  login: string
-  password: string
-}
-
-interface DataSignin {
-  email: string
-  login: string
-  firstName: string
-  secondName: string
-  phone: string
-  password: string
-}
-
-interface DataEdit {
-  email: string
-  login: string
-  firstName: string
-  secondName: string
-  displayName: string
-  phone: string
-}
-
-interface DataPassword {
-  oldPassword: string
-  newPassword: string
-}
+const signinAPI = new SigninAPI()
+const loginApi = new LoginAPI()
 
 export default class UserService {
   static __instance: UserService
@@ -44,23 +22,19 @@ export default class UserService {
     this._userData = null
 
     bus.on('user:login', (data) => {
-      const { login, password } = data as unknown as DataLogin
-      this.login({ login, password })
+      this.login(data as unknown as LoginFormModel)
     })
 
     bus.on('user:signin', (data) => {
-      const { email, login, firstName, secondName, phone, password } = data as unknown as DataSignin
-      this.signin({ email, login, firstName, secondName, phone, password })
+      this.signin(data as unknown as SigninFormModel)
     })
 
     bus.on('user:edit', (data) => {
-      const { email, login, firstName, secondName, displayName, phone } = data as unknown as DataEdit
-      this.edit({ email, login, firstName, secondName, displayName, phone })
+      this.edit(data as unknown as ProfileEditFormModel)
     })
 
     bus.on('user:edit-password', (data) => {
-      const { oldPassword, newPassword } = data as unknown as DataPassword
-      this.editPassword({ oldPassword, newPassword })
+      this.editPassword(data as unknown as ProfilePasswordFormModel)
     })
 
     UserService.__instance = this
@@ -74,19 +48,44 @@ export default class UserService {
     }
   }
 
-  login (data: DataLogin): void {
+  login (data: LoginFormModel): void {
     console.log('Login send', data)
+
+    void loginApi.request(data)
+      .then((res) => {
+        console.log('Login response', res)
+
+        if (res.status === 200) {
+          console.log('response', res.response)
+        } else {
+          console.log('error', JSON.parse(res.response as string))
+        }
+      })
   }
 
-  signin (data: DataSignin): void {
+  signin (data: SigninFormModel): void {
     console.log('Signin send', data)
+
+    void signinAPI.create(data)
+      .then((res) => {
+        console.log('Signin response', res)
+
+        const response = JSON.parse(res.response as string)
+        if (res.status === 200) {
+          console.log('response', response)
+          const userID = response.id
+          console.log('userID', userID)
+        } else {
+          console.log('error', response)
+        }
+      })
   }
 
-  edit (data: DataEdit): void {
+  edit (data: ProfileEditFormModel): void {
     console.log('Profile edit send', data)
   }
 
-  editPassword (data: DataPassword): void {
+  editPassword (data: ProfilePasswordFormModel): void {
     console.log('Profile password send', data)
   }
 
