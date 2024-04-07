@@ -16,6 +16,12 @@ type OptionsWithoutMethod = Omit<Options, 'method'>
 type HTTPMethod = (url: string, options: OptionsWithoutMethod) => Promise<XMLHttpRequest>
 
 export default class HTTP {
+  private readonly _host: string
+
+  constructor (host: string) {
+    this._host = host
+  }
+
   private _queryStringify (data: Record<string, string | number | boolean>): string {
     const queryString = Object.keys(data)
       .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
@@ -25,7 +31,7 @@ export default class HTTP {
 
   private readonly _createHTTPMethod = (method: METHOD): HTTPMethod => {
     return async (url: string, options: OptionsWithoutMethod = {}) => {
-      return await this.request(url, { ...options, method })
+      return await this.request(`${this._host}${url}`, { ...options, method })
     }
   }
 
