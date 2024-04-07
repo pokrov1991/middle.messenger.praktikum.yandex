@@ -1,6 +1,8 @@
 import Mediator from '../modules/mediator'
 import SigninAPI from '../api/signin-api'
 import LoginAPI from '../api/login-api'
+import logger from './decorators/logger'
+import toRoute from '../utils/toRoute'
 import { type LoginFormModel, type SigninFormModel, type ProfileEditFormModel, type ProfilePasswordFormModel } from '../types/user'
 import { type DataUserField, type DataUser } from '../types/global'
 
@@ -48,36 +50,36 @@ export default class UserService {
     }
   }
 
+  @logger
   login (data: LoginFormModel): void {
-    console.log('Login send', data)
-
+    // TODO - isLoaded = true
     void loginApi.request(data)
-      .then((res) => {
-        console.log('Login response', res)
-
-        if (res.status === 200) {
-          console.log('response', res.response)
-        } else {
+      .then(async (res) => {
+        if (res.status !== 200) {
           console.log('error', JSON.parse(res.response as string))
+          return
         }
+
+        if (res.response === 'OK') {
+          void toRoute('/main')
+        }
+        // TODO - isLoaded = false
       })
   }
 
+  @logger
   signin (data: SigninFormModel): void {
-    console.log('Signin send', data)
-
     void signinAPI.create(data)
       .then((res) => {
-        console.log('Signin response', res)
+        if (res.status !== 200) {
+          console.log('error', JSON.parse(res.response as string))
+          return
+        }
 
         const response = JSON.parse(res.response as string)
-        if (res.status === 200) {
-          console.log('response', response)
-          const userID = response.id
-          console.log('userID', userID)
-        } else {
-          console.log('error', response)
-        }
+        console.log('response', response)
+        const userID = response.id
+        console.log('userID', userID)
       })
   }
 
