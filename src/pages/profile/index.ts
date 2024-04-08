@@ -55,6 +55,16 @@ export async function profilePage (): Promise<Block> {
   userService.init(true)
 
   // Создание классов компонентов
+  class BlockLink extends Block {
+    constructor (props: Props) {
+      super('a', props)
+    }
+
+    render (): HTMLElement {
+      return this.compile(Link, this.props) as unknown as HTMLElement
+    }
+  }
+
   class BlockField extends Block {
     constructor (props: Props) {
       super('div', props)
@@ -86,13 +96,36 @@ export async function profilePage (): Promise<Block> {
   }
 
   // Создание компонента страницы
+  const cLinkEdit = new BlockLink({
+    to: '/profile-edit',
+    text: 'Изменить данные'
+  })
+
+  const cLinkPassword = new BlockLink({
+    to: '/profile-password',
+    text: 'Изменить пароль'
+  })
+
+  const cLinkExit = new BlockLink({
+    text: 'Выйти',
+    className: 'c-link_red',
+    events: {
+      click: () => {
+        bus.emit('user:logout')
+      }
+    }
+  })
+
   const cProfile = new BlockProfile({
     FieldsList: dataUserFieldsList.map(item => new BlockField(item))
   })
 
   const cProfilePage = new BlockProfilePage({
     title: dataUser?.name,
-    Profile: cProfile
+    Profile: cProfile,
+    LinkEdit: cLinkEdit,
+    LinkPassword: cLinkPassword,
+    LinkExit: cLinkExit
   })
 
   return cProfilePage

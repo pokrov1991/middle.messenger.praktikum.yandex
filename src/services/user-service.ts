@@ -1,14 +1,19 @@
 import Mediator from '../modules/mediator'
 import SigninAPI from '../api/signin-api'
 import LoginAPI from '../api/login-api'
+import LogoutAPI from '../api/logout-api'
+import UserAPI from '../api/user-api'
 import logger from './decorators/logger'
 import toRoute from '../utils/toRoute'
+import checkErrorStatus from '../utils/checkErrorStatus'
 import { type LoginFormModel, type SigninFormModel, type ProfileEditFormModel, type ProfilePasswordFormModel } from '../types/user'
 import { type DataUserField, type DataUser } from '../types/global'
 
 const bus = new Mediator()
 const signinAPI = new SigninAPI()
 const loginApi = new LoginAPI()
+const logoutApi = new LogoutAPI()
+const userApi = new UserAPI()
 
 export default class UserService {
   static __instance: UserService
@@ -29,6 +34,10 @@ export default class UserService {
 
     bus.on('user:signin', (data) => {
       this.signin(data as unknown as SigninFormModel)
+    })
+
+    bus.on('user:logout', () => {
+      this.logout()
     })
 
     bus.on('user:edit', (data) => {
@@ -55,13 +64,10 @@ export default class UserService {
     // TODO - isLoaded = true
     void loginApi.request(data)
       .then(async (res) => {
-        if (res.status !== 200) {
-          console.log('error', JSON.parse(res.response as string))
-          return
-        }
+        checkErrorStatus(res.status, res.response as string)
 
         if (res.response === 'OK') {
-          void toRoute('/main')
+          this.user()
         }
         // TODO - isLoaded = false
       })
@@ -71,15 +77,30 @@ export default class UserService {
   signin (data: SigninFormModel): void {
     void signinAPI.create(data)
       .then((res) => {
-        if (res.status !== 200) {
-          console.log('error', JSON.parse(res.response as string))
-          return
-        }
+        checkErrorStatus(res.status, res.response as string)
+
+        this.user()
+      })
+  }
+
+  logout (): void {
+    void logoutApi.request()
+      .then((res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        void toRoute('/')
+      })
+  }
+
+  user (): void {
+    void userApi.request()
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
 
         const response = JSON.parse(res.response as string)
         console.log('response', response)
-        const userID = response.id
-        console.log('userID', userID)
+
+        void toRoute('/main')
       })
   }
 
