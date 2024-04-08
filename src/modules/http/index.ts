@@ -53,6 +53,8 @@ export default class HTTP {
         isGet && typeof data !== 'undefined' ? `${url}${this._queryStringify(data)}` : url
       )
 
+      xhr.withCredentials = true
+
       xhr.onload = function () {
         resolve(xhr)
       }
