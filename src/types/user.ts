@@ -17,7 +17,7 @@ interface ProfileEditFormModel {
   login: string
   first_name: string
   second_name: string
-  displayName: string
+  display_name: string
   phone: string
 }
 

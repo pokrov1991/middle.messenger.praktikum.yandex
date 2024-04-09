@@ -1,4 +1,7 @@
+import UserService from '../services/user-service'
 import type Block from '../modules/block'
+
+const user = new UserService()
 
 export async function loadBlockPage (pageName: string): Promise<Block> {
   let blockPage: Block
@@ -10,6 +13,19 @@ export async function loadBlockPage (pageName: string): Promise<Block> {
   let profilePassword: () => Promise<Block>
   let serverError: () => Promise<Block>
   let notFound: () => Promise<Block>
+
+  switch (pageName) {
+    case '/main':
+    case '/profile':
+    case '/profile-edit':
+    case '/profile-password':
+      await user.auth().then(() => {
+        if (user.isAuth !== true) {
+          window.location.href = '/'
+        }
+      })
+      break
+  }
 
   switch (pageName) {
     case '/':

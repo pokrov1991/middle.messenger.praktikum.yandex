@@ -4,6 +4,10 @@ interface Props {
   [key: string]: any
 }
 
+type Indexed<T = unknown> = {
+  [key in string]: T;
+}
+
 interface DataChatItem {
   id: string
   userName: string
@@ -37,4 +41,11 @@ interface DataUser {
   srcAvatar: string
 }
 
-export type { Props, DataChatItem, DataMessage, DataUserField, DataUser }
+export type {
+  Props,
+  Indexed,
+  DataChatItem,
+  DataMessage,
+  DataUserField,
+  DataUser
+}
