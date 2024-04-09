@@ -47,7 +47,6 @@ export async function profileEdit (): Promise<Block> {
 
   // Методы и переменные
   const bus = new Mediator()
-  // const validation = new Validation(['email', 'login', 'first_name', 'second_name', 'display_name', 'phone'])
   const validation = new Validation([])
   let dataUserFieldsList: DataUserField[] = []
   let dataUser: DataUser = {
