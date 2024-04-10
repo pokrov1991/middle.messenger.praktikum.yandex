@@ -4,7 +4,8 @@ import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import UserService from '../../services/user-service'
 import store, { StoreEvents } from '../../modules/store'
-import { type Props, type DataUserField, type DataUser } from '../../types/global'
+import { connect } from '../../utils/handleObjects'
+import { type Props, type Indexed, type DataUserField, type DataUser } from '../../types/global'
 import { layoutProfile } from './../../layouts'
 import { profile, profileItem } from './../../blocks'
 import { link, title } from './../../ui'
@@ -100,14 +101,8 @@ export async function profilePage (): Promise<Block> {
   }
 
   class BlockProfilePage extends Block {
-    constructor (props: Props) {
+    constructor (_tagName: string, props: Props) {
       super('section', props)
-
-      store.on(StoreEvents.Updated, () => {
-        this.setProps({
-          title: dataUser.name
-        })
-      })
     }
 
     render (): HTMLElement {
@@ -140,7 +135,10 @@ export async function profilePage (): Promise<Block> {
     FieldsList: dataUserFieldsList.map(item => new BlockField(item))
   })
 
-  const cProfilePage = new BlockProfilePage({
+  const ConnectProfilePage = connect(BlockProfilePage, (state: any): Indexed => ({
+    title: state.user.first_name
+  }))
+  const cProfilePage = new ConnectProfilePage('section', {
     title: dataUser?.name,
     Profile: cProfile,
     LinkEdit: cLinkEdit,
