@@ -1,4 +1,6 @@
-import { type Indexed } from '../types/global'
+import store, { StoreEvents } from '../modules/store'
+import type Block from '../modules/block'
+import { type Props, type Indexed } from '../types/global'
 
 export function isEqual (a: object, b: object): boolean {
   if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) {
@@ -65,4 +67,24 @@ export function set (object: Indexed | unknown, path: string, value: unknown): I
     [key]: acc
   }), value as Indexed)
   return merge(object as Indexed, result)
+}
+
+export function connect (Component: typeof Block, mapStateToProps: (state: Indexed) => Indexed): typeof Block {
+  return class extends Component {
+    constructor (...args: [string, Props]) {
+      let state = mapStateToProps(store.getState())
+
+      super(...args)
+
+      store.on(StoreEvents.Updated, () => {
+        const newState = mapStateToProps(store.getState())
+
+        if (!isEqual(state, newState)) {
+          this.setProps({ ...newState })
+        }
+
+        state = newState
+      })
+    }
+  }
 }

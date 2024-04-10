@@ -3,7 +3,7 @@ import EventBus from './event-bus'
 import { v4 as makeUUID } from 'uuid'
 import { type Props } from '../types/global'
 
-export default abstract class Block {
+export default class Block {
   private static readonly EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
