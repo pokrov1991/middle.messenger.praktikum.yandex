@@ -8,7 +8,8 @@ import { connect } from '../../utils/handleObjects'
 import { type Props, type Indexed, type DataUserField, type DataUser } from '../../types/global'
 import { layoutProfile } from './../../layouts'
 import { profile, profileItem } from './../../blocks'
-import { link, title } from './../../ui'
+import { popup } from './../../components'
+import { button, link, title } from './../../ui'
 
 export async function profilePage (): Promise<Block> {
   const pagePromise = await import('./profile.hbs?raw')
@@ -22,6 +23,11 @@ export async function profilePage (): Promise<Block> {
   const profileItemPromise = await profileItem()
   const ProfileItem = profileItemPromise.ProfileItem
 
+  const popupPromise = await popup()
+  const Popup = popupPromise.Popup
+
+  const buttonPromise = await button()
+  const Button = buttonPromise.Button
   const linkPromise = await link()
   const Link = linkPromise.Link
   const titlePromise = await title()
@@ -32,6 +38,8 @@ export async function profilePage (): Promise<Block> {
     LayoutProfile,
     Profile,
     ProfileItem,
+    Popup,
+    Button,
     Link,
     Title
   }).forEach(([name, component]) => {
@@ -136,10 +144,13 @@ export async function profilePage (): Promise<Block> {
   })
 
   const ConnectProfilePage = connect(BlockProfilePage, (state: any): Indexed => ({
-    title: state.user.first_name
+    title: state.user.first_name,
+    srcAvatar: state.user.avatar
   }))
   const cProfilePage = new ConnectProfilePage('section', {
     title: dataUser?.name,
+    srcAvatar: dataUser?.srcAvatar,
+    popupTitle: 'Загрузите файл',
     Profile: cProfile,
     LinkEdit: cLinkEdit,
     LinkPassword: cLinkPassword,

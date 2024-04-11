@@ -1,0 +1,10 @@
+<div class="c-popup{{#if className}} {{ className }}{{/if}}" onclick="event.currentTarget.style.display='none'">
+  <div class="c-popup__wrap" onclick="event.stopPropagation()">
+    <div class="c-popup__header">
+      <h2>{{ popupTitle }}</h2>
+    </div>
+    <div class="c-popup__body">
+      {{> @partial-block }}
+    </div>
+  </div>
+</div>
