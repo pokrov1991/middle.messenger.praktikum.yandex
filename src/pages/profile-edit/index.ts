@@ -7,7 +7,7 @@ import UserService from '../../services/user-service'
 import { type Props, type DataUserField, type DataUser } from '../../types/global'
 import { layoutProfile } from './../../layouts'
 import { profile } from './../../blocks'
-import { inputText } from './../../components'
+import { inputText, popup } from './../../components'
 import { input, button, link, title } from './../../ui'
 import { onSubmit } from './profile-edit'
 
@@ -23,6 +23,8 @@ export async function profileEdit (): Promise<Block> {
 
   const inputTextPromise = await inputText()
   const InputText = inputTextPromise.InputText
+  const popupPromise = await popup()
+  const Popup = popupPromise.Popup
 
   const inputPromise = await input()
   const Input = inputPromise.Input
@@ -37,6 +39,7 @@ export async function profileEdit (): Promise<Block> {
   Object.entries({
     LayoutProfile,
     Profile,
+    Popup,
     Input,
     Button,
     Link,
@@ -157,7 +160,8 @@ export async function profileEdit (): Promise<Block> {
 
   const cProfileEditPage = new BlockProfileEditPage({
     title: 'Изменить данные',
-    src: dataUser?.srcAvatar,
+    srcAvatar: dataUser?.srcAvatar,
+    popupTitle: 'Загрузите файл',
     Profile: cProfile,
     Button: cButton
   })

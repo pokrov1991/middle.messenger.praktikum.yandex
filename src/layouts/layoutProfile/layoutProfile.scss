@@ -24,6 +24,7 @@
     @include full-size;
 
     max-width: calc(100% - 64px);
+    margin-left: -32px;
     padding: 60px 20px;
     display: flex;
     flex-direction: column;

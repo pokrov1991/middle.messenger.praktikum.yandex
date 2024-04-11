@@ -6,4 +6,5 @@ declare module '*.hbs?raw' {
 interface Window {
   inputFocus: any
   toRoute: any
+  showPopup: any
 }
