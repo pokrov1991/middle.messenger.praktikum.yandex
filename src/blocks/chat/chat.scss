@@ -32,7 +32,7 @@
     width: 100%;
     padding: 21px 0 23px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 
     .c-link {
       display: flex;
@@ -49,6 +49,20 @@
         height: 8px;
         width: 4px;
         background: url('/icons/arrow-right-grey.svg') center / cover;
+      }
+
+      &_add-chat {
+        color: var(--colors-link-color);
+        background: none;
+        padding: 0;
+        width: auto;
+
+        &:hover {
+          background: none;
+        }
+        &::after {
+          content: none;
+        }
       }
     }
   }

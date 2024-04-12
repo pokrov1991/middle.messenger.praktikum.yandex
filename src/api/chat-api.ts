@@ -1,16 +1,17 @@
-// import HTTP from '../modules/http'
-// import BaseAPI from '../modules/http/base-api'
+import HTTP from '../modules/http'
+import BaseAPI from '../modules/http/base-api'
+import { type ChatAddFormModel, type ChatRequestFormModel } from '../types/chat'
 
-// const chatAPIInstance = new HTTP()
+const APIInstance = new HTTP('https://ya-praktikum.tech/api/v2')
 
-// class ChatAPI extends BaseAPI {
-//   create (): any {
-//     // Здесь уже не нужно писать полный путь /api/v1/chats/
-//     return chatAPIInstance.post('/', {})
-//   }
+export default class SigninAPI extends BaseAPI {
+  public async create (_data: ChatAddFormModel): Promise<XMLHttpRequest> {
+    const data = { ..._data }
+    return await APIInstance.post('/chats', { data })
+  }
 
-//   request (): any {
-//     // Здесь уже не нужно писать полный путь /api/v1/chats/
-//     return chatAPIInstance.get('/full', {})
-//   }
-// }
+  public async request (_data: ChatRequestFormModel): Promise<XMLHttpRequest> {
+    const data = { ..._data }
+    return await APIInstance.get('/chats', { data })
+  }
+}

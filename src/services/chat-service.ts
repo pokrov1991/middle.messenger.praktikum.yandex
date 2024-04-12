@@ -1,7 +1,13 @@
 import Mediator from '../modules/mediator'
+import ChatAPI from '../api/chat-api'
+import logger from './decorators/logger'
+import checkErrorStatus from '../utils/checkErrorStatus'
 import { getDate } from '../utils'
 import { type DataChatItem, type DataMessage } from '../types/global'
+import { type ChatAddFormModel } from '../types/chat'
+
 const bus = new Mediator()
+const chatAPI = new ChatAPI()
 
 export default class ChatService {
   private _chatList: DataChatItem[]
@@ -19,6 +25,10 @@ export default class ChatService {
     bus.on('chat:send-chat-id', (id) => {
       const idChat = id as unknown as string
       this.getMessages(idChat)
+    })
+
+    bus.on('chat:add-chat', (data) => {
+      this.createChat(data as unknown as ChatAddFormModel)
     })
   }
 
@@ -122,5 +132,13 @@ export default class ChatService {
     }
 
     bus.emit('chat:get-chats', this._chatList)
+  }
+
+  @logger
+  createChat (data: ChatAddFormModel): void {
+    void chatAPI.create(data)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+      })
   }
 }
