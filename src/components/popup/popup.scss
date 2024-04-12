@@ -28,7 +28,7 @@
     }
   }
   &__body {
-    #avatarForm {
+    #formAvatar {
       label {
         width: 100%;
         display: flex;
@@ -54,5 +54,13 @@
         margin-top: 45px;
       }
     }
+    #formAddChat {
+      .c-input {
+        margin-bottom: 33px;
+      }
+    }
+  }
+  &_active {
+    display: flex;
   }
 }

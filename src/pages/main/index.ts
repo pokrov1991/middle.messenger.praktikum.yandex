@@ -7,8 +7,9 @@ import ChatService from '../../services/chat-service'
 import { type Props, type DataChatItem, type DataMessage } from '../../types/global'
 import { layoutEmpty } from '../../layouts'
 import { chat, chatList, chatItem, chatBox, chatMessage } from '../../blocks'
+import { popup } from './../../components'
 import { input, textarea, link, button } from '../../ui'
-import { onChat, onSubmit } from './main'
+import { openPopupAddChat, onChat, onSubmit, onSubmitAddChat } from './main'
 
 export async function main (): Promise<Block> {
   const pagePromise = await import('./main.hbs?raw')
@@ -28,6 +29,9 @@ export async function main (): Promise<Block> {
   const chatMessagePromise = await chatMessage()
   const ChatMessage = chatMessagePromise.ChatMessage
 
+  const popupPromise = await popup()
+  const Popup = popupPromise.Popup
+
   const inputPromise = await input()
   const Input = inputPromise.Input
   const textareaPromise = await textarea()
@@ -45,6 +49,7 @@ export async function main (): Promise<Block> {
     ChatItem,
     ChatBox,
     ChatMessage,
+    Popup,
     Input,
     Textarea,
     Link,
@@ -101,6 +106,12 @@ export async function main (): Promise<Block> {
       ChatBox: new BlockChatBox({
         ListMessages: dataMessageList.map(item => new BlockChatMessage(item))
       })
+    })
+  })
+
+  bus.on('chat:popup-add-chat', (isOpen) => {
+    cChat.setProps({
+      isPopupAddChat: isOpen
     })
   })
 
@@ -236,6 +247,21 @@ export async function main (): Promise<Block> {
     }
   })
 
+  const cButtonAddChat = new BlockButton({
+    text: 'Добавить',
+    events: {
+      click: onSubmitAddChat
+    }
+  })
+
+  const cButtonPopupAddChat = new BlockButton({
+    className: 'c-link c-link_add-chat',
+    text: '+ Добавить чат',
+    events: {
+      click: () => { openPopupAddChat(true) }
+    }
+  })
+
   const cLink = new BlockLink({
     to: '/profile',
     text: 'Профиль'
@@ -255,11 +281,15 @@ export async function main (): Promise<Block> {
   })
 
   const cChat = new BlockChat({
+    isPopupAddChat: false,
     isChatSelected: true,
+    popupTitle: 'Добавить чат',
     className: '',
     ChatBox: cChatBox,
     ChatList: cChatList,
-    Link: cLink
+    Link: cLink,
+    ButtonPopupAddChat: cButtonPopupAddChat,
+    ButtonAddChat: cButtonAddChat
   })
 
   // Создание компонента страницы

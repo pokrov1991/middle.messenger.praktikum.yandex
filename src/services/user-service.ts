@@ -10,8 +10,8 @@ import store, { StoreEvents } from '../modules/store'
 import logger from './decorators/logger'
 import toRoute from '../utils/toRoute'
 import checkErrorStatus from '../utils/checkErrorStatus'
-import { type LoginFormModel, type SigninFormModel, type ProfileEditFormModel, type ProfilePasswordFormModel, type UserResponse } from '../types/user'
-import { type Indexed, type DataUserField, type DataUser } from '../types/global'
+import { type LoginFormModel, type SigninFormModel, type ProfileEditFormModel, type ProfilePasswordFormModel, type UserResponse, type DataUserField, type DataUser } from '../types/user'
+import { type Indexed } from '../types/global'
 
 const bus = new Mediator()
 const signinAPI = new SigninAPI()

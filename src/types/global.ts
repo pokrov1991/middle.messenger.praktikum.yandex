@@ -25,27 +25,9 @@ interface DataMessage {
   isMy?: boolean
 }
 
-interface DataUserField {
-  id: string
-  name: string
-  label: string
-  value: string
-  isValid?: boolean
-  required?: string
-  textValid?: string
-  events?: { focusout: (event: InputEvent) => void }
-}
-
-interface DataUser {
-  name: string
-  srcAvatar: string
-}
-
 export type {
   Props,
   Indexed,
   DataChatItem,
-  DataMessage,
-  DataUserField,
-  DataUser
+  DataMessage
 }
