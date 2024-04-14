@@ -64,12 +64,51 @@
     color: var(--colors-page-color);
   }
 
-  &__kebab {
-    width: 25px;
-    height: 25px;
+  &__menu {
     margin-left: auto;
-    background: url('/icons/kebab.svg') no-repeat center;
-    cursor: pointer;
+  }
+
+  .c-chat-box-user-menu {
+    &__toggle {
+      width: 25px;
+      height: 25px;
+      display: none;
+    }
+    &__kebab {
+      display: block;
+      width: 25px;
+      height: 25px;
+      background: url('/icons/kebab.svg') no-repeat center;
+      cursor: pointer;
+    }
+    &__dropdown {
+      display: flex;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 14px;
+      color: var(--colors-page-color);
+    }
+    &__add,
+    &__remove {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+  
+      span {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 14px;
+        color: var(--colors-link-color);
+      }
+
+      &:hover {
+        background: none;
+      }
+    }
   }
 }
 

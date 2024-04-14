@@ -3,9 +3,17 @@
     <div class="c-chat-box__user c-chat-box-user">
       <div class="c-chat-box-user__avatar"></div>
       <div class="c-chat-box-user__name">
-        {{ userName }}
+        {{ title }}
       </div>
-      <div class="c-chat-box-user__kebab" onclick="console.log('kebab menu')"></div>
+      <div class="c-chat-box-user__menu c-chat-box-user-menu">
+        <div class="c-chat-box-user-menu__toggle">
+          <span class="c-chat-box-user-menu__kebab"></span>
+        </div>
+        <div class="c-chat-box-user-menu__dropdown">
+          {{{ ButtonRemoveUser }}} /
+          {{{ ButtonAddUser }}} пользователя
+        </div>
+      </div>
     </div>
   </div>
   <div class="c-chat-box__messages">
@@ -25,4 +33,26 @@
       <input type="hidden" id="id-chat" name="id-chat" value="{{ id }}"/>
     </form>
   </div>
+
+  {{#> Popup popupTitle=titlePopupAddUser className="c-chat_add-user" isPopupShow=isPopupAddUser }}
+    <form id="formAddUser">
+      <div class="c-input c-input_focus c-chat_add-user">
+        <label for="userId">ID пользователя</label>
+        <input type="text" id="userId" name="userId" autofocus>
+        <input type="hidden" id="chatId" name="chatId" value="{{ id }}"/>
+      </div>
+      {{{ ButtonPopupAddUser }}}
+    </form>
+  {{/ Popup }}
+
+  {{#> Popup popupTitle=titlePopupRemoveUser className="c-chat_remove-user" isPopupShow=isPopupRemoveUser }}
+    <form id="formRemoveUser">
+      <div class="c-input c-input_focus c-chat_remove-user">
+        <label for="userId">ID пользователя</label>
+        <input type="text" id="userId" name="userId" autofocus>
+        <input type="hidden" id="chatId" name="chatId" value="{{ id }}"/>
+      </div>
+      {{{ ButtonPopupRemoveUser }}}
+    </form>
+  {{/ Popup }}
 </section>

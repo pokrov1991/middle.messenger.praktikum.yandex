@@ -1,13 +1,16 @@
 import Mediator from '../modules/mediator'
 import ChatAPI from '../api/chat-api'
+import ChatUserAPI from '../api/chat-user-api'
+import store from '../modules/store'
 import logger from './decorators/logger'
 import checkErrorStatus from '../utils/checkErrorStatus'
 import { getDate } from '../utils'
 import { type DataChatItem, type DataMessage } from '../types/global'
-import { type ChatAddFormModel } from '../types/chat'
+import { type ChatAddFormModel, type ChatUserActionFormModel, type ChatListRequestQuery, type ChatListResponseModel } from '../types/chat'
 
 const bus = new Mediator()
 const chatAPI = new ChatAPI()
+const chatUserAPI = new ChatUserAPI()
 
 export default class ChatService {
   private _chatList: DataChatItem[]
@@ -30,11 +33,19 @@ export default class ChatService {
     bus.on('chat:add-chat', (data) => {
       this.createChat(data as unknown as ChatAddFormModel)
     })
+
+    bus.on('chat:add-user', (data) => {
+      this.createUser(data as unknown as ChatUserActionFormModel)
+    })
+
+    bus.on('chat:remove-user', (data) => {
+      this.removeUser(data as unknown as ChatUserActionFormModel)
+    })
   }
 
   init (): void {
     console.log('init chat-service')
-    this.getChats()
+    this.getChats({})
   }
 
   sendMessage (data: DataMessage): void {
@@ -44,7 +55,7 @@ export default class ChatService {
 
   getMessages (idChat: string | undefined, message: string = ''): void {
     const dataMessageList = {
-      andrey: [
+      1032: [
         {
           id: 'key0',
           date: '12:00',
@@ -58,7 +69,7 @@ export default class ChatService {
           isMy: false
         }
       ],
-      kinoclub: [
+      534: [
         {
           id: 'key0',
           date: '12:00',
@@ -66,7 +77,7 @@ export default class ChatService {
           isMy: true
         }
       ],
-      ilya: [
+      461: [
         {
           id: 'key0',
           date: '12:00',
@@ -96,49 +107,57 @@ export default class ChatService {
     }
   }
 
-  getChats (): void {
-    const dataChatList: DataChatItem[] = [
-      {
-        id: 'andrey',
-        userName: 'Андрей',
-        userAvatar: '',
-        date: '10:49',
-        message: 'Изображение',
-        unread: 2,
-        active: false
-      },
-      {
-        id: 'kinoclub',
-        userName: 'Киноклуб',
-        userAvatar: '',
-        date: '12:00',
-        message: 'Вы: стикер',
-        unread: 0,
-        active: false
-      },
-      {
-        id: 'ilya',
-        userName: 'Илья',
-        userAvatar: '',
-        date: 'ЧТ',
-        message: 'Друзья, у меня для вас особенный выпуск новостей!...',
-        unread: 1,
-        active: false
-      }
-    ]
-
-    if (this._chatList.length === 0) {
-      this._chatList = dataChatList
-    }
-
-    bus.emit('chat:get-chats', this._chatList)
-  }
-
   @logger
   createChat (data: ChatAddFormModel): void {
     void chatAPI.create(data)
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
+      })
+  }
+
+  @logger
+  createUser (data: ChatUserActionFormModel): void {
+    void chatUserAPI.create(data)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+      })
+  }
+
+  @logger
+  removeUser (data: ChatUserActionFormModel): void {
+    void chatUserAPI.delete(data)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+      })
+  }
+
+  @logger
+  getChats (query: ChatListRequestQuery): void {
+    void chatAPI.request(query)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        const response: ChatListResponseModel[] = JSON.parse(res.response as string)
+
+        const dataChatList: DataChatItem[] = response.map((item): DataChatItem => {
+          return {
+            id: item.id,
+            title: item.title,
+            avatar: item.avatar,
+            date: item.last_message?.time ?? '',
+            message: item.last_message?.content ?? 'Сообщений нет',
+            unread_count: item.unread_count,
+            active: false
+          }
+        })
+
+        if (this._chatList.length === 0) {
+          this._chatList = dataChatList
+        }
+
+        bus.emit('chat:get-chats', this._chatList)
+
+        store.set('chatList', response)
       })
   }
 }

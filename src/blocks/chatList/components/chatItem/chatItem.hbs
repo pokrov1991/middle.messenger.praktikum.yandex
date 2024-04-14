@@ -4,13 +4,13 @@
 >
   <div class="c-chat-item__avatar"></div>
   <div class="c-chat-item__content">
-    <span>{{ userName }}</span>
+    <span>{{ title }}</span>
     <p>{{ message }}</p>
   </div>
   <div class="c-chat-item__info">
     <span class="c-chat-item__date">{{ date }}</span>
-    {{#if unread}} 
-      <b class="c-chat-item__unread">{{ unread }}</b>
+    {{#if unread_count}} 
+      <b class="c-chat-item__unread">{{ unread_count }}</b>
     {{/if}}
   </div>
 </div>
