@@ -26,16 +26,6 @@ interface ProfilePasswordFormModel {
   newPassword: string
 }
 
-interface ChatAddFormModel {
-  title: string
-}
-
-interface ChatRequestFormModel {
-  offset?: number
-  limit?: number
-  title?: string
-}
-
 interface FormResponseError {
   reason: string
   error: string
@@ -77,8 +67,6 @@ export type {
   SigninFormModel,
   ProfileEditFormModel,
   ProfilePasswordFormModel,
-  ChatAddFormModel,
-  ChatRequestFormModel,
   FormResponseError,
   SigninFormResponseOk,
   UserResponse,

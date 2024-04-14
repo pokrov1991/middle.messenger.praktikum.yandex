@@ -9,12 +9,12 @@ type Indexed<T = unknown> = {
 }
 
 interface DataChatItem {
-  id: string
-  userName: string
-  userAvatar: string
+  id: number
+  title: string
+  avatar: string
   date: string
   message: string
-  unread: number
+  unread_count: number
   active: boolean
 }
 

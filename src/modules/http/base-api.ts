@@ -5,5 +5,5 @@ export default class BaseAPI {
 
   async update (_data: any): Promise<XMLHttpRequest> { throw new Error('Метод не реализован') }
 
-  delete (): void { throw new Error('Метод не реализован') }
+  async delete (_data: any): Promise<XMLHttpRequest> { throw new Error('Метод не реализован') }
 }
