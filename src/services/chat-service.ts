@@ -1,4 +1,5 @@
 import Mediator from '../modules/mediator'
+import MessageService from './message-service'
 import ChatAPI from '../api/chat-api'
 import ChatUserAPI from '../api/chat-user-api'
 import ChatTokenAPI from '../api/chat-token-api'
@@ -17,15 +18,13 @@ const chatTokenAPI = new ChatTokenAPI()
 
 export default class ChatService {
   private _chatList: DataChatItem[]
-  private _messageList: DataMessage[]
-  private _chatToken: string
-  private _socket: WebSocket | null
+  private _socket: MessageService | null
+  private _token: string
 
   constructor () {
     this._chatList = []
-    this._messageList = []
-    this._chatToken = ''
     this._socket = null
+    this._token = ''
 
     bus.on('chat:send-message', (data) => {
       const { id, message } = data as unknown as DataMessage
@@ -35,7 +34,9 @@ export default class ChatService {
     bus.on('chat:send-chat-id', (id) => {
       const chatId = id as unknown as number
       if (this._socket !== null) {
-        this._socket.close(1000, 'Пользователь вышел из чата')
+        this._socket.close()
+        this._socket = null
+        this._token = ''
       }
       this.getMessages(chatId)
     })
@@ -69,72 +70,13 @@ export default class ChatService {
         const userId = state.user.id
         const token = res
 
-        if (this._socket === null || this._socket.readyState !== 1) {
-          this._socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`)
-
-          this._socket.addEventListener('open', () => {
-            console.log('Соединение установлено')
-
-            if (this._socket !== null) {
-              this._socket.send(JSON.stringify({
-                content: '0',
-                type: 'get old'
-              }))
-            }
-          })
-
-          this._socket.addEventListener('close', event => {
-            if (event.wasClean) {
-              console.log('Соединение закрыто чисто')
-            } else {
-              console.log('Обрыв соединения')
-            }
-
-            console.log(`Код: ${event.code} | Причина: ${event.reason}`)
-
-            this._chatToken = ''
-          })
-
-          this._socket.addEventListener('error', event => {
-            console.log('Ошибка', event)
-          })
-
-          this._socket.addEventListener('message', event => {
-            const data = JSON.parse(event.data as string)
-            console.log('Получены данные', data)
-
-            if (Array.isArray(data) && data.length > 0) {
-              this._messageList = data.map((item: any) => {
-                return {
-                  id: item.id as number,
-                  date: getDate(item.time as string),
-                  message: item.content as string,
-                  isRead: item.is_read as boolean,
-                  isMy: item.user_id === userId
-                }
-              })
-            }
-
-            if (typeof data.user_id !== 'undefined') {
-              this._messageList.unshift({
-                id: data.id as number,
-                date: getDate(data.time as string),
-                message: data.content as string,
-                isRead: data.is_read as boolean,
-                isMy: data.user_id === userId
-              })
-            }
-
-            bus.emit('chat:get-messages', this._messageList)
-          })
+        if (this._socket === null || this._socket.status() !== 1) {
+          this._socket = new MessageService(userId, chatId, token)
         }
 
         // Если есть сообщение, отправляем его
         if (message.length > 0) {
-          this._socket.send(JSON.stringify({
-            content: message,
-            type: 'message'
-          }))
+          this._socket.sendMessage(message)
         }
       })
     }
@@ -196,18 +138,17 @@ export default class ChatService {
 
   @logger
   async getChatToken (chatId: number): Promise<string> {
-    if (this._chatToken !== '') {
-      return this._chatToken
+    if (this._token !== '') {
+      return this._token
     }
     return await chatTokenAPI.request({ id: chatId })
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
 
         const response: ChatTokenResponse = JSON.parse(res.response as string)
+        this._token = response.token
 
-        this._chatToken = response.token
-
-        return this._chatToken
+        return this._token
       })
   }
 }

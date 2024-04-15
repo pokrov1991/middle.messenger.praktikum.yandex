@@ -1,4 +1,5 @@
 import Mediator from '../modules/mediator'
+import { getDate } from '../utils'
 import { type DataMessage } from '../types/global'
 
 const bus = new Mediator()
@@ -8,6 +9,7 @@ export default class MessageService {
   private readonly _userId: number
   private readonly _chatId: number
   private readonly _token: string
+  private _ping: NodeJS.Timeout | string
   private _messageList: DataMessage[]
 
   constructor (userId: number, chatId: number, token: string) {
@@ -16,6 +18,7 @@ export default class MessageService {
     this._token = token
     this._socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${this._userId}/${this._chatId}/${this._token}`)
 
+    this._ping = ''
     this._messageList = []
 
     this._handleOpen = this._handleOpen.bind(this)
@@ -43,6 +46,12 @@ export default class MessageService {
   private readonly _handleOpen = (): void => {
     console.log('Соединение установлено')
     this.getMessages()
+    // Каждые 15 секунд пингуем сокет
+    this._ping = setInterval(() => {
+      this._socket.send(JSON.stringify({
+        type: 'ping'
+      }))
+    }, 15000)
   }
 
   private readonly _handleClose = (event: CloseEventInit): void => {
@@ -66,7 +75,7 @@ export default class MessageService {
       this._messageList = data.map((item: any) => {
         return {
           id: item.id as number,
-          date: item.time as string,
+          date: getDate(item.time as string),
           message: item.content as string,
           isRead: item.is_read as boolean,
           isMy: item.user_id === this._userId
@@ -77,7 +86,7 @@ export default class MessageService {
     if (typeof data.user_id !== 'undefined') {
       this._messageList.unshift({
         id: data.id as number,
-        date: data.time as string,
+        date: getDate(data.time as string),
         message: data.content as string,
         isRead: data.is_read as boolean,
         isMy: data.user_id === this._userId
@@ -88,8 +97,13 @@ export default class MessageService {
   }
 
   close (): void {
-    this._socket.close()
+    clearInterval(this._ping as NodeJS.Timeout)
+    this._socket.close(1000, 'Пользователь вышел из чата')
     this._removeEvents()
+  }
+
+  status (): number {
+    return this._socket.readyState
   }
 
   getMessages (offset: string = '0'): void {
