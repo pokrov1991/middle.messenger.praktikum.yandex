@@ -83,6 +83,7 @@ export async function main (): Promise<Block> {
     })
     cChat.setProps({
       isChatSelected: false,
+      isPopupAddChat: false,
       className: 'c-chat__box_active'
     })
     cChatBox.setProps({
@@ -92,6 +93,7 @@ export async function main (): Promise<Block> {
       isPopupRemoveUser: false
     })
     cChat.setProps({
+      isPopupAddChat: false,
       ChatList: new BlockChatList({
         ListChats: dataChatList.map(item => new BlockChatItem(item))
       })
@@ -106,6 +108,7 @@ export async function main (): Promise<Block> {
   bus.on('chat:get-messages', (payload) => {
     dataMessageList = payload as unknown as DataMessage[]
     cChat.setProps({
+      isPopupAddChat: false,
       ChatBox: new BlockChatBox({
         ListMessages: dataMessageList.map(item => new BlockChatMessage(item))
       })

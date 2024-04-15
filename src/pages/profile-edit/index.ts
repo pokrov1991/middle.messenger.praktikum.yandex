@@ -163,6 +163,7 @@ export async function profileEdit (): Promise<Block> {
     title: 'Изменить данные',
     srcAvatar: dataUser?.srcAvatar,
     popupTitle: 'Загрузите файл',
+    popupType: 'profile-edit',
     Profile: cProfile,
     Button: cButton
   })

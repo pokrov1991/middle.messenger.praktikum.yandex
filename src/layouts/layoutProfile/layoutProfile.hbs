@@ -5,7 +5,7 @@
   <div class="c-layout-profile__wrap">
     <div class="c-layout-profile__avatar">
       <div class="c-profile-avatar">
-        <span class="c-profile-avatar__upload" onclick="window.showPopup()">
+        <span class="c-profile-avatar__upload" onclick="window.showPopup('{{ popupType }}')">
           Поменять аватар
         </span>
         <img class="c-profile-avatar__img" src="https://ya-praktikum.tech/api/v2/resources{{ srcAvatar }}" alt="Avatar">
@@ -17,12 +17,12 @@
     </div>
   </div>
 
-  {{#> Popup popupTitle=popupTitle className=className }}
+  {{#> Popup popupTitle=popupTitle className=popupType }}
     <form id="formAvatar">
-      <label for="avatar" id="avatarFileName">
+      <label for="avatar_{{ popupType }}" id="avatarFileName_{{ popupType }}">
         Выбрать файл на компьютере
       </label>
-      <input id="avatar" type="file" name="avatar" accept="image/*">
+      <input id="avatar_{{ popupType }}" type="file" name="avatar" accept="image/*">
       {{> Button text="Поменять" }}
     </form>
   {{/ Popup }}

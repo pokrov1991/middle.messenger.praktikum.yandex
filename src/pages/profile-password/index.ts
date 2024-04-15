@@ -119,6 +119,7 @@ export async function profilePassword (): Promise<Block> {
     title: 'Изменить пароль',
     srcAvatar: dataUser?.srcAvatar,
     popupTitle: 'Загрузите файл',
+    popupType: 'profile-password',
     InputList: [
       new BlockInputPassword({
         label: 'Старый пароль',
