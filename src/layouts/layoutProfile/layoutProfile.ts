@@ -1,17 +1,15 @@
 import Mediator from '../../modules/mediator'
 const bus = new Mediator()
 
-window.showPopup = (): void => {
-  const popup: HTMLElement | null = document.querySelector('.c-popup')
+window.showPopup = (type: string): void => {
+  const popup: HTMLElement | null = document.querySelector(`.c-popup.${type}`)
   if (popup !== null) {
     popup.style.display = 'flex'
   }
-}
 
-setTimeout(() => {
-  const avatarForm = document.getElementById('formAvatar') as HTMLFormElement
-  const avatarInput = document.getElementById('avatar')
-  const avatarFileName = document.getElementById('avatarFileName')
+  const avatarForm = document.querySelector(`.c-popup.${type} #formAvatar`) as unknown as HTMLFormElement
+  const avatarInput = document.querySelector(`.c-popup.${type} #avatar_${type}`) as unknown as HTMLFormElement
+  const avatarFileName = document.querySelector(`.c-popup.${type} #avatarFileName_${type}`) as unknown as HTMLFormElement
 
   if (avatarInput !== null && avatarFileName !== null) {
     avatarInput.onchange = function (e: any) {
@@ -35,4 +33,4 @@ setTimeout(() => {
       bus.emit('user:avatar', formData)
     })
   }
-}, 500)
+}

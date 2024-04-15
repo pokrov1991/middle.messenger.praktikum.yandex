@@ -88,6 +88,7 @@ export default class ChatService {
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
       })
+    this.getChats({})
   }
 
   @logger

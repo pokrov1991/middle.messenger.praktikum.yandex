@@ -152,6 +152,7 @@ export async function profilePage (): Promise<Block> {
     title: dataUser?.name,
     srcAvatar: dataUser?.srcAvatar,
     popupTitle: 'Загрузите файл',
+    popupType: 'profile',
     Profile: cProfile,
     LinkEdit: cLinkEdit,
     LinkPassword: cLinkPassword,

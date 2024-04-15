@@ -40,7 +40,7 @@ export default class Mediator<E extends string = string, M extends { [K in E]: u
         listener(...args)
       })
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 }
