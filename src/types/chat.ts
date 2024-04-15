@@ -17,6 +17,10 @@ interface ChatListRequestQuery {
   title?: string
 }
 
+interface ChatTokenRequest {
+  id: number
+}
+
 interface ChatAddFormResponseOk {
   id: number
 }
@@ -41,11 +45,17 @@ interface ChatListResponseModel {
   }
 }
 
+interface ChatTokenResponse {
+  token: string
+}
+
 export type {
   ChatAddFormModel,
   ChatRemoveFormModel,
   ChatUserActionFormModel,
   ChatListRequestQuery,
+  ChatTokenRequest,
   ChatAddFormResponseOk,
-  ChatListResponseModel
+  ChatListResponseModel,
+  ChatTokenResponse
 }

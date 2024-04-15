@@ -1,24 +1,31 @@
 import Mediator from '../modules/mediator'
 import ChatAPI from '../api/chat-api'
 import ChatUserAPI from '../api/chat-user-api'
+import ChatTokenAPI from '../api/chat-token-api'
 import store from '../modules/store'
 import logger from './decorators/logger'
 import checkErrorStatus from '../utils/checkErrorStatus'
 import { getDate } from '../utils'
-import { type DataChatItem, type DataMessage } from '../types/global'
-import { type ChatAddFormModel, type ChatUserActionFormModel, type ChatListRequestQuery, type ChatListResponseModel } from '../types/chat'
+import { type Indexed, type DataChatItem, type DataMessage } from '../types/global'
+import { type ChatAddFormModel, type ChatUserActionFormModel, type ChatListRequestQuery, type ChatListResponseModel, type ChatTokenResponse } from '../types/chat'
+import { type UserResponse } from '../types/user'
 
 const bus = new Mediator()
 const chatAPI = new ChatAPI()
 const chatUserAPI = new ChatUserAPI()
+const chatTokenAPI = new ChatTokenAPI()
 
 export default class ChatService {
   private _chatList: DataChatItem[]
-  private _messageList: Record<string, DataMessage[]>
+  private _messageList: DataMessage[]
+  private _chatToken: string
+  private _socket: WebSocket | null
 
   constructor () {
     this._chatList = []
-    this._messageList = {}
+    this._messageList = []
+    this._chatToken = ''
+    this._socket = null
 
     bus.on('chat:send-message', (data) => {
       const { id, message } = data as unknown as DataMessage
@@ -26,8 +33,11 @@ export default class ChatService {
     })
 
     bus.on('chat:send-chat-id', (id) => {
-      const idChat = id as unknown as string
-      this.getMessages(idChat)
+      const chatId = id as unknown as number
+      if (this._socket !== null) {
+        this._socket.close(1000, 'Пользователь вышел из чата')
+      }
+      this.getMessages(chatId)
     })
 
     bus.on('chat:add-chat', (data) => {
@@ -49,61 +59,84 @@ export default class ChatService {
   }
 
   sendMessage (data: DataMessage): void {
-    console.log('Message send', data)
-    this.getMessages(data.id, data.message)
+    this.getMessages(Number(data.id), data.message)
   }
 
-  getMessages (idChat: string | undefined, message: string = ''): void {
-    const dataMessageList = {
-      1032: [
-        {
-          id: 'key0',
-          date: '12:00',
-          message: 'Круто!',
-          isMy: true
-        },
-        {
-          id: 'key1',
-          date: '11:56',
-          message: 'Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА.',
-          isMy: false
-        }
-      ],
-      534: [
-        {
-          id: 'key0',
-          date: '12:00',
-          message: 'Мяу-мяу',
-          isMy: true
-        }
-      ],
-      461: [
-        {
-          id: 'key0',
-          date: '12:00',
-          message: 'Гав-гав',
-          isMy: false
-        }
-      ]
-    }
+  getMessages (chatId: number, message: string = ''): void {
+    if (typeof chatId === 'number') {
+      void this.getChatToken(chatId).then((res) => {
+        const state: Indexed<UserResponse> = store.getState() as Indexed<UserResponse>
+        const userId = state.user.id
+        const token = res
 
-    if (Object.keys(this._messageList).length === 0) {
-      this._messageList = dataMessageList
-    }
+        if (this._socket === null || this._socket.readyState !== 1) {
+          this._socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`)
 
-    if (typeof idChat !== 'undefined') {
-      if (message.length > 0) {
-        this._messageList[idChat] = [
-          {
-            id: `key${Math.floor(100000 + Math.random() * 900000)}`,
-            date: getDate(),
-            message,
-            isMy: true
-          },
-          ...this._messageList[idChat]
-        ]
-      }
-      bus.emit('chat:get-messages', this._messageList[idChat])
+          this._socket.addEventListener('open', () => {
+            console.log('Соединение установлено')
+
+            if (this._socket !== null) {
+              this._socket.send(JSON.stringify({
+                content: '0',
+                type: 'get old'
+              }))
+            }
+          })
+
+          this._socket.addEventListener('close', event => {
+            if (event.wasClean) {
+              console.log('Соединение закрыто чисто')
+            } else {
+              console.log('Обрыв соединения')
+            }
+
+            console.log(`Код: ${event.code} | Причина: ${event.reason}`)
+
+            this._chatToken = ''
+          })
+
+          this._socket.addEventListener('error', event => {
+            console.log('Ошибка', event)
+          })
+
+          this._socket.addEventListener('message', event => {
+            const data = JSON.parse(event.data as string)
+            console.log('Получены данные', data)
+
+            if (Array.isArray(data) && data.length > 0) {
+              this._messageList = data.map((item: any) => {
+                return {
+                  id: item.id as number,
+                  date: getDate(item.time as string),
+                  message: item.content as string,
+                  isRead: item.is_read as boolean,
+                  isMy: item.user_id === userId
+                }
+              })
+            }
+
+            if (typeof data.user_id !== 'undefined') {
+              this._messageList.unshift({
+                id: data.id as number,
+                date: getDate(data.time as string),
+                message: data.content as string,
+                isRead: data.is_read as boolean,
+                isMy: data.user_id === userId
+              })
+            }
+
+            bus.emit('chat:get-messages', this._messageList)
+          })
+        }
+
+        // Если есть сообщение, отправляем его
+        if (message.length > 0) {
+          this._socket.send(JSON.stringify({
+            content: message,
+            type: 'message'
+          }))
+        }
+      })
     }
   }
 
@@ -144,7 +177,7 @@ export default class ChatService {
             id: item.id,
             title: item.title,
             avatar: item.avatar,
-            date: item.last_message?.time ?? '',
+            date: typeof item.last_message?.time !== 'undefined' ? getDate(item.last_message.time) : '',
             message: item.last_message?.content ?? 'Сообщений нет',
             unread_count: item.unread_count,
             active: false
@@ -158,6 +191,23 @@ export default class ChatService {
         bus.emit('chat:get-chats', this._chatList)
 
         store.set('chatList', response)
+      })
+  }
+
+  @logger
+  async getChatToken (chatId: number): Promise<string> {
+    if (this._chatToken !== '') {
+      return this._chatToken
+    }
+    return await chatTokenAPI.request({ id: chatId })
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        const response: ChatTokenResponse = JSON.parse(res.response as string)
+
+        this._chatToken = response.token
+
+        return this._chatToken
       })
   }
 }
