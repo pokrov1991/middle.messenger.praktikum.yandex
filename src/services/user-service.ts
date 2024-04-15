@@ -78,7 +78,6 @@ export default class UserService {
 
   @logger
   login (data: LoginFormModel): void {
-    // TODO - isLoaded = true
     void loginApi.request(data)
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
@@ -86,9 +85,8 @@ export default class UserService {
         if (res.response === 'OK') {
           void this.auth()
 
-          await toRoute('/main')
+          await toRoute('/messenger')
         }
-        // TODO - isLoaded = false
       })
   }
 
@@ -100,7 +98,7 @@ export default class UserService {
 
         void this.auth()
 
-        await toRoute('/main')
+        await toRoute('/messenger')
       })
   }
 
@@ -143,7 +141,7 @@ export default class UserService {
 
         store.set('user', response)
 
-        await toRoute('/profile')
+        await toRoute('/settings')
       })
   }
 
@@ -153,7 +151,7 @@ export default class UserService {
         checkErrorStatus(res.status, res.response as string)
 
         if (res.response === 'OK') {
-          await toRoute('/profile')
+          await toRoute('/settings')
         }
       })
   }
@@ -167,7 +165,7 @@ export default class UserService {
 
         store.set('user', response)
 
-        await toRoute('/profile')
+        await toRoute('/settings')
       })
   }
 

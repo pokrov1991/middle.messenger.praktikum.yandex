@@ -12,7 +12,7 @@ const base = process.env.BASE || '/'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const __allowedPathsStatic = ['/fonts', '/icons']
-const __allowedPaths = ['/', '/signin', '/main', '/profile', '/profile-edit', '/profile-password', '/server-error', '/not-fond', ...__allowedPathsStatic]
+const __allowedPaths = ['/', '/sign-up', '/messenger', '/settings', '/settings-edit', '/settings-password', '/server-error', '/not-fond', ...__allowedPathsStatic]
 
 // Создаем http сервер
 const app: express.Application = express()

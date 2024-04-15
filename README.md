@@ -38,7 +38,11 @@ npm run stylelint
 
 Сервисы и представления общаются через паттерн «Медиатор» **src/modules/mediator.ts**
 
-Класс для работы с запросами **src/modules/fetch.ts**
+Класс для работы с запросами **src/modules/http/index.ts**
+
+Методы API лежат в папке **src/api**
+
+Сервис для работы с сообщениями через Socket **src/services/message-service.ts**
 
 Представления реализованы через структуру схожей c атомной: **pages, blocks, components, ui**
 

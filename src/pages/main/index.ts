@@ -326,7 +326,7 @@ export async function main (): Promise<Block> {
   })
 
   const cLink = new BlockLink({
-    to: '/profile',
+    to: '/settings',
     text: 'Профиль'
   })
 
