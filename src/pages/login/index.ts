@@ -152,7 +152,7 @@ export async function login (): Promise<Block> {
   })
 
   const cLink = new BlockLink({
-    to: '/signin',
+    to: '/sign-up',
     text: 'Нет аккаунта?'
   })
 

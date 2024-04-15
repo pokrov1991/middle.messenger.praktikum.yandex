@@ -15,10 +15,10 @@ export async function loadBlockPage (pageName: string): Promise<Block> {
   let notFound: () => Promise<Block>
 
   switch (pageName) {
-    case '/main':
-    case '/profile':
-    case '/profile-edit':
-    case '/profile-password':
+    case '/messenger':
+    case '/settings':
+    case '/settings-edit':
+    case '/settings-password':
       await user.auth().then(() => {
         if (user.isAuth !== true) {
           window.location.href = '/'
@@ -32,25 +32,25 @@ export async function loadBlockPage (pageName: string): Promise<Block> {
       ({ login } = await import('../pages/login'))
       blockPage = await login()
       break
-    case '/signin':
+    case '/sign-up':
       ({ signin } = await import('../pages/signin'))
       blockPage = await signin()
       break
-    case '/main':
+    case '/messenger':
       ({ main } = await import('../pages/main'))
       blockPage = await main()
       break
-    case '/profile':
+    case '/settings':
       ({ profilePage } = await import('../pages/profile'))
       blockPage = await profilePage()
       break
 
-    case '/profile-edit':
+    case '/settings-edit':
       ({ profileEdit } = await import('../pages/profile-edit'))
       blockPage = await profileEdit()
       break
 
-    case '/profile-password':
+    case '/settings-password':
       ({ profilePassword } = await import('../pages/profile-password'))
       blockPage = await profilePassword()
       break
