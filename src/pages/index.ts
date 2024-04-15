@@ -1,12 +1,15 @@
 import { loadBlockPage } from '../utils/getPageBlock'
 import Router from '../modules/router'
-// import { getPageName } from './../utils'
+import { getPageName } from './../utils'
 
 export async function template (): Promise<void> {
-  // const pageName: string = getPageName(location.href)
-  // const pageNameUrl = `/${pageName}`
+  const pageNameParams: string = getPageName(location.href)
 
-  const pageNameUrl = location.pathname
+  let pageNameUrl = location.pathname
+
+  if (pageNameParams !== '') {
+    pageNameUrl = `/${pageNameParams}`
+  }
 
   const router = new Router('#app')
 
