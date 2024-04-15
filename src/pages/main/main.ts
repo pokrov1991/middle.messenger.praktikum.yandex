@@ -60,6 +60,9 @@ const onSubmitAddChat = (event: any): void => {
 
     bus.emit('chat:add-chat', data)
   }
+
+  const popup = document.querySelector('.c-chat_add-chat') as unknown as HTMLFormElement
+  popup.style.display = 'none'
 }
 
 const onSubmitAddUser = (event: any): void => {
