@@ -80,6 +80,14 @@ export default class UserService {
   login (data: LoginFormModel): void {
     void loginApi.request(data)
       .then(async (res) => {
+        if (res.response !== 'OK') {
+          const response = JSON.parse(res.response as string)
+          if (response.reason === 'User already in system'
+          ) {
+            await toRoute('/messenger')
+          }
+        }
+
         checkErrorStatus(res.status, res.response as string)
 
         if (res.response === 'OK') {
