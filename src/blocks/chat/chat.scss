@@ -8,6 +8,7 @@
   &__sidebar {
     @include full-size;
 
+    overflow-y: hidden;
     max-width: 310px;
     padding: 0 10px;
     border-right: 1px solid var(--colors-chat-sidebar-border);
@@ -118,5 +119,7 @@
 
   &__list {
     width: 100%;
+    height: calc(100% - 105px);
+    overflow-y: scroll;
   }
 }

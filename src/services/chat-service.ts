@@ -17,12 +17,10 @@ const chatUserAPI = new ChatUserAPI()
 const chatTokenAPI = new ChatTokenAPI()
 
 export default class ChatService {
-  private _chatList: DataChatItem[]
   private _socket: MessageService | null
   private _token: string
 
   constructor () {
-    this._chatList = []
     this._socket = null
     this._token = ''
 
@@ -87,8 +85,9 @@ export default class ChatService {
     void chatAPI.create(data)
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
+
+        this.getChats({})
       })
-    this.getChats({})
   }
 
   @logger
@@ -127,11 +126,7 @@ export default class ChatService {
           }
         })
 
-        if (this._chatList.length === 0) {
-          this._chatList = dataChatList
-        }
-
-        bus.emit('chat:get-chats', this._chatList)
+        bus.emit('chat:get-chats', dataChatList)
 
         store.set('chatList', response)
       })
