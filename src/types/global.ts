@@ -19,9 +19,10 @@ interface DataChatItem {
 }
 
 interface DataMessage {
-  id?: string
+  id: number
   date?: string
   message: string
+  isRead?: boolean
   isMy?: boolean
 }
 

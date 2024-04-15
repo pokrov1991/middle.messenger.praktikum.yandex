@@ -4,7 +4,7 @@ import { type ChatAddFormModel, type ChatRemoveFormModel, type ChatListRequestQu
 
 const APIInstance = new HTTP('https://ya-praktikum.tech/api/v2')
 
-export default class SigninAPI extends BaseAPI {
+export default class ChatAPI extends BaseAPI {
   public async create (_data: ChatAddFormModel): Promise<XMLHttpRequest> {
     const data = { ..._data }
     return await APIInstance.post('/chats', { data })

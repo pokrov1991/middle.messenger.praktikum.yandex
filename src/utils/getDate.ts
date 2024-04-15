@@ -1,6 +1,10 @@
-const getDate = (): string => {
-  const now = new Date()
-  const dateStr = now.getHours() + ':' + ('0' + now.getMinutes()).substr(-2)
-  return dateStr
+const getDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  const day = date.getDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+
+  return `${day}.${month} ${hours}:${minutes}`
 }
 export { getDate }
