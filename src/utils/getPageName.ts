@@ -1,9 +1,9 @@
 const getPageName = (originUrl: string): string => {
   try {
-    const url: URL = new URL(originUrl)
-    const params: URLSearchParams = new URLSearchParams(url.search)
-    const page = params.get('page')
-    return page !== null && page !== '' ? page : ''
+    const urlObj = new URL(originUrl)
+    const pathname = urlObj.pathname.length > 0 ? urlObj.pathname : '/'
+    const search = urlObj.search.length > 0 ? urlObj.search : ''
+    return pathname + search
   } catch (error) {
     console.error('Invalid URL:', error)
     return ''

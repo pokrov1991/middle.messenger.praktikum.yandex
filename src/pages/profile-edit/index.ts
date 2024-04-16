@@ -162,7 +162,7 @@ export async function profileEdit (): Promise<Block> {
 
   const cProfileEditPage = new BlockProfileEditPage({
     title: 'Изменить данные',
-    urlBack: routePaths.messenger,
+    urlBack: routePaths.settings,
     host: hostAPI,
     srcAvatar: dataUser?.srcAvatar,
     popupTitle: 'Загрузите файл',

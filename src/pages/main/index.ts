@@ -5,6 +5,7 @@ import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
 import ChatService from '../../services/chat-service'
 import store, { StoreEvents } from '../../modules/store'
+import { routePaths } from '../../utils'
 import { type Props, type DataChatItem, type DataMessage } from '../../types/global'
 import { layoutEmpty } from '../../layouts'
 import { chat, chatList, chatItem, chatBox, chatMessage } from '../../blocks'
@@ -326,7 +327,7 @@ export async function main (): Promise<Block> {
   })
 
   const cLink = new BlockLink({
-    to: '/settings',
+    to: routePaths.settings,
     text: 'Профиль'
   })
 

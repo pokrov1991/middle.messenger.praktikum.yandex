@@ -11,7 +11,7 @@
     "eslint-fix": "npx eslint 'src/**' --fix",
     "stylelint": "npx stylelint '**/*.scss'",
     "stylelint-fix": "npx stylelint '**/*.scss' --fix",
-    "dev": "npx tsx server.ts",
+    "dev": "vite --port 3000 --open",
     "prebuild": "tsc --noEmit",
     "build": "npm run prebuild && vite build --emptyOutDir",
     "preview": "cross-env NODE_ENV=production npx tsx server.ts",
