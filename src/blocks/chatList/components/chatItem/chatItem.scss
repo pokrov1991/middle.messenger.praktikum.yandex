@@ -18,6 +18,13 @@
     min-width: 47px;
     border-radius: 50%;
     background: var(--colors-chat-item-background);
+    overflow: hidden;
+
+    img {
+      width: 47px;
+      height: 47px;
+      object-fit: cover;
+    }
   }
 
   &__content {

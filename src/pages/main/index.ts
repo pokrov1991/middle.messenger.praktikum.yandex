@@ -11,7 +11,7 @@ import { layoutEmpty } from '../../layouts'
 import { chat, chatList, chatItem, chatBox, chatMessage } from '../../blocks'
 import { popup } from './../../components'
 import { input, textarea, link, button } from '../../ui'
-import { openPopupAddChat, openPopupAddUser, openPopupRemoveUser, onChat, onSubmit, onSubmitAddChat, onSubmitAddUser, onSubmitRemoveUser } from './main'
+import { openPopupAddChat, openPopupRemoveChat, openPopupAddUser, openPopupRemoveUser, onChat, onSubmit, onSubmitAddChat, onSubmitAddUser, onSubmitRemoveUser, onSubmitRemoveChat } from './main'
 
 export async function main (): Promise<Block> {
   const pagePromise = await import('./main.hbs?raw')
@@ -90,8 +90,10 @@ export async function main (): Promise<Block> {
     cChatBox.setProps({
       id: payload.id,
       title: payload.title,
+      avatar: payload.avatar,
       isPopupAddUser: false,
-      isPopupRemoveUser: false
+      isPopupRemoveUser: false,
+      isPopupRemoveChat: false
     })
     cChat.setProps({
       isPopupAddChat: false,
@@ -114,6 +116,11 @@ export async function main (): Promise<Block> {
         ListMessages: dataMessageList.map(item => new BlockChatMessage(item))
       })
     })
+    cChatBox.setProps({
+      isPopupAddUser: false,
+      isPopupRemoveUser: false,
+      isPopupRemoveChat: false
+    })
   })
 
   bus.on('chat:popup-add-chat', (isOpen) => {
@@ -125,13 +132,23 @@ export async function main (): Promise<Block> {
   bus.on('chat:popup-add-user', (isOpen) => {
     cChatBox.setProps({
       isPopupAddUser: isOpen,
-      isPopupRemoveUser: false
+      isPopupRemoveUser: false,
+      isPopupRemoveChat: false
     })
   })
 
   bus.on('chat:popup-remove-user', (isOpen) => {
     cChatBox.setProps({
       isPopupRemoveUser: isOpen,
+      isPopupAddUser: false,
+      isPopupRemoveChat: false
+    })
+  })
+
+  bus.on('chat:popup-remove-chat', (isOpen) => {
+    cChatBox.setProps({
+      isPopupRemoveChat: isOpen,
+      isPopupRemoveUser: false,
       isPopupAddUser: false
     })
   })
@@ -305,6 +322,14 @@ export async function main (): Promise<Block> {
     }
   })
 
+  const cButtonRemoveChat = new BlockButton({
+    className: 'c-chat-box-user-menu__remove-chat',
+    text: '',
+    events: {
+      click: () => { openPopupRemoveChat(true) }
+    }
+  })
+
   const cButtonPopupAddChat = new BlockButton({
     text: 'Добавить',
     events: {
@@ -326,6 +351,13 @@ export async function main (): Promise<Block> {
     }
   })
 
+  const cButtonPopupRemoveChat = new BlockButton({
+    text: 'Подтвердить',
+    events: {
+      click: onSubmitRemoveChat
+    }
+  })
+
   const cLink = new BlockLink({
     to: routePaths.settings,
     text: 'Профиль'
@@ -337,15 +369,19 @@ export async function main (): Promise<Block> {
     title: 'Название чата',
     titlePopupAddUser: 'Добавить пользователя',
     titlePopupRemoveUser: 'Удалить пользователя',
+    titlePopupRemoveChat: 'Удалить чат?',
     isPopupAddUser: false,
     isPopupRemoveUser: false,
+    isPopupRemoveChat: false,
     ListMessages: dataMessageList.map(item => new BlockChatMessage(item)),
     Textarea: cTextarea,
     Button: cButton,
     ButtonAddUser: cButtonAddUser,
     ButtonPopupAddUser: cButtonPopupAddUser,
     ButtonRemoveUser: cButtonRemoveUser,
-    ButtonPopupRemoveUser: cButtonPopupRemoveUser
+    ButtonPopupRemoveUser: cButtonPopupRemoveUser,
+    ButtonRemoveChat: cButtonRemoveChat,
+    ButtonPopupRemoveChat: cButtonPopupRemoveChat
   })
 
   const cChatList = new BlockChatList({

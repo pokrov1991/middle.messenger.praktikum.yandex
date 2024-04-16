@@ -93,7 +93,12 @@ export default class MessageService {
       })
     }
 
-    bus.emit('chat:get-messages', this._messageList)
+    if (
+      (Array.isArray(data) && data.length > 0) ||
+      typeof data.user_id !== 'undefined'
+    ) {
+      bus.emit('chat:get-messages', this._messageList)
+    }
   }
 
   close (): void {
