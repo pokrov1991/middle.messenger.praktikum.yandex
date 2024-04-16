@@ -1,7 +1,7 @@
 import Mediator from '../../modules/mediator'
 const bus = new Mediator()
 
-const onSubmit = (event: any): void => {
+const onSubmit = (event: Event): void => {
   event.preventDefault()
 
   const formElement = document.getElementById('formProfileEdit') as HTMLFormElement

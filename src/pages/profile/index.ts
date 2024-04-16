@@ -5,6 +5,7 @@ import Mediator from '../../modules/mediator'
 import UserService from '../../services/user-service'
 import store, { StoreEvents } from '../../modules/store'
 import { connect } from '../../utils/handleObjects'
+import { routePaths, hostAPI } from '../../utils'
 import { type Props, type Indexed } from '../../types/global'
 import { type DataUserField, type DataUser } from '../../types/user'
 import { layoutProfile } from './../../layouts'
@@ -150,6 +151,8 @@ export async function profilePage (): Promise<Block> {
   }))
   const cProfilePage = new ConnectProfilePage('section', {
     title: dataUser?.name,
+    urlBack: routePaths.messenger,
+    host: hostAPI,
     srcAvatar: dataUser?.srcAvatar,
     popupTitle: 'Загрузите файл',
     popupType: 'profile',

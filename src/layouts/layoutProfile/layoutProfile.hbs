@@ -8,7 +8,7 @@
         <span class="c-profile-avatar__upload" onclick="window.showPopup('{{ popupType }}')">
           Поменять аватар
         </span>
-        <img class="c-profile-avatar__img" src="https://ya-praktikum.tech/api/v2/resources{{ srcAvatar }}" alt="Avatar">
+        <img class="c-profile-avatar__img" src="{{ host }}/resources{{ srcAvatar }}" alt="Avatar">
       </div>
       {{> Title text=title className="c-layout-profile__title" }}
     </div>

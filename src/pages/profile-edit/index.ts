@@ -4,6 +4,7 @@ import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
 import UserService from '../../services/user-service'
+import { routePaths, hostAPI } from '../../utils'
 import { type Props } from '../../types/global'
 import { type DataUserField, type DataUser } from '../../types/user'
 import { layoutProfile } from './../../layouts'
@@ -161,6 +162,8 @@ export async function profileEdit (): Promise<Block> {
 
   const cProfileEditPage = new BlockProfileEditPage({
     title: 'Изменить данные',
+    urlBack: routePaths.messenger,
+    host: hostAPI,
     srcAvatar: dataUser?.srcAvatar,
     popupTitle: 'Загрузите файл',
     popupType: 'profile-edit',
