@@ -6,7 +6,7 @@ import ChatTokenAPI from '../api/chat-token-api'
 import store from '../modules/store'
 import logger from './decorators/logger'
 import checkErrorStatus from '../utils/checkErrorStatus'
-import { getDate } from '../utils'
+import { getDate, handleJSONParse } from '../utils'
 import { type Indexed, type DataChatItem, type DataMessage } from '../types/global'
 import { type ChatAddFormModel, type ChatUserActionFormModel, type ChatListRequestQuery, type ChatListResponseModel, type ChatTokenResponse } from '../types/chat'
 import { type UserResponse } from '../types/user'
@@ -88,6 +88,9 @@ export default class ChatService {
 
         this.getChats({})
       })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
   }
 
   @logger
@@ -95,6 +98,9 @@ export default class ChatService {
     void chatUserAPI.create(data)
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
       })
   }
 
@@ -104,6 +110,9 @@ export default class ChatService {
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
       })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
   }
 
   @logger
@@ -112,7 +121,7 @@ export default class ChatService {
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
 
-        const response: ChatListResponseModel[] = JSON.parse(res.response as string)
+        const response: ChatListResponseModel[] = handleJSONParse(res.response as string) as ChatListResponseModel[]
 
         const dataChatList: DataChatItem[] = response.map((item): DataChatItem => {
           return {
@@ -130,6 +139,9 @@ export default class ChatService {
 
         store.set('chatList', response)
       })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
   }
 
   @logger
@@ -141,10 +153,14 @@ export default class ChatService {
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
 
-        const response: ChatTokenResponse = JSON.parse(res.response as string)
+        const response: ChatTokenResponse = handleJSONParse(res.response as string) as ChatTokenResponse
         this._token = response.token
 
         return this._token
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+        return ''
       })
   }
 }

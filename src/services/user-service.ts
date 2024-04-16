@@ -9,8 +9,9 @@ import UserAvatarAPI from '../api/user-avatar-api'
 import store, { StoreEvents } from '../modules/store'
 import logger from './decorators/logger'
 import toRoute from '../utils/toRoute'
+import { handleJSONParse, routePaths } from '../utils'
 import checkErrorStatus from '../utils/checkErrorStatus'
-import { type LoginFormModel, type SigninFormModel, type ProfileEditFormModel, type ProfilePasswordFormModel, type UserResponse, type DataUserField, type DataUser } from '../types/user'
+import { type LoginFormModel, type SigninFormModel, type ProfileEditFormModel, type ProfilePasswordFormModel, type UserResponse, type DataUserField, type DataUser, type FormResponseError } from '../types/user'
 import { type Indexed } from '../types/global'
 
 const bus = new Mediator()
@@ -81,10 +82,10 @@ export default class UserService {
     void loginApi.request(data)
       .then(async (res) => {
         if (res.response !== 'OK') {
-          const response = JSON.parse(res.response as string)
+          const response = handleJSONParse(res.response as string) as FormResponseError
           if (response.reason === 'User already in system'
           ) {
-            await toRoute('/messenger')
+            await toRoute(routePaths.messenger)
           }
         }
 
@@ -93,8 +94,11 @@ export default class UserService {
         if (res.response === 'OK') {
           void this.auth()
 
-          await toRoute('/messenger')
+          await toRoute(routePaths.messenger)
         }
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
       })
   }
 
@@ -106,7 +110,10 @@ export default class UserService {
 
         void this.auth()
 
-        await toRoute('/messenger')
+        await toRoute(routePaths.messenger)
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
       })
   }
 
@@ -119,6 +126,9 @@ export default class UserService {
 
         this.isAuth = false
       })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
   }
 
   async auth (): Promise<void> {
@@ -128,7 +138,7 @@ export default class UserService {
 
         this.isAuth = true
 
-        const response = JSON.parse(res.response as string)
+        const response = handleJSONParse(res.response as string)
 
         store.set('user', response)
       })
@@ -145,11 +155,14 @@ export default class UserService {
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
 
-        const response = JSON.parse(res.response as string)
+        const response = handleJSONParse(res.response as string)
 
         store.set('user', response)
 
-        await toRoute('/settings')
+        await toRoute(routePaths.settings)
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
       })
   }
 
@@ -159,8 +172,11 @@ export default class UserService {
         checkErrorStatus(res.status, res.response as string)
 
         if (res.response === 'OK') {
-          await toRoute('/settings')
+          await toRoute(routePaths.settings)
         }
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
       })
   }
 
@@ -169,11 +185,14 @@ export default class UserService {
       .then(async (res) => {
         checkErrorStatus(res.status, res.response as string)
 
-        const response = JSON.parse(res.response as string)
+        const response = handleJSONParse(res.response as string)
 
         store.set('user', response)
 
-        await toRoute('/settings')
+        await toRoute(routePaths.settings)
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
       })
   }
 

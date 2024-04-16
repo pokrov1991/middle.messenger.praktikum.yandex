@@ -20,7 +20,7 @@ const onChat = (data: Props): void => {
   bus.emit('chat:select-chat', data)
 }
 
-const onSubmit = (event: any): void => {
+const onSubmit = (event: Event): void => {
   event.preventDefault()
 
   const formElement = document.getElementById('formMessage') as HTMLFormElement
@@ -42,7 +42,7 @@ const onSubmit = (event: any): void => {
   }
 }
 
-const onSubmitAddChat = (event: any): void => {
+const onSubmitAddChat = (event: Event): void => {
   event.preventDefault()
 
   const formElement = document.getElementById('formAddChat') as HTMLFormElement
@@ -65,7 +65,7 @@ const onSubmitAddChat = (event: any): void => {
   popup.style.display = 'none'
 }
 
-const onSubmitAddUser = (event: any): void => {
+const onSubmitAddUser = (event: Event): void => {
   event.preventDefault()
 
   const formElement = document.getElementById('formAddUser') as HTMLFormElement
@@ -87,7 +87,7 @@ const onSubmitAddUser = (event: any): void => {
   }
 }
 
-const onSubmitRemoveUser = (event: any): void => {
+const onSubmitRemoveUser = (event: Event): void => {
   event.preventDefault()
 
   const formElement = document.getElementById('formRemoveUser') as HTMLFormElement

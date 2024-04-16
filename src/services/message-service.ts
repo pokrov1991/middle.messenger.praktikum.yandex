@@ -1,5 +1,5 @@
 import Mediator from '../modules/mediator'
-import { getDate } from '../utils'
+import { getDate, handleJSONParse, hostWS } from '../utils'
 import { type DataMessage } from '../types/global'
 
 const bus = new Mediator()
@@ -16,7 +16,7 @@ export default class MessageService {
     this._userId = userId
     this._chatId = chatId
     this._token = token
-    this._socket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${this._userId}/${this._chatId}/${this._token}`)
+    this._socket = new WebSocket(`${hostWS}/${this._userId}/${this._chatId}/${this._token}`)
 
     this._ping = ''
     this._messageList = []
@@ -63,12 +63,12 @@ export default class MessageService {
     console.log(`Код: ${event.code} | Причина: ${event.reason}`)
   }
 
-  private readonly _handleError = (event: any): void => {
+  private readonly _handleError = (event: Event): void => {
     console.log('Ошибка', event)
   }
 
   private readonly _handleMassage = (event: MessageEvent): void => {
-    const data = JSON.parse(event.data as string)
+    const data = handleJSONParse(event.data as string) as any
     console.log('Получены данные', data)
 
     if (Array.isArray(data) && data.length > 0) {

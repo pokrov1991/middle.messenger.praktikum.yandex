@@ -1,7 +1,8 @@
 import HTTP from '../modules/http'
 import BaseAPI from '../modules/http/base-api'
+import { hostAPI } from '../utils'
 
-const APIInstance = new HTTP('https://ya-praktikum.tech/api/v2')
+const APIInstance = new HTTP(hostAPI)
 
 export default class UserAvatarAPI extends BaseAPI {
   public async update (_data: Record<string, FormData>): Promise<XMLHttpRequest> {
