@@ -55,6 +55,13 @@
     border-radius: 50%;
     min-width: 34px;
     background: var(--colors-chat-item-background);
+    overflow: hidden;
+
+    img {
+      width: 34px;
+      height: 34px;
+      object-fit: cover;
+    }
   }
 
   &__name {
@@ -86,6 +93,7 @@
 
     &__dropdown {
       display: flex;
+      align-items: center;
       gap: 5px;
       font-size: 12px;
       font-weight: 500;
@@ -111,6 +119,31 @@
 
       &:hover {
         background: none;
+      }
+    }
+
+    &__remove-chat {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+      padding: 0;
+      width: 22px;
+      min-width: 22px;
+      height: 22px;
+      background: url('/icons/delete.svg') no-repeat center;
+      cursor: pointer;
+
+      ::before {
+        content: '|';
+        position: absolute;
+        left: -11px;
+        top: 4px;
+        color: var(--colors-link-color-grey);
+      }
+
+      &:hover {
+        background: url('/icons/delete.svg') no-repeat center;
       }
     }
   }

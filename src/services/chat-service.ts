@@ -6,9 +6,9 @@ import ChatTokenAPI from '../api/chat-token-api'
 import store from '../modules/store'
 import logger from './decorators/logger'
 import checkErrorStatus from '../utils/checkErrorStatus'
-import { getDate, handleJSONParse } from '../utils'
+import { getDate, handleJSONParse, hostAPI } from '../utils'
 import { type Indexed, type DataChatItem, type DataMessage } from '../types/global'
-import { type ChatAddFormModel, type ChatUserActionFormModel, type ChatListRequestQuery, type ChatListResponseModel, type ChatTokenResponse } from '../types/chat'
+import { type ChatAddFormModel, type ChatRemoveFormModel, type ChatUserActionFormModel, type ChatListRequestQuery, type ChatListResponseModel, type ChatTokenResponse } from '../types/chat'
 import { type UserResponse } from '../types/user'
 
 const bus = new Mediator()
@@ -49,6 +49,10 @@ export default class ChatService {
 
     bus.on('chat:remove-user', (data) => {
       this.removeUser(data as unknown as ChatUserActionFormModel)
+    })
+
+    bus.on('chat:remove-chat', (data) => {
+      this.removeChat(data as unknown as ChatRemoveFormModel)
     })
   }
 
@@ -94,6 +98,19 @@ export default class ChatService {
   }
 
   @logger
+  removeChat (data: ChatRemoveFormModel): void {
+    void chatAPI.delete(data)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        this.getChats({})
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
+  }
+
+  @logger
   createUser (data: ChatUserActionFormModel): void {
     void chatUserAPI.create(data)
       .then(async (res) => {
@@ -127,7 +144,7 @@ export default class ChatService {
           return {
             id: item.id,
             title: item.title,
-            avatar: item.avatar,
+            avatar: item.avatar !== null ? `${hostAPI}/resources${item.avatar}` : '',
             date: typeof item.last_message?.time !== 'undefined' ? getDate(item.last_message.time) : '',
             message: item.last_message?.content ?? 'Сообщений нет',
             unread_count: item.unread_count,

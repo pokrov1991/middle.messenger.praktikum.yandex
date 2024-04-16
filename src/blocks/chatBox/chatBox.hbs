@@ -1,7 +1,11 @@
 <section class="c-chat-box">
   <div class="c-chat-box__header">
     <div class="c-chat-box__user c-chat-box-user">
-      <div class="c-chat-box-user__avatar"></div>
+      <div class="c-chat-box-user__avatar">
+        {{#if avatar}} 
+          <img src="{{ avatar }}" alt="{{ title }}" />
+        {{/if}}
+      </div>
       <div class="c-chat-box-user__name">
         {{ title }}
       </div>
@@ -12,6 +16,7 @@
         <div class="c-chat-box-user-menu__dropdown">
           {{{ ButtonRemoveUser }}} /
           {{{ ButtonAddUser }}} пользователя
+          {{{ ButtonRemoveChat }}}
         </div>
       </div>
     </div>
@@ -53,6 +58,18 @@
         <input type="hidden" id="chatId" name="chatId" value="{{ id }}"/>
       </div>
       {{{ ButtonPopupRemoveUser }}}
+    </form>
+  {{/ Popup }}
+
+  {{#> Popup popupTitle=titlePopupRemoveChat className="c-chat_remove-chat" isPopupShow=isPopupRemoveChat }}
+    <form id="formRemoveChat" class="form-remove-chat">
+      <input type="hidden" id="chatId" name="chatId" value="{{ id }}"/>
+      {{{ ButtonPopupRemoveChat }}}
+      <div class="form-remove-chat__close">
+        <span onclick="document.querySelector('.c-chat_remove-chat').style.display='none'">
+          Отмена
+        </span>
+      </div>
     </form>
   {{/ Popup }}
 </section>
