@@ -1,5 +1,6 @@
 import UserService from '../services/user-service'
 import type Block from '../modules/block'
+import { routePaths } from '../utils'
 
 const user = new UserService()
 
@@ -15,10 +16,10 @@ export async function loadBlockPage (pageName: string): Promise<Block> {
   let notFound: () => Promise<Block>
 
   switch (pageName) {
-    case '/messenger':
-    case '/settings':
-    case '/settings-edit':
-    case '/settings-password':
+    case routePaths.messenger:
+    case routePaths.settings:
+    case routePaths.settingsEdit:
+    case routePaths.settingsPassword:
       await user.auth().then(() => {
         if (user.isAuth !== true) {
           window.location.href = '/'
@@ -32,30 +33,30 @@ export async function loadBlockPage (pageName: string): Promise<Block> {
       ({ login } = await import('../pages/login'))
       blockPage = await login()
       break
-    case '/sign-up':
+    case routePaths.signUp:
       ({ signin } = await import('../pages/signin'))
       blockPage = await signin()
       break
-    case '/messenger':
+    case routePaths.messenger:
       ({ main } = await import('../pages/main'))
       blockPage = await main()
       break
-    case '/settings':
+    case routePaths.settings:
       ({ profilePage } = await import('../pages/profile'))
       blockPage = await profilePage()
       break
 
-    case '/settings-edit':
+    case routePaths.settingsEdit:
       ({ profileEdit } = await import('../pages/profile-edit'))
       blockPage = await profileEdit()
       break
 
-    case '/settings-password':
+    case routePaths.settingsPassword:
       ({ profilePassword } = await import('../pages/profile-password'))
       blockPage = await profilePassword()
       break
 
-    case '/server-error':
+    case routePaths.serverError:
       ({ serverError } = await import('../pages/server-error'))
       blockPage = await serverError()
       break

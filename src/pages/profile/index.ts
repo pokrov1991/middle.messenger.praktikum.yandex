@@ -122,12 +122,12 @@ export async function profilePage (): Promise<Block> {
 
   // Создание компонента страницы
   const cLinkEdit = new BlockLink({
-    to: '/settings-edit',
+    to: routePaths.settingsEdit,
     text: 'Изменить данные'
   })
 
   const cLinkPassword = new BlockLink({
-    to: '/settings-password',
+    to: routePaths.settingsPassword,
     text: 'Изменить пароль'
   })
 

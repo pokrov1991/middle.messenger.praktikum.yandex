@@ -4,6 +4,7 @@ import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
 import UserService from '../../services/user-service'
+import { routePaths } from '../../utils'
 import { type Props } from '../../types/global'
 import { layoutAuth } from './../../layouts'
 import { inputPassword, inputText } from './../../components'
@@ -152,7 +153,7 @@ export async function login (): Promise<Block> {
   })
 
   const cLink = new BlockLink({
-    to: '/sign-up',
+    to: routePaths.signUp,
     text: 'Нет аккаунта?'
   })
 

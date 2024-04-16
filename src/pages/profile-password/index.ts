@@ -118,7 +118,7 @@ export async function profilePassword (): Promise<Block> {
   // Создание компонента страницы
   const cProfilePasswordPage = new BlockProfilePasswordPage({
     title: 'Изменить пароль',
-    urlBack: routePaths.messenger,
+    urlBack: routePaths.settings,
     host: hostAPI,
     srcAvatar: dataUser?.srcAvatar,
     popupTitle: 'Загрузите файл',
