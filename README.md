@@ -38,9 +38,17 @@ npm run stylelint
 
 Сервисы и представления общаются через паттерн «Медиатор» **src/modules/mediator.ts**
 
-Класс для работы с запросами **src/modules/fetch.ts**
+Класс для работы с запросами **src/modules/http/index.ts**
+
+Методы API лежат в папке **src/api**
+
+Сервис для работы с сообщениями через Socket **src/services/message-service.ts**
 
 Представления реализованы через структуру схожей c атомной: **pages, blocks, components, ui**
+
+# Вывод ошибок
+
+Статусы ошибок выводятся в консоли. В планах есть реализация вывода ошибок через Toaster
 
 # Инструменты
 
@@ -50,21 +58,19 @@ npm run stylelint
 
 ## Страницы
 
-Авторизация: https://reliable-pie-75ba03.netlify.app/?page=login
+Авторизация: https://reliable-pie-75ba03.netlify.app/
 
-Регистрация: https://reliable-pie-75ba03.netlify.app/?page=signin
+Регистрация: https://reliable-pie-75ba03.netlify.app/?page=sign-up
 
 Список чатов и лента переписки:
 
-Выберите чат: https://reliable-pie-75ba03.netlify.app/?page=main
+Чат: https://reliable-pie-75ba03.netlify.app/?page=messenger
 
-С лентой переписки: https://reliable-pie-75ba03.netlify.app/?page=main#messages
+Профиль: https://reliable-pie-75ba03.netlify.app/?page=settings
 
-Профиль: https://reliable-pie-75ba03.netlify.app/?page=profile
+Изменить данные: https://reliable-pie-75ba03.netlify.app/?page=settings-edit
 
-Изменить данные: https://reliable-pie-75ba03.netlify.app/?page=profile-edit
-
-Изменить пароль: https://reliable-pie-75ba03.netlify.app/?page=profile-password
+Изменить пароль: https://reliable-pie-75ba03.netlify.app/?page=settings-password
 
 Ошибка 404: https://reliable-pie-75ba03.netlify.app/?page=not-found
 

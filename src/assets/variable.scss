@@ -14,6 +14,7 @@
   --color-black-alfa-40: rgb(30 30 30 / 40%);
   --color-white-100: rgb(255 255 255 / 100%);
   --color-red-100: rgb(255 47 47 / 100%);
+  --color-grey-100: rgba(141 141 141 / 100%);
   --transition-03: 0.3s;
   --colors-page-background: var(--color-white-100);
   --colors-page-color: var(--color-black-100);
@@ -40,4 +41,5 @@
   --colors-chat-item-action: var(--color-blue-90);
   --colors-chat-message: var(--color-black-20);
   --colors-chat-message-my: var(--color-blue-50);
+  --colors-popup-background: var(--color-black-alfa-40);
 }

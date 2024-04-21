@@ -1,4 +1,4 @@
-{{#> LayoutProfile title=title urlBack="/?page=main" }}
+{{#> LayoutProfile title=title urlBack=urlBack }}
   <div class="c-page c-page-profile">
     <div class="c-page-profile__fields">
       {{{ Profile }}}
@@ -6,13 +6,13 @@
     <nav class="c-page-profile__navigations">
       <ul>
         <li>
-          <a class="c-link" href="/?page=profile-edit">Изменить данные</a>
+          {{{ LinkEdit }}}
         </li>
         <li>
-          <a class="c-link" href="/?page=profile-password">Изменить пароль</a>
+          {{{ LinkPassword }}}
         </li>
         <li>
-          <a class="c-link c-link_red" href="#">Выйти</a>
+          {{{ LinkExit }}}
         </li>
       </ul>
     </nav>

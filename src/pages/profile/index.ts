@@ -3,12 +3,17 @@ import Handlebars from 'handlebars'
 import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import UserService from '../../services/user-service'
-import { type Props, type DataUserField, type DataUser } from '../../types/global'
+import store, { StoreEvents } from '../../modules/store'
+import { connect } from '../../utils/handleObjects'
+import { routePaths, hostAPI } from '../../utils'
+import { type Props, type Indexed } from '../../types/global'
+import { type DataUserField, type DataUser } from '../../types/user'
 import { layoutProfile } from './../../layouts'
 import { profile, profileItem } from './../../blocks'
-import { title } from './../../ui'
+import { popup } from './../../components'
+import { button, link, title } from './../../ui'
 
-export async function profilePage (): Promise<HTMLElement | null> {
+export async function profilePage (): Promise<Block> {
   const pagePromise = await import('./profile.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -20,6 +25,13 @@ export async function profilePage (): Promise<HTMLElement | null> {
   const profileItemPromise = await profileItem()
   const ProfileItem = profileItemPromise.ProfileItem
 
+  const popupPromise = await popup()
+  const Popup = popupPromise.Popup
+
+  const buttonPromise = await button()
+  const Button = buttonPromise.Button
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const titlePromise = await title()
   const Title = titlePromise.Title
 
@@ -28,6 +40,9 @@ export async function profilePage (): Promise<HTMLElement | null> {
     LayoutProfile,
     Profile,
     ProfileItem,
+    Popup,
+    Button,
+    Link,
     Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -52,6 +67,16 @@ export async function profilePage (): Promise<HTMLElement | null> {
   userService.init(true)
 
   // Создание классов компонентов
+  class BlockLink extends Block {
+    constructor (props: Props) {
+      super('a', props)
+    }
+
+    render (): HTMLElement {
+      return this.compile(Link, this.props) as unknown as HTMLElement
+    }
+  }
+
   class BlockField extends Block {
     constructor (props: Props) {
       super('div', props)
@@ -65,6 +90,19 @@ export async function profilePage (): Promise<HTMLElement | null> {
   class BlockProfile extends Block {
     constructor (props: Props) {
       super('section', props)
+
+      store.on(StoreEvents.Updated, () => {
+        this.setProps({
+          FieldsList: dataUserFieldsList.map(item => new BlockField(item))
+        })
+      })
+    }
+
+    componentDidUpdate (oldProps: Props, newProps: Props): boolean {
+      if (oldProps.FieldsList !== newProps.FieldsList) {
+        this.lists.FieldsList = newProps.FieldsList
+      }
+      return true
     }
 
     render (): HTMLElement {
@@ -73,7 +111,7 @@ export async function profilePage (): Promise<HTMLElement | null> {
   }
 
   class BlockProfilePage extends Block {
-    constructor (props: Props) {
+    constructor (_tagName: string, props: Props) {
       super('section', props)
     }
 
@@ -83,14 +121,46 @@ export async function profilePage (): Promise<HTMLElement | null> {
   }
 
   // Создание компонента страницы
+  const cLinkEdit = new BlockLink({
+    to: routePaths.settingsEdit,
+    text: 'Изменить данные'
+  })
+
+  const cLinkPassword = new BlockLink({
+    to: routePaths.settingsPassword,
+    text: 'Изменить пароль'
+  })
+
+  const cLinkExit = new BlockLink({
+    text: 'Выйти',
+    className: 'c-link_red',
+    events: {
+      click: () => {
+        bus.emit('user:logout')
+      }
+    }
+  })
+
   const cProfile = new BlockProfile({
     FieldsList: dataUserFieldsList.map(item => new BlockField(item))
   })
 
-  const cProfilePage = new BlockProfilePage({
+  const ConnectProfilePage = connect(BlockProfilePage, (state: any): Indexed => ({
+    title: state.user.first_name,
+    srcAvatar: state.user.avatar
+  }))
+  const cProfilePage = new ConnectProfilePage('section', {
     title: dataUser?.name,
-    Profile: cProfile
+    urlBack: routePaths.messenger,
+    host: hostAPI,
+    srcAvatar: dataUser?.srcAvatar,
+    popupTitle: 'Загрузите файл',
+    popupType: 'profile',
+    Profile: cProfile,
+    LinkEdit: cLinkEdit,
+    LinkPassword: cLinkPassword,
+    LinkExit: cLinkExit
   })
 
-  return cProfilePage.getContent()
+  return cProfilePage
 }

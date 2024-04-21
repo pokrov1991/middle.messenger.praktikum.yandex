@@ -8,8 +8,9 @@
   &__sidebar {
     @include full-size;
 
+    overflow-y: hidden;
     max-width: 310px;
-    padding: 0 10px;
+    padding: 0;
     border-right: 1px solid var(--colors-chat-sidebar-border);
     background: var(--colors-chat-sidebar-background);
   }
@@ -30,9 +31,9 @@
 
   &__profile {
     width: 100%;
-    padding: 21px 0 23px;
+    padding: 21px 10px 23px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 
     .c-link {
       display: flex;
@@ -50,12 +51,27 @@
         width: 4px;
         background: url('/icons/arrow-right-grey.svg') center / cover;
       }
+
+      &_add-chat {
+        color: var(--colors-link-color);
+        background: none;
+        padding: 0;
+        width: auto;
+
+        &:hover {
+          background: none;
+        }
+        
+        &::after {
+          content: none;
+        }
+      }
     }
   }
 
   &__search {
     width: 100%;
-    padding-bottom: 14px;
+    padding: 0 10px 14px;
 
     .c-input-search {
       height: 32px;
@@ -104,5 +120,7 @@
 
   &__list {
     width: 100%;
+    height: calc(100% - 105px);
+    overflow-y: scroll;
   }
 }

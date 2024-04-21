@@ -31,12 +31,16 @@ export default class Mediator<E extends string = string, M extends { [K in E]: u
   }
 
   emit (event: E, ...args: M[E]): void {
-    if (typeof this.listeners[event] === 'undefined') {
-      throw new Error(`Нет события: ${event}`)
-    }
+    try {
+      if (typeof this.listeners[event] === 'undefined') {
+        throw new Error(`Нет события: ${event}`)
+      }
 
-    this.listeners[event]?.forEach(function (listener: (...args: any[]) => void) {
-      listener(...args)
-    })
+      this.listeners[event]?.forEach(function (listener: (...args: unknown[]) => void) {
+        listener(...args)
+      })
+    } catch (error) {
+      // console.log(error)
+    }
   }
 }

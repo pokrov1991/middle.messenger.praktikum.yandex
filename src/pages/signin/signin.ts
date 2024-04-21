@@ -1,7 +1,7 @@
 import Mediator from '../../modules/mediator'
 const bus = new Mediator()
 
-const onSubmit = (event: any): void => {
+const onSubmit = (event: Event): void => {
   event.preventDefault()
 
   const formElement = document.getElementById('formSignin') as HTMLFormElement
@@ -19,8 +19,8 @@ const onSubmit = (event: any): void => {
     const data = {
       email,
       login,
-      firstName,
-      secondName,
+      first_name: firstName,
+      second_name: secondName,
       phone,
       password
     }

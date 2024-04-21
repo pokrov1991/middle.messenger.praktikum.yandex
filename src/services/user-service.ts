@@ -1,62 +1,72 @@
 import Mediator from '../modules/mediator'
-import { type DataUserField, type DataUser } from '../types/global'
+import SigninAPI from '../api/signin-api'
+import LoginAPI from '../api/login-api'
+import LogoutAPI from '../api/logout-api'
+import UserAPI from '../api/user-api'
+import UserEditAPI from '../api/user-edit-api'
+import UserPasswordAPI from '../api/user-password-api'
+import UserAvatarAPI from '../api/user-avatar-api'
+import store, { StoreEvents } from '../modules/store'
+import logger from './decorators/logger'
+import toRoute from '../utils/toRoute'
+import { handleJSONParse, routePaths } from '../utils'
+import checkErrorStatus from '../utils/checkErrorStatus'
+import { type LoginFormModel, type SigninFormModel, type ProfileEditFormModel, type ProfilePasswordFormModel, type UserResponse, type DataUserField, type DataUser, type FormResponseError } from '../types/user'
+import { type Indexed } from '../types/global'
+
 const bus = new Mediator()
-
-interface DataLogin {
-  login: string
-  password: string
-}
-
-interface DataSignin {
-  email: string
-  login: string
-  firstName: string
-  secondName: string
-  phone: string
-  password: string
-}
-
-interface DataEdit {
-  email: string
-  login: string
-  firstName: string
-  secondName: string
-  displayName: string
-  phone: string
-}
-
-interface DataPassword {
-  oldPassword: string
-  newPassword: string
-}
+const signinAPI = new SigninAPI()
+const loginApi = new LoginAPI()
+const logoutApi = new LogoutAPI()
+const userApi = new UserAPI()
+const userEditAPI = new UserEditAPI()
+const userPasswordAPI = new UserPasswordAPI()
+const userAvatarAPI = new UserAvatarAPI()
 
 export default class UserService {
-  private _userFieldsList: DataUserField[]
-  private _userData: DataUser | null
+  static __instance: UserService
+  private _userFieldsList!: DataUserField[]
+  private _userData!: DataUser | null
+  public isAuth: boolean | undefined
 
   constructor () {
+    if (typeof UserService.__instance !== 'undefined') {
+      return UserService.__instance
+    }
+
     this._userFieldsList = []
     this._userData = null
+    this.isAuth = false
 
     bus.on('user:login', (data) => {
-      const { login, password } = data as unknown as DataLogin
-      this.login({ login, password })
+      this.login(data as unknown as LoginFormModel)
     })
 
     bus.on('user:signin', (data) => {
-      const { email, login, firstName, secondName, phone, password } = data as unknown as DataSignin
-      this.signin({ email, login, firstName, secondName, phone, password })
+      this.signin(data as unknown as SigninFormModel)
+    })
+
+    bus.on('user:logout', () => {
+      this.logout()
     })
 
     bus.on('user:edit', (data) => {
-      const { email, login, firstName, secondName, displayName, phone } = data as unknown as DataEdit
-      this.edit({ email, login, firstName, secondName, displayName, phone })
+      this.edit(data as unknown as ProfileEditFormModel)
     })
 
     bus.on('user:edit-password', (data) => {
-      const { oldPassword, newPassword } = data as unknown as DataPassword
-      this.editPassword({ oldPassword, newPassword })
+      this.editPassword(data as unknown as ProfilePasswordFormModel)
     })
+
+    bus.on('user:avatar', (data) => {
+      this.avatar(data as unknown as Record<string, FormData>)
+    })
+
+    store.on(StoreEvents.Updated, () => {
+      this.getUser()
+    })
+
+    UserService.__instance = this
   }
 
   init (isAuth: boolean = false): void {
@@ -67,73 +77,174 @@ export default class UserService {
     }
   }
 
-  login (data: DataLogin): void {
-    console.log('Login send', data)
+  @logger
+  login (data: LoginFormModel): void {
+    void loginApi.request(data)
+      .then(async (res) => {
+        if (res.response !== 'OK') {
+          const response = handleJSONParse(res.response as string) as FormResponseError
+          if (response.reason === 'User already in system'
+          ) {
+            await toRoute(routePaths.messenger)
+          }
+        }
+
+        checkErrorStatus(res.status, res.response as string)
+
+        if (res.response === 'OK') {
+          void this.auth()
+
+          await toRoute(routePaths.messenger)
+        }
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
   }
 
-  signin (data: DataSignin): void {
-    console.log('Signin send', data)
+  @logger
+  signin (data: SigninFormModel): void {
+    void signinAPI.create(data)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        void this.auth()
+
+        await toRoute(routePaths.messenger)
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
   }
 
-  edit (data: DataEdit): void {
-    console.log('Profile edit send', data)
+  logout (): void {
+    void logoutApi.request()
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        await toRoute('/')
+
+        this.isAuth = false
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
   }
 
-  editPassword (data: DataPassword): void {
-    console.log('Profile password send', data)
+  async auth (): Promise<void> {
+    await userApi.request()
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        this.isAuth = true
+
+        const response = handleJSONParse(res.response as string)
+
+        store.set('user', response)
+      })
+      .catch(async (_error) => {
+        if (this.isAuth !== true) {
+          await toRoute('/')
+        }
+      })
+  }
+
+  @logger
+  edit (data: ProfileEditFormModel): void {
+    void userEditAPI.update(data)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        const response = handleJSONParse(res.response as string)
+
+        store.set('user', response)
+
+        await toRoute(routePaths.settings)
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
+  }
+
+  editPassword (data: ProfilePasswordFormModel): void {
+    void userPasswordAPI.update(data)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        if (res.response === 'OK') {
+          await toRoute(routePaths.settings)
+        }
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
+  }
+
+  avatar (data: Record<string, FormData>): void {
+    void userAvatarAPI.update(data)
+      .then(async (res) => {
+        checkErrorStatus(res.status, res.response as string)
+
+        const response = handleJSONParse(res.response as string)
+
+        store.set('user', response)
+
+        await toRoute(routePaths.settings)
+      })
+      .catch((error) => {
+        console.error('Ошибка:', error)
+      })
   }
 
   getUser (): void {
+    const state: Indexed<UserResponse> = store.getState() as Indexed<UserResponse>
+    const stateUser = state.user
+
     const dataUserFieldsList: DataUserField[] = [
       {
         id: 'email',
         name: 'email',
         label: 'Почта',
-        value: 'pochta@yandex.ru'
+        value: stateUser.email
       },
       {
         id: 'login',
         name: 'login',
         label: 'Логин',
-        value: 'ivanivanov'
+        value: stateUser.login
       },
       {
         id: 'first_name',
         name: 'first_name',
         label: 'Имя',
-        value: 'Иван'
+        value: stateUser.first_name
       },
       {
         id: 'second_name',
         name: 'second_name',
         label: 'Фамилия',
-        value: 'Иванов'
+        value: stateUser.second_name
       },
       {
         id: 'display_name',
         name: 'display_name',
         label: 'Имя в чате',
-        value: 'Иван'
+        value: stateUser.display_name
       },
       {
         id: 'phone',
         name: 'phone',
         label: 'Телефон',
-        value: '+79099673030'
+        value: stateUser.phone
       }
     ]
     const dataUser: DataUser = {
-      name: 'Иван',
-      srcAvatar: ''
+      name: stateUser.first_name,
+      srcAvatar: stateUser.avatar === '' ? '/056e80fc-735c-4cd6-8d4f-e7d68c9b667e/be2b994b-1eb5-4245-8e00-a99e22cd390a_avatar-default.jpg' : stateUser.avatar
     }
 
-    if (this._userFieldsList.length === 0) {
-      this._userFieldsList = dataUserFieldsList
-    }
-
-    if (this._userData !== null) {
-      this._userData = dataUser
-    }
+    this._userFieldsList = dataUserFieldsList
+    this._userData = dataUser
 
     bus.emit('user:get-user', [this._userFieldsList, this._userData])
   }

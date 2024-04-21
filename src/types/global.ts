@@ -4,37 +4,31 @@ interface Props {
   [key: string]: any
 }
 
+type Indexed<T = unknown> = {
+  [key in string]: T;
+}
+
 interface DataChatItem {
-  id: string
-  userName: string
-  userAvatar: string
+  id: number
+  title: string
+  avatar: string
   date: string
   message: string
-  unread: number
+  unread_count: number
   active: boolean
 }
 
 interface DataMessage {
-  id?: string
+  id: number
   date?: string
   message: string
+  isRead?: boolean
   isMy?: boolean
 }
 
-interface DataUserField {
-  id: string
-  name: string
-  label: string
-  value: string
-  isValid?: boolean
-  required?: string
-  textValid?: string
-  events?: { focusout: (event: InputEvent) => void }
+export type {
+  Props,
+  Indexed,
+  DataChatItem,
+  DataMessage
 }
-
-interface DataUser {
-  name: string
-  srcAvatar: string
-}
-
-export type { Props, DataChatItem, DataMessage, DataUserField, DataUser }

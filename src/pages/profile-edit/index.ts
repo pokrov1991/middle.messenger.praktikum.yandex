@@ -4,14 +4,16 @@ import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
 import UserService from '../../services/user-service'
-import { type Props, type DataUserField, type DataUser } from '../../types/global'
+import { routePaths, hostAPI } from '../../utils'
+import { type Props } from '../../types/global'
+import { type DataUserField, type DataUser } from '../../types/user'
 import { layoutProfile } from './../../layouts'
 import { profile } from './../../blocks'
-import { inputText } from './../../components'
-import { input, button, title } from './../../ui'
+import { inputText, popup } from './../../components'
+import { input, button, link, title } from './../../ui'
 import { onSubmit } from './profile-edit'
 
-export async function profileEdit (): Promise<HTMLElement | null> {
+export async function profileEdit (): Promise<Block> {
   const pagePromise = await import('./profile-edit.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -23,11 +25,15 @@ export async function profileEdit (): Promise<HTMLElement | null> {
 
   const inputTextPromise = await inputText()
   const InputText = inputTextPromise.InputText
+  const popupPromise = await popup()
+  const Popup = popupPromise.Popup
 
   const inputPromise = await input()
   const Input = inputPromise.Input
   const buttonPromise = await button()
   const Button = buttonPromise.Button
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const titlePromise = await title()
   const Title = titlePromise.Title
 
@@ -35,8 +41,10 @@ export async function profileEdit (): Promise<HTMLElement | null> {
   Object.entries({
     LayoutProfile,
     Profile,
+    Popup,
     Input,
     Button,
+    Link,
     Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -44,7 +52,6 @@ export async function profileEdit (): Promise<HTMLElement | null> {
 
   // Методы и переменные
   const bus = new Mediator()
-  // const validation = new Validation(['email', 'login', 'first_name', 'second_name', 'display_name', 'phone'])
   const validation = new Validation([])
   let dataUserFieldsList: DataUserField[] = []
   let dataUser: DataUser = {
@@ -155,10 +162,14 @@ export async function profileEdit (): Promise<HTMLElement | null> {
 
   const cProfileEditPage = new BlockProfileEditPage({
     title: 'Изменить данные',
-    src: dataUser?.srcAvatar,
+    urlBack: routePaths.settings,
+    host: hostAPI,
+    srcAvatar: dataUser?.srcAvatar,
+    popupTitle: 'Загрузите файл',
+    popupType: 'profile-edit',
     Profile: cProfile,
     Button: cButton
   })
 
-  return cProfileEditPage.getContent()
+  return cProfileEditPage
 }

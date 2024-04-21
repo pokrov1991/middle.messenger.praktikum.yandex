@@ -26,7 +26,7 @@ export default class EventBus<E extends string = string, M extends { [K in E]: u
       throw new Error(`Нет события: ${event}`)
     }
 
-    this.listeners[event]?.forEach(function (listener: (...args: any[]) => void) {
+    this.listeners[event]?.forEach(function (listener: (...args: unknown[]) => void) {
       listener(...args)
     })
   }

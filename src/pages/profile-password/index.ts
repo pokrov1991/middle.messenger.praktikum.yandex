@@ -4,14 +4,16 @@ import Block from '../../modules/block'
 import Mediator from '../../modules/mediator'
 import Validation from '../../modules/validation'
 import UserService from '../../services/user-service'
+import { routePaths, hostAPI } from '../../utils'
+import { type DataUser } from '../../types/user'
 import { type Props } from '../../types/global'
 import { layoutProfile } from './../../layouts'
 import { profile } from './../../blocks'
-import { inputPassword } from './../../components'
-import { input, button, title } from './../../ui'
+import { inputPassword, popup } from './../../components'
+import { input, button, link, title } from './../../ui'
 import { onSubmit } from './profile-password'
 
-export async function profilePassword (): Promise<HTMLElement | null> {
+export async function profilePassword (): Promise<Block> {
   const pagePromise = await import('./profile-password.hbs?raw')
   const pageTemplate = pagePromise.default
 
@@ -23,11 +25,15 @@ export async function profilePassword (): Promise<HTMLElement | null> {
 
   const inputPasswordPromise = await inputPassword()
   const InputPassword = inputPasswordPromise.InputPassword
+  const popupPromise = await popup()
+  const Popup = popupPromise.Popup
 
   const inputPromise = await input()
   const Input = inputPromise.Input
   const buttonPromise = await button()
   const Button = buttonPromise.Button
+  const linkPromise = await link()
+  const Link = linkPromise.Link
   const titlePromise = await title()
   const Title = titlePromise.Title
 
@@ -36,8 +42,10 @@ export async function profilePassword (): Promise<HTMLElement | null> {
     LayoutProfile,
     Profile,
     InputPassword,
+    Popup,
     Input,
     Button,
+    Link,
     Title
   }).forEach(([name, component]) => {
     Handlebars.registerPartial(name, component)
@@ -46,6 +54,10 @@ export async function profilePassword (): Promise<HTMLElement | null> {
   // Методы и переменные
   const bus = new Mediator()
   const validation = new Validation(['oldPassword', 'newPassword', 'repeatPassword'])
+  let dataUser: DataUser = {
+    name: '',
+    srcAvatar: ''
+  }
 
   // Слушатели
   bus.on('form:vaidated', (payload) => {
@@ -55,9 +67,13 @@ export async function profilePassword (): Promise<HTMLElement | null> {
     })
   })
 
+  bus.on('user:get-user', ([_userFieldsList, userData]) => {
+    dataUser = userData
+  })
+
   // Инициализация сервиса
   const userService = new UserService()
-  userService.init()
+  userService.init(true)
 
   // Создание классов компонентов
   class BlockButton extends Block {
@@ -102,6 +118,11 @@ export async function profilePassword (): Promise<HTMLElement | null> {
   // Создание компонента страницы
   const cProfilePasswordPage = new BlockProfilePasswordPage({
     title: 'Изменить пароль',
+    urlBack: routePaths.settings,
+    host: hostAPI,
+    srcAvatar: dataUser?.srcAvatar,
+    popupTitle: 'Загрузите файл',
+    popupType: 'profile-password',
     InputList: [
       new BlockInputPassword({
         label: 'Старый пароль',
@@ -146,5 +167,5 @@ export async function profilePassword (): Promise<HTMLElement | null> {
     Button: cButton
   })
 
-  return cProfilePasswordPage.getContent()
+  return cProfilePasswordPage
 }

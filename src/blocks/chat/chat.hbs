@@ -1,7 +1,8 @@
 <section class="c-chat">
   <div class="c-chat__sidebar">
     <div class="c-chat__profile">
-      <a class="c-link" href="/?page=profile">Профиль</a>
+      {{{ ButtonAddChat }}}
+      {{{ Link }}}
     </div>
     <div class="c-chat__search">
       {{> Input label="Поиск" id="search_chat" name="search_chat" className="c-input-search" }}
@@ -19,4 +20,14 @@
     {{/if}}
     {{{ ChatBox }}}
   </div>
+
+  {{#> Popup popupTitle=titlePopupAddChat className="c-chat_add-chat" isPopupShow=isPopupAddChat }}
+    <form id="formAddChat">
+      <div class="c-input c-input_focus c-chat_add-chat">
+        <label for="title">Название чата</label>
+        <input type="text" id="title" name="title" autofocus>
+      </div>
+      {{{ ButtonPopupAddChat }}}
+    </form>
+  {{/ Popup }}
 </section>

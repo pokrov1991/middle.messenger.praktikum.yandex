@@ -1,4 +1,3 @@
 import './layoutProfile.scss'
-import './layoutProfile'
-
+import './layoutProfile.js'
 export { default as LayoutProfile } from './layoutProfile.hbs?raw'
