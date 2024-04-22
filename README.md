@@ -56,6 +56,10 @@ npm run stylelint
 
 Соответствующие конфигурации лежат в файлах **tsconfig.json, .eslintrc.json, .stylelintrc.json**
 
+# Тесты
+
+Для лоадера ts использую https://www.npmjs.com/package/tsx (CommonJS only loader)
+
 ## Страницы
 
 Авторизация: https://reliable-pie-75ba03.netlify.app/
