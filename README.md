@@ -61,6 +61,7 @@ npm run stylelint
 Для лоадера ts использую https://www.npmjs.com/package/tsx (CommonJS only loader)
 Тесты реализованы при помощи Mocha + Chai
 Mock реализован через библиотеку Sinon.js
+Файлы тестов для роутера, компонента, модуля отправки запросов лежат в **src/modules/router.spec.ts**, **src/modules/block.spec.ts**, **src/modules/http/index.spec.ts**
 
 ## Страницы
 
