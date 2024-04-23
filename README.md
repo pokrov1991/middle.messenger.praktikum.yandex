@@ -59,6 +59,8 @@ npm run stylelint
 # Тесты
 
 Для лоадера ts использую https://www.npmjs.com/package/tsx (CommonJS only loader)
+Тесты реализованы при помощи Mocha + Chai
+Mock реализован через библиотеку Sinon.js
 
 ## Страницы
 
