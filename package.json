@@ -7,7 +7,6 @@
   },
   "type": "module",
   "scripts": {
-    "prepare": "husky install",
     "eslint": "npx eslint 'src/**'",
     "eslint-fix": "npx eslint 'src/**' --fix",
     "stylelint": "npx stylelint '**/*.scss'",
@@ -17,12 +16,9 @@
     "prebuild": "tsc --noEmit",
     "build": "npm run prebuild && vite build --emptyOutDir",
     "preview": "cross-env NODE_ENV=production npx tsx server.ts",
-    "start": "npm run build && npm run preview"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run eslint && npm run stylelint && npm run test"
-    }
+    "start": "npm run build && npm run preview",
+    "prepare": "husky install",
+    "pre-commit": "npm run eslint && npm run stylelint && npm run test"
   },
   "devDependencies": {
     "@types/chai": "^4.3.14",
