@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { stub, type SinonStub } from 'sinon'
-import HTTP from './http'
-import { hostAPI } from '../utils'
+import HTTP from './index'
+import { hostAPI } from '../../utils'
 
 describe('Модуль отправки запросов HTTP', () => {
   let http: HTTP
