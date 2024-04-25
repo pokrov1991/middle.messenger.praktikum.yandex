@@ -56,6 +56,13 @@ npm run stylelint
 
 Соответствующие конфигурации лежат в файлах **tsconfig.json, .eslintrc.json, .stylelintrc.json**
 
+# Тесты
+
+Для лоадера ts использую https://www.npmjs.com/package/tsx (CommonJS only loader)
+Тесты реализованы при помощи Mocha + Chai
+Mock реализован через библиотеку Sinon.js
+Файлы тестов для роутера, компонента, модуля отправки запросов лежат в **src/modules/router.spec.ts**, **src/modules/block.spec.ts**, **src/modules/http/index.spec.ts**
+
 ## Страницы
 
 Авторизация: https://reliable-pie-75ba03.netlify.app/

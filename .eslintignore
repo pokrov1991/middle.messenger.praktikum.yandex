@@ -2,6 +2,7 @@
 /node_modules
 /src/assets
 vite.config.js
+mocha-setup.cjs
 server.ts
 *.hbs
 *.scss
